@@ -1,0 +1,5 @@
+pierstoval_translation:
+    locales: fr,de,en,es
+
+framework:
+    translator:      { fallback: %locale% } # Activate translator

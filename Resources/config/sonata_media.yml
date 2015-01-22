@@ -1,0 +1,39 @@
+
+sonata_media:
+    db_driver: doctrine_orm
+    default_context: default
+    class:
+        media: Pierstoval\Bundle\CmsBundle\Entity\Media
+    providers:
+        image:
+            resizer: sonata.media.resizer.simple
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+            formats:
+                icon:   { width: 34,  quality: 100 }
+                small:  { width: 100, quality: 90 }
+                medium: { width: 250, quality: 80 }
+                big:    { width: 500, quality: 75 }
+                large:  { width: 968, quality: 70 }
+    cdn:
+        server:
+            path: /uploads/media
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     false
+
+# Auto mapping for bundles
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    PierstovalCmsBundle: ~
+                    SonataMediaBundle: ~
+    dbal:
+        types:
+            json: Sonata\Doctrine\Types\JsonType

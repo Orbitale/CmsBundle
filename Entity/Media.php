@@ -11,6 +11,7 @@
 namespace Pierstoval\Bundle\CmsBundle\Entity;
 
 use Sonata\MediaBundle\Entity\BaseMedia;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity

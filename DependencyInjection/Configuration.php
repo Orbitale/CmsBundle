@@ -28,6 +28,30 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('pierstoval_cms');
 
+        $rootNode
+            ->children()
+                ->scalarNode('site_name')->defaultNull()->end()
+                ->arrayNode('layouts')
+                    ->defaultValue(array(
+                        'front' => array(
+                            'resource' => 'PierstovalCmsBundle::default_layout.html.twig',
+                            'pattern' => '^/',
+                        ),
+                    ))
+                    ->useAttributeAsKey('type')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('type')->end()
+                            ->scalarNode('resource')->isRequired()->end()
+                            ->arrayNode('assets_css')->end()
+                            ->arrayNode('assets_js')->end()
+                            ->scalarNode('route')->defaultValue('')->end()
+                            ->scalarNode('pattern')->defaultValue('')->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }

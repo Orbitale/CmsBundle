@@ -12,16 +12,16 @@ namespace Pierstoval\Bundle\CmsBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 
-class FrontController {
+class FrontController extends Controller {
 
     /**
-     * @Route("/cms/home", name="cms_home")
+     * @Route("/home", name="cms_home")
      */
     public function indexAction()
     {
-        return new Response('CMS Homepage');
+        $this->get('templating')->exists('');
+        return $this->render('PierstovalCmsBundle:Front:index.html.twig');
     }
 
 }

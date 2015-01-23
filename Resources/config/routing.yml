@@ -21,3 +21,8 @@ pierstoval_cms:
     resource: "@PierstovalCmsBundle/Controller/"
     type:     annotation
     prefix:   /
+
+easy_admin:
+    resource: "@EasyAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin

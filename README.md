@@ -1,5 +1,10 @@
 # Pierstoval CMS Bundle
 
+This bundle is a simple helper to create a little CMS based on a
+classic `User`, `Page`, and `Post` system.
+
+It is using the awesome [EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle/) by [Javier Eguiluz](https://github.com/javiereguiluz)
+
 ### Install
 
 

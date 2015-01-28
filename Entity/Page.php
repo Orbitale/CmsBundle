@@ -11,21 +11,441 @@
 namespace Pierstoval\Bundle\CmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\IpTraceable\Traits\IpTraceableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="pierstoval_cms_pages")
+ * @Gedmo\Tree(type="nested")
+ * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
-class Page {
+class Page
+{
+
+    use TimestampableEntity;
+    use BlameableEntity;
+    use IpTraceableEntity;
 
     /**
      * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var string
+     * @Gedmo\Translatable()
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    protected $title;
+
+    /**
+     * @var string
+     * @Gedmo\Translatable
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(name="slug", type="string", length=255)
+     */
+    protected $slug;
+
+    /**
+     * @var string
+     * @Gedmo\Translatable()
+     * @ORM\Column(name="content", type="text")
+     */
+    protected $content;
+
+    /**
+     * @var string
+     * @ORM\Column(name="meta_description", type="string", length=255)
+     */
+    protected $metaDescription;
+
+    /**
+     * @var string
+     * @ORM\Column(name="meta_title", type="string", length=255)
+     */
+    protected $metaTitle;
+
+    /**
+     * @var string
+     * @ORM\Column(name="meta_keywords", type="string", length=255)
+     */
+    protected $metaKeywords;
+
+    /**
+     * @var Category
+     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category")
+     */
+    protected $category;
+
+    /**
+     * @var string
+     * @ORM\Column(name="css", type="text")
+     */
+    protected $css;
+
+    /**
+     * @var string
+     * @ORM\Column(name="js", type="text")
+     */
+    protected $js;
+
+    /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    protected $enabled = false;
+
+    /**
+     * @var integer
+     * @Gedmo\TreeRight()
+     * @ORM\Column(name="right", type="integer")
+     */
+    protected $right;
+
+    /**
+     * @var integer
+     * @Gedmo\TreeLeft()
+     * @ORM\Column(name="left", type="integer")
+     */
+    protected $left;
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     *
+     * @return Page
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     *
+     * @return Page
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @param string $content
+     *
+     * @return Page
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * @param string $metaDescription
+     *
+     * @return Page
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        $this->metaDescription = $metaDescription;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaTitle
+     *
+     * @return Page
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMetaKeywords()
+    {
+        return $this->metaKeywords;
+    }
+
+    /**
+     * @param mixed $metaKeywords
+     *
+     * @return Page
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        $this->metaKeywords = $metaKeywords;
+        return $this;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param Category $category
+     *
+     * @return Page
+     */
+    public function setCategory($category)
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCss()
+    {
+        return $this->css;
+    }
+
+    /**
+     * @param mixed $css
+     *
+     * @return Page
+     */
+    public function setCss($css)
+    {
+        $this->css = $css;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJs()
+    {
+        return $this->js;
+    }
+
+    /**
+     * @param mixed $js
+     *
+     * @return Page
+     */
+    public function setJs($js)
+    {
+        $this->js = $js;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * @param boolean $enabled
+     *
+     * @return Page
+     */
+    public function setEnabled($enabled)
+    {
+        $this->enabled = $enabled;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRight()
+    {
+        return $this->right;
+    }
+
+    /**
+     * @param mixed $right
+     *
+     * @return Page
+     */
+    public function setRight($right)
+    {
+        $this->right = $right;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLeft()
+    {
+        return $this->left;
+    }
+
+    /**
+     * @param int $left
+     *
+     * @return Page
+     */
+    public function setLeft($left)
+    {
+        $this->left = $left;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param mixed $level
+     *
+     * @return Page
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $parent
+     *
+     * @return Page
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param mixed $children
+     *
+     * @return Page
+     */
+    public function setChildren($children)
+    {
+        $this->children = $children;
+        return $this;
+    }
+
+    /**
+     * @return \Datetime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
+    }
+
+    /**
+     * @param \Datetime $deletedAt
+     *
+     * @return Page
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+        return $this;
+    }
+
+    /**
+     * @var integer
+     * @Gedmo\TreeLevel()
+     * @ORM\Column(name="level", type="integer")
+     */
+    protected $level;
+
+    /**
+     * @var Page
+     * @Gedmo\TreeParent()
+     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $parent;
+
+    /**
+     * @var Page[]
+     * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
+     * @ORM\OrderBy({"left" = "ASC"})
+     */
+    protected $children;
+
+    /**
+     * @var \Datetime
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     */
+    protected $deletedAt;
 
     /**
      * @return integer

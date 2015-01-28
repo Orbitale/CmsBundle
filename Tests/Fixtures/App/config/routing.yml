@@ -1,0 +1,3 @@
+
+pierstoval_cms:
+    resource: "@PierstovalCmsBundle/Resources/config/routing.yml"

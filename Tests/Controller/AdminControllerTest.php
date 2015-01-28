@@ -10,9 +10,9 @@
 
 namespace Pierstoval\Bundle\CmsBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Pierstoval\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
-class AdminControllerTest extends WebTestCase
+class AdminControllerTest extends AbstractTestCase
 {
     public function testIndex()
     {

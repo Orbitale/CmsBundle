@@ -1,4 +1,3 @@
 imports:
     - { resource: fos_user.yml }
     - { resource: pierstoval_translation.yml }
-    - { resource: sonata_media.yml }

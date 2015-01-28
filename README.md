@@ -26,7 +26,6 @@ public function registerBundles()
         new Pierstoval\Bundle\TranslationBundle\PierstovalTranslationBundle(),
         new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
         new JMS\SerializerBundle\JMSSerializerBundle(),
-        new Sonata\MediaBundle\SonataMediaBundle(),
         new FOS\UserBundle\FOSUserBundle(),
     );
 }

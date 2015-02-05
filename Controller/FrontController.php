@@ -16,7 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class FrontController extends Controller {
 
     /**
-     * @Route("/home", name="cms_home")
+     * @Route("/", name="cms_home")
      */
     public function indexAction()
     {

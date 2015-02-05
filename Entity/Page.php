@@ -106,14 +106,43 @@ class Page
      * @Gedmo\TreeRight()
      * @ORM\Column(name="right", type="integer")
      */
-    protected $right;
+    protected $right = 0;
 
     /**
      * @var integer
      * @Gedmo\TreeLeft()
      * @ORM\Column(name="left", type="integer")
      */
-    protected $left;
+    protected $left = 0;
+    /**
+     * @var integer
+     * @Gedmo\TreeLevel()
+     * @ORM\Column(name="level", type="integer")
+     */
+    protected $level;
+    /**
+     * @var Page
+     * @Gedmo\TreeParent()
+     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $parent;
+    /**
+     * @var Page[]
+     * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
+     * @ORM\OrderBy({"left" = "ASC"})
+     */
+    protected $children;
+    /**
+     * @var \Datetime
+     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     */
+    protected $deletedAt;
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     /**
      * @return mixed
@@ -375,10 +404,21 @@ class Page
      *
      * @return Page
      */
-    public function setParent($parent)
+    public function setParent(Page $parent)
     {
+        if ($parent->getId() == $this->id) {
+            return $this;
+        }
         $this->parent = $parent;
         return $this;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -390,7 +430,7 @@ class Page
     }
 
     /**
-     * @param mixed $children
+     * @param Page[] $children
      *
      * @return Page
      */
@@ -417,42 +457,6 @@ class Page
     {
         $this->deletedAt = $deletedAt;
         return $this;
-    }
-
-    /**
-     * @var integer
-     * @Gedmo\TreeLevel()
-     * @ORM\Column(name="level", type="integer")
-     */
-    protected $level;
-
-    /**
-     * @var Page
-     * @Gedmo\TreeParent()
-     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
-     */
-    protected $parent;
-
-    /**
-     * @var Page[]
-     * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
-     * @ORM\OrderBy({"left" = "ASC"})
-     */
-    protected $children;
-
-    /**
-     * @var \Datetime
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     */
-    protected $deletedAt;
-
-    /**
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
 }

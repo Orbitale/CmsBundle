@@ -48,7 +48,7 @@ class Page
      * @var string
      * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(name="slug", type="string", length=255)
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
      */
     protected $slug;
 

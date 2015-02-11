@@ -1,5 +1,50 @@
 {% extends app.request.attributes.get('_cms_layout') %}
 
-{% block body %}
-    Here is the default homepage for your new CMS !
+{% block stylesheets %}
+{{ parent() }}
+{% if page.css %}
+    <style type="text/css">
+        {{ page.css | escape('css') }}
+    </style>
+{% endif %}
+{% endblock %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block cms_breadcrumbs %}
+    <div id="breadcrumbs">
+        {% set slugsArray = [] %}
+        <a href="{{ url('cms_home') }}">{{ 'home' | trans }}</a> &gt;
+        {% for key, breadcrumbPage in pages %}
+
+            {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}
+
+            {% if breadcrumbPage.id == page.id %}
+                {{ breadcrumbPage.title }}
+            {% else %}
+                <a href="{{ url('cms_home', {slugs: slugsArray|join('/')}) }}">
+                    {{ breadcrumbPage.title }}
+                </a>
+            {% endif %}
+
+            {% if not loop.last %} &gt; {% endif %}
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block cms_page_content %}
+    <h1>{{ page.title }}</h1>
+    <article>
+        {{ page.content | raw }}
+    </article>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if page.js %}
+        <script type="text/javascript">
+            {{ page.css | escape('js') }}
+        </script>
+    {% endif %}
 {% endblock %}

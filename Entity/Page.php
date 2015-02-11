@@ -55,71 +55,72 @@ class Page
     /**
      * @var string
      * @Gedmo\Translatable()
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="page_content", type="text", nullable=true)
      */
     protected $content;
 
     /**
      * @var string
-     * @ORM\Column(name="meta_description", type="string", length=255)
+     * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
      */
     protected $metaDescription;
 
     /**
      * @var string
-     * @ORM\Column(name="meta_title", type="string", length=255)
+     * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
      */
     protected $metaTitle;
 
     /**
      * @var string
-     * @ORM\Column(name="meta_keywords", type="string", length=255)
+     * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
      */
     protected $metaKeywords;
 
     /**
      * @var Category
      * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category")
+     *
      */
     protected $category;
 
     /**
      * @var string
-     * @ORM\Column(name="css", type="text")
+     * @ORM\Column(name="css", type="text", nullable=true)
      */
     protected $css;
 
     /**
      * @var string
-     * @ORM\Column(name="js", type="text")
+     * @ORM\Column(name="js", type="text", nullable=true)
      */
     protected $js;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="enabled", type="boolean")
      */
     protected $enabled = false;
 
     /**
      * @var integer
      * @Gedmo\TreeRight()
-     * @ORM\Column(name="right", type="integer")
+     * @ORM\Column(name="page_right", type="integer")
      */
     protected $right = 0;
 
     /**
      * @var integer
      * @Gedmo\TreeLeft()
-     * @ORM\Column(name="left", type="integer")
+     * @ORM\Column(name="page_left", type="integer")
      */
     protected $left = 0;
     /**
      * @var integer
      * @Gedmo\TreeLevel()
-     * @ORM\Column(name="level", type="integer")
+     * @ORM\Column(name="page_level", type="integer")
      */
-    protected $level;
+    protected $level = 0;
     /**
      * @var Page
      * @Gedmo\TreeParent()

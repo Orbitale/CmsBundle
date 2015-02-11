@@ -15,12 +15,16 @@ use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="pierstoval_cms_pages")
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @UniqueEntity("slug")
  */
 class Page
 {
@@ -41,6 +45,8 @@ class Page
      * @var string
      * @Gedmo\Translatable()
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max=255)
      */
     protected $title;
 
@@ -49,6 +55,7 @@ class Page
      * @Gedmo\Translatable
      * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     * @Assert\Length(max=255)
      */
     protected $slug;
 
@@ -62,12 +69,14 @@ class Page
     /**
      * @var string
      * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
      */
     protected $metaDescription;
 
     /**
      * @var string
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
+     * @Assert\Length(max=255)
      */
     protected $metaTitle;
 
@@ -106,6 +115,7 @@ class Page
      * @var integer
      * @Gedmo\TreeRight()
      * @ORM\Column(name="page_right", type="integer")
+     * @Assert\Type("integer")
      */
     protected $right = 0;
 
@@ -113,12 +123,14 @@ class Page
      * @var integer
      * @Gedmo\TreeLeft()
      * @ORM\Column(name="page_left", type="integer")
+     * @Assert\Type("integer")
      */
     protected $left = 0;
     /**
      * @var integer
      * @Gedmo\TreeLevel()
      * @ORM\Column(name="page_level", type="integer")
+     * @Assert\Type("integer")
      */
     protected $level = 0;
     /**

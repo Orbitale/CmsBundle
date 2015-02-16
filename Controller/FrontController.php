@@ -10,8 +10,9 @@
 
 namespace Pierstoval\Bundle\CmsBundle\Controller;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Pierstoval\Bundle\CmsBundle\Entity\Page;
+use Pierstoval\Bundle\CmsBundle\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,12 +27,12 @@ class FrontController extends Controller
     public function indexAction($slugs = '', Request $request)
     {
         if (!$slugs) {
-            $slugs = $this->getHomepage();
+            $slugs = $this->getHomepage($request);
         }
 
         $slugsArray = explode('/', $slugs);
 
-        /** @var ObjectRepository $repo */
+        /** @var PageRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository('PierstovalCmsBundle:Page');
 
         /** @var Page[] $pages */
@@ -43,11 +44,24 @@ class FrontController extends Controller
         ));
     }
 
-    protected function getHomepage()
+    /**
+     * @param Request $request
+     *
+     * @return string
+     * @throws \Exception
+     */
+    protected function getHomepage(Request $request = null)
     {
-        $conf = $this->container->getParameter('pierstoval_cms.config');
+        /** @var PageRepository $repo */
+        $repo = $this->getDoctrine()->getManager()->getRepository('PierstovalCmsBundle:Page');
 
-        return $conf['home_default_pattern'];
+        /** @var Page|null $homepage */
+        $homepage = $repo->findHomepage($request ? $request->getHost() : null);
+
+        if ($homepage) {
+            return $homepage->getSlug();
+        }
+        throw new \Exception('No homepage has been configured. Please check your existing pages or create a homepage in your backoffice.');
     }
 
     /**

@@ -33,7 +33,20 @@ class PierstovalCmsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('pierstoval_cms.config', $config);
+        foreach ($config['layouts'] as $type => $layout) {
+            if (is_numeric($type)) {
+                unset($config['layouts'][$type]);
+                $type = $layout['type'];
+            }
+            $config['layouts'][$type] = array_merge(array(
+                'type' => $type,
+                'assets_css' => '',
+                'assets_js' => '',
+                'route' => '',
+                'pattern' => '^/',
+            ), $layout);
+        }
 
+        $container->setParameter('pierstoval_cms.config', $config);
     }
 }

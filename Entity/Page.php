@@ -20,7 +20,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Pierstoval\Bundle\CmsBundle\Repository\PageRepository")
  * @ORM\Table(name="pierstoval_cms_pages")
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
@@ -112,6 +112,18 @@ class Page
     protected $enabled = false;
 
     /**
+     * @var bool
+     * @ORM\Column(name="homepage", type="boolean")
+     */
+    protected $homepage = false;
+
+    /**
+     * @var string
+     * @ORM\Column(name="host", type="string", length=255)
+     */
+    protected $host = '';
+
+    /**
      * @var integer
      * @Gedmo\TreeRight()
      * @ORM\Column(name="page_right", type="integer")
@@ -126,6 +138,7 @@ class Page
      * @Assert\Type("integer")
      */
     protected $left = 0;
+
     /**
      * @var integer
      * @Gedmo\TreeLevel()
@@ -133,6 +146,7 @@ class Page
      * @Assert\Type("integer")
      */
     protected $level = 0;
+
     /**
      * @var Page
      * @Gedmo\TreeParent()
@@ -140,12 +154,14 @@ class Page
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $parent;
+
     /**
      * @var Page[]
      * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
      * @ORM\OrderBy({"left" = "ASC"})
      */
     protected $children;
+
     /**
      * @var \Datetime
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
@@ -469,6 +485,44 @@ class Page
     public function setDeletedAt($deletedAt)
     {
         $this->deletedAt = $deletedAt;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isHomepage()
+    {
+        return $this->homepage;
+    }
+
+    /**
+     * @param boolean $homepage
+     *
+     * @return Page
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $homepage;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * @param string $host
+     *
+     * @return Page
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
         return $this;
     }
 

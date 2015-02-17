@@ -18,7 +18,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-
 /**
  * @ORM\Entity(repositoryClass="Pierstoval\Bundle\CmsBundle\Repository\PageRepository")
  * @ORM\Table(name="pierstoval_cms_pages")
@@ -89,7 +88,7 @@ class Page
     /**
      * @var Category
      * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category")
-     *
+     * @ORM\JoinColumn(name="category_id", nullable=true)
      */
     protected $category;
 
@@ -126,24 +125,27 @@ class Page
     /**
      * @var integer
      * @Gedmo\TreeRight()
-     * @ORM\Column(name="page_right", type="integer")
+     * @ORM\Column(name="tree_right", type="integer")
      * @Assert\Type("integer")
+     * @Assert\NotNull()
      */
     protected $right = 0;
 
     /**
      * @var integer
      * @Gedmo\TreeLeft()
-     * @ORM\Column(name="page_left", type="integer")
+     * @ORM\Column(name="tree_left", type="integer")
      * @Assert\Type("integer")
+     * @Assert\NotNull()
      */
     protected $left = 0;
 
     /**
      * @var integer
      * @Gedmo\TreeLevel()
-     * @ORM\Column(name="page_level", type="integer")
      * @Assert\Type("integer")
+     * @ORM\Column(name="tree_level", type="integer")
+     * @Assert\NotNull()
      */
     protected $level = 0;
 
@@ -166,7 +168,7 @@ class Page
      * @var \Datetime
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
-    protected $deletedAt;
+    protected $deletedAt = null;
 
     public function __toString()
     {

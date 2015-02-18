@@ -63,6 +63,6 @@ easy_admin:
             list:
                 fields: [ id, parent, title, slug, content, category, enabled ]
             form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, level, category, parent, enabled ]
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 
 ```

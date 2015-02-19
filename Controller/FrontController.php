@@ -26,8 +26,10 @@ class FrontController extends Controller
      */
     public function indexAction($slugs = '', Request $request)
     {
+        $config = $this->container->getParameter('pierstoval_cms.config');
+
         if (!$slugs) {
-            $slugs = $this->getHomepage($request);
+            $slugs = $this->getHomepage($config['multiple_hosts'] ? $request : null);
         }
 
         $slugsArray = explode('/', $slugs);

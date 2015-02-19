@@ -131,7 +131,6 @@ class Page
     /**
      * @var Page[]
      * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
-     * @ORM\OrderBy({"left" = "ASC"})
      */
     protected $children;
 

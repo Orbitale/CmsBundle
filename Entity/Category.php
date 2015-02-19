@@ -78,7 +78,6 @@ class Category
     /**
      * @var Category[]
      * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category", mappedBy="parent")
-     * @ORM\OrderBy({"left" = "ASC"})
      */
     protected $children;
 

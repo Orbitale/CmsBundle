@@ -15,11 +15,11 @@ use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="pierstoval_cms_categories")
- * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Category
@@ -42,46 +42,34 @@ class Category
      * @var string
      * @Gedmo\Translatable()
      * @ORM\Column(name="name", type="string", length=255)
+     * @Assert\NotBlank()
      */
     protected $name;
 
     /**
      * @var string
+     * @Gedmo\Translatable
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     * @Assert\Length(max=255)
+     */
+    protected $slug;
+
+    /**
+     * @var string
      * @Gedmo\Translatable()
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
 
     /**
      * @var bool
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="enabled", type="boolean")
      */
-    protected $enabled;
-
-    /**
-     * @var integer
-     * @Gedmo\TreeRight()
-     * @ORM\Column(name="right", type="integer")
-     */
-    protected $right;
-
-    /**
-     * @var integer
-     * @Gedmo\TreeLeft()
-     * @ORM\Column(name="left", type="integer")
-     */
-    protected $left;
-
-    /**
-     * @var integer
-     * @Gedmo\TreeLevel()
-     * @ORM\Column(name="level", type="integer")
-     */
-    protected $level;
+    protected $enabled = false;
 
     /**
      * @var Category
-     * @Gedmo\TreeParent()
      * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -147,6 +135,25 @@ class Category
     }
 
     /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     *
+     * @return Category
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
      * @return boolean
      */
     public function isEnabled()
@@ -162,63 +169,6 @@ class Category
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getRight()
-    {
-        return $this->right;
-    }
-
-    /**
-     * @param int $right
-     *
-     * @return Category
-     */
-    public function setRight($right)
-    {
-        $this->right = $right;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLeft()
-    {
-        return $this->left;
-    }
-
-    /**
-     * @param int $left
-     *
-     * @return Category
-     */
-    public function setLeft($left)
-    {
-        $this->left = $left;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
-    /**
-     * @param int $level
-     *
-     * @return Category
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
         return $this;
     }
 

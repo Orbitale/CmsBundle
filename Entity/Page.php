@@ -21,7 +21,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass="Pierstoval\Bundle\CmsBundle\Repository\PageRepository")
  * @ORM\Table(name="pierstoval_cms_pages")
- * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("slug")
  */
@@ -123,35 +122,7 @@ class Page
     protected $host = '';
 
     /**
-     * @var integer
-     * @Gedmo\TreeRight()
-     * @ORM\Column(name="tree_right", type="integer")
-     * @Assert\Type("integer")
-     * @Assert\NotNull()
-     */
-    protected $right = 0;
-
-    /**
-     * @var integer
-     * @Gedmo\TreeLeft()
-     * @ORM\Column(name="tree_left", type="integer")
-     * @Assert\Type("integer")
-     * @Assert\NotNull()
-     */
-    protected $left = 0;
-
-    /**
-     * @var integer
-     * @Gedmo\TreeLevel()
-     * @Assert\Type("integer")
-     * @ORM\Column(name="tree_level", type="integer")
-     * @Assert\NotNull()
-     */
-    protected $level = 0;
-
-    /**
      * @var Page
-     * @Gedmo\TreeParent()
      * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
@@ -362,63 +333,6 @@ class Page
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getRight()
-    {
-        return $this->right;
-    }
-
-    /**
-     * @param mixed $right
-     *
-     * @return Page
-     */
-    public function setRight($right)
-    {
-        $this->right = $right;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLeft()
-    {
-        return $this->left;
-    }
-
-    /**
-     * @param int $left
-     *
-     * @return Page
-     */
-    public function setLeft($left)
-    {
-        $this->left = $left;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLevel()
-    {
-        return $this->level;
-    }
-
-    /**
-     * @param mixed $level
-     *
-     * @return Page
-     */
-    public function setLevel($level)
-    {
-        $this->level = $level;
         return $this;
     }
 

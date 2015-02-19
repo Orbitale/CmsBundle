@@ -10,8 +10,6 @@
 
 namespace Pierstoval\Bundle\CmsBundle\Tests\Fixtures;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
@@ -23,7 +21,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
-
 
 /**
  * Class AbstractTestCase

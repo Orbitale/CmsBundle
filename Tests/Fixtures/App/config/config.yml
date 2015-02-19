@@ -1,8 +1,21 @@
-imports:
-    - { resource: @PierstovalCmsBundle/Resources/config/config.yml }
-
 parameters:
     locale: fr
+
+easy_admin:
+    entities:
+        "Cms Pages":
+            class: Pierstoval\Bundle\CmsBundle\Entity\Page
+            list:
+                fields: [ id, parent, title, slug, content, category, enabled ]
+            form:
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
+
+        "Cms Categories":
+            class: Pierstoval\Bundle\CmsBundle\Entity\Category
+            list:
+                fields: [ id, parent, title, slug, content, category, enabled ]
+            form:
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 
 framework:
     secret:          secret
@@ -32,21 +45,8 @@ doctrine:
                 alias: Gedmo
                 prefix: Gedmo\Translatable\Entity
                 dir: "%kernel.root_dir%/../../../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
-            tree:
-                is_bundle: false
-                type: annotation
-                alias: Gedmo
-                prefix: Gedmo\Tree\Entity
-                dir: "%kernel.root_dir%/../../../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
 
 services:
-    gedmo.listener.tree:
-        class: Gedmo\Tree\TreeListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
-
     gedmo.listener.translatable:
         class: Gedmo\Translatable\TranslatableListener
         tags:
@@ -69,20 +69,3 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
-
-security:
-    encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
-    providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
-    firewalls:
-        main:
-            pattern: ^/
-            form_login:
-                provider: fos_userbundle
-                csrf_provider: form.csrf_provider
-            logout:       true
-            anonymous:    true

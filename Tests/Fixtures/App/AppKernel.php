@@ -23,11 +23,10 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-            new FOS\UserBundle\FOSUserBundle(),
             new Pierstoval\Bundle\CmsBundle\PierstovalCmsBundle(),
             new Pierstoval\Bundle\TranslationBundle\PierstovalTranslationBundle(),
+            new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle(),
         );
     }
 

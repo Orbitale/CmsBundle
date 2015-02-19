@@ -18,7 +18,7 @@ class AdminControllerTest extends AbstractTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/admin');
+        $crawler = $client->request('GET', '/admin/?action=list&entity=Page');
 
         $this->assertTrue($crawler->filter('html:contains("Easy Admin")')->count() > 0);
     }

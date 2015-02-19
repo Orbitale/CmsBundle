@@ -1,3 +1,9 @@
+pierstoval_cms_front:
+    resource: "@PierstovalCmsBundle/Controller/FrontController.php"
+    type:     annotation
+    prefix:   /site/
 
-pierstoval_cms:
-    resource: "@PierstovalCmsBundle/Resources/config/routing.yml"
+easy_admin:
+    resource: "@EasyAdminBundle/Controller"
+    type: annotation
+    prefix: /admin/

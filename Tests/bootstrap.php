@@ -9,6 +9,7 @@
 */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Component\ClassLoader\ClassLoader;
 
 $file = __DIR__ . '/../vendor/autoload.php';
 if (!file_exists($file)) {
@@ -16,4 +17,7 @@ if (!file_exists($file)) {
 }
 $autoload = require_once $file;
 
-AnnotationRegistry::registerFile(__DIR__.'/../vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php');
+AnnotationRegistry::registerLoader(function($class) use ($autoload) {
+    $autoload->loadClass($class);
+    return class_exists($class, false);
+});

@@ -1,3 +1,5 @@
-imports:
-    - { resource: fos_user.yml }
-    - { resource: pierstoval_translation.yml }
+pierstoval_translation:
+    locales: fr,de,en,es
+
+framework:
+    translator:      { fallback: %locale% } # Activate translator

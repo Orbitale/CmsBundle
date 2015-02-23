@@ -41,9 +41,10 @@ class LayoutsListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        // Get the route and pathinfo to check respectively the "route" and "pattern" attributes in layouts config
+        // Get the necessary informations to check them in layout configurations
         $route = $request->attributes->get('_route');
         $path  = $request->getPathInfo();
+        $host  = $request->getHost();
 
         $layouts = $this->config['layouts'];
 
@@ -52,11 +53,15 @@ class LayoutsListener implements EventSubscriberInterface
         $finalLayout = '';
 
         foreach ($layouts as $layoutConfig) {
-            if (isset($layoutConfig['route']) && $layoutConfig['route'] && $route === $layoutConfig['route']) {
+            if ($host === $layoutConfig['host']) {
                 $finalLayout = $layoutConfig['resource'];
                 break;
             }
-            if (isset($layoutConfig['pattern']) && $layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+            if ($route === $layoutConfig['route']) {
+                $finalLayout = $layoutConfig['resource'];
+                break;
+            }
+            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
                 $finalLayout = $layoutConfig['resource'];
                 break;
             }

@@ -26,10 +26,8 @@ class FrontController extends Controller
      */
     public function indexAction($slugs = '', Request $request)
     {
-        $config = $this->container->getParameter('pierstoval_cms.config');
-
         if (!$slugs) {
-            $slugs = $this->getHomepage($config['multiple_hosts'] ? $request : null);
+            $slugs = $this->getHomepage($request->getHost());
         }
 
         $slugsArray = explode('/', $slugs);
@@ -47,25 +45,24 @@ class FrontController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param string $host
      *
      * @return string
      * @throws \Exception
      */
-    protected function getHomepage(Request $request = null)
+    protected function getHomepage($host = null)
     {
         /** @var PageRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository('PierstovalCmsBundle:Page');
 
         /** @var Page|null $homepage */
-        $homepage = $repo->findHomepage($request ? $request->getHost() : null);
+        $homepage = $repo->findHomepage($host);
 
         if ($homepage) {
             return $homepage->getSlug();
         }
         throw new \Exception('No homepage has been configured. Please check your existing pages or create a homepage in your backoffice.');
     }
-
     /**
      * @param array  $slugs
      * @param Page[] $pages

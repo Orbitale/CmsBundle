@@ -42,6 +42,7 @@ class PierstovalCmsExtension extends Extension
                 'type' => $type,
                 'assets_css' => '',
                 'assets_js' => '',
+                'host' => null,
                 'route' => '',
                 'pattern' => '^/',
             ), $layout);

@@ -30,7 +30,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->booleanNode('multiple_hosts')->defaultFalse()->end()
                 ->arrayNode('layouts')
                     ->defaultValue(array(
                         'front' => array(

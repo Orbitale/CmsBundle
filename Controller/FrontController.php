@@ -10,13 +10,11 @@
 
 namespace Pierstoval\Bundle\CmsBundle\Controller;
 
-use Doctrine\ORM\NonUniqueResultException;
 use Pierstoval\Bundle\CmsBundle\Entity\Page;
 use Pierstoval\Bundle\CmsBundle\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class FrontController extends Controller
 {
@@ -63,6 +61,7 @@ class FrontController extends Controller
         }
         throw new \Exception('No homepage has been configured. Please check your existing pages or create a homepage in your backoffice.');
     }
+
     /**
      * @param array  $slugs
      * @param Page[] $pages

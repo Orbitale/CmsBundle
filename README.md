@@ -145,7 +145,7 @@ services:
 
 ## Usage
 
-Simply go to your backoffice in `http://127.0.0.1/admin`, and login if you are using the `Security` component.
+Simply go to your backoffice in `/admin`, and login if you are using the `Security` component.
 
 You can manage `Cms Pages` and `Cms Categories` as you wish, like in an usual backoffice.
 
@@ -153,7 +153,7 @@ The `FrontController` handles some methods to view pages with a single `indexAct
 
 The URI for a classic page is simply `/{slug}` where `slug` is the... page slug (wow, thanks captain hindsight!).
 
-If your page has one `parent`, then the URI is the following: `/{parentSlug}/{slug}`. As the slugs are verbose nough,
+If your page has one `parent`, then the URI is the following: `/{parentSlug}/{slug}`. As the slugs are verbose enough,
 you can notice that we respect the pages hierarchy in the generated url.
 You can navigate through a complex list of pages, as long as they're related as `parent` and `child`.
 This allows you to have such urls like this one :
@@ -161,6 +161,40 @@ This allows you to have such urls like this one :
 a parent, that has a parent, and so on, until you reach the "root" parent.
 ** Note: this behavior is the precise reason why you have to use a specific prefix for your `FrontController` routing
 import, unless you may have many "404" errors.**
+
+### Generate a route based on a single page
+
+If you have a `Page` object in a view or in a controller, you can get the whole arborescence by using the `getTree()`
+method, which will navigate through all parents and return a string based on a separator argument (default `/`, for urls).
+
+Let's get an example with this kind of tree:
+
+```
+/ - Home (root url)
+├─ /welcome                   - Welcome page (set as "homepage", so "Home" will be the same)
+│  ├─ /welcome/our-company            - Our company
+│  ├─ /welcome/our-company/financial  - Financial
+│  └─ /welcome/our-company/team       - Team
+└─ Contact
+```
+
+Imagine we want to generate the url for the "Team" page. You have this `Page` object in your view/controller.
+
+```twig
+    {# Page : "Team" #}
+    {{ path('cms_home', {"slugs": page.tree}) }}
+    {# Will show : /welcome/our-company/team #}
+```
+
+Or in a controller:
+
+```php
+    // Page : "Team"
+    $url = $this->generateUrl('cms_home', array('slugs' => $page->getTree()));
+    // $url === /welcome/our-company/team
+```
+
+With this, you have a functional tree system for your CMS!
 
 ## <a name="fosuserbundle"></a> Using FOSUserBundle to have a secured backoffice
 

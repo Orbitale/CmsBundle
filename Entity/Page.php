@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -27,6 +28,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Page
 {
 
+    use SoftDeleteableEntity;
     use TimestampableEntity;
     use BlameableEntity;
     use IpTraceableEntity;
@@ -133,12 +135,6 @@ class Page
      * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
      */
     protected $children;
-
-    /**
-     * @var \Datetime
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
-     */
-    protected $deletedAt = null;
 
     public function __toString()
     {
@@ -381,25 +377,6 @@ class Page
     public function setChildren($children)
     {
         $this->children = $children;
-        return $this;
-    }
-
-    /**
-     * @return \Datetime
-     */
-    public function getDeletedAt()
-    {
-        return $this->deletedAt;
-    }
-
-    /**
-     * @param \Datetime $deletedAt
-     *
-     * @return Page
-     */
-    public function setDeletedAt($deletedAt)
-    {
-        $this->deletedAt = $deletedAt;
         return $this;
     }
 

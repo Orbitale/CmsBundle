@@ -70,3 +70,18 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ @annotation_reader ] ]
+
+security:
+    firewalls:
+        secured_area:
+            pattern:    ^/
+            anonymous: true
+
+    providers:
+        in_memory:
+             memory:
+                users:
+                    one_user: { password: password, roles: 'ROLE_USER' }
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext

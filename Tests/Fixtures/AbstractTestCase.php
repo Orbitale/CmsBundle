@@ -75,6 +75,19 @@ class AbstractTestCase extends WebTestCase
         $application->add($command);
         $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
         $command->run($input, new ConsoleOutput());
+
+        // Check security context, because of deprecation
+        try {
+            $kernel->getContainer()->get('security.context');
+        } catch (\Exception $baseException) {
+            $e = $baseException;
+            do {
+                if ($e instanceof \PHPUnit_Framework_Error_Deprecated) {
+                    $this->markTestSkipped('Skip this error while Symfony SecurityContext is used by Twig\'s AppVariable.');
+                }
+                $e = $e->getPrevious();
+            } while ($e);
+        }
     }
 
 }

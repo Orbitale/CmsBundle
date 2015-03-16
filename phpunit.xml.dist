@@ -20,6 +20,27 @@
 
     <php>
         <server name="KERNEL_DIR" value="./Tests/Fixtures/App" />
+        <ini name="zend.enable_gc" value="0" />
     </php>
 
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./Controller</directory>
+            <directory suffix=".php">./DependencyInjection</directory>
+            <directory suffix=".php">./Entity</directory>
+            <directory suffix=".php">./Listeners</directory>
+            <directory suffix=".php">./Repository</directory>
+            <directory suffix=".php">./Resources</directory>
+            <exclude>
+                <directory>./build</directory>
+                <directory>./Tests</directory>
+                <directory>./vendor</directory>
+            </exclude>
+        </whitelist>
+        <blacklist>
+            <directory>./vendor</directory>
+            <directory>./Tests</directory>
+            <directory>./build</directory>
+        </blacklist>
+    </filter>
 </phpunit>

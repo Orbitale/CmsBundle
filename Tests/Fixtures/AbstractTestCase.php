@@ -10,6 +10,11 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 
+use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
+use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
+use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
@@ -18,9 +23,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
-use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
-use Doctrine\Bundle\DoctrineBundle\Command\DropDatabaseDoctrineCommand;
-use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
+use Doctrine\Bundle\DoctrineBundle\Command\Proxy\UpdateSchemaDoctrineCommand;
 
 /**
  * Class AbstractTestCase
@@ -49,14 +52,14 @@ class AbstractTestCase extends WebTestCase
 
         self::$kernel->boot();
         self::$container = self::$kernel->getContainer();
+        $kernel = self::getKernel();
 
-        $application = new Application(self::getKernel());
+        $databaseFile = $kernel->getContainer()->getParameter('database_path');
+        $application = new Application($kernel);
 
-        // Drop the database
-        $command = new DropDatabaseDoctrineCommand();
-        $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:database:drop','--force' => true,));
-        $command->run($input, new ConsoleOutput());
+        if (file_exists($databaseFile)) {
+            unlink($databaseFile);
+        }
 
         // Create database
         $command = new CreateDatabaseDoctrineCommand();
@@ -70,4 +73,5 @@ class AbstractTestCase extends WebTestCase
         $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
         $command->run($input, new ConsoleOutput());
     }
+
 }

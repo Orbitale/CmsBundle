@@ -14,6 +14,7 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
 class AdminControllerTest extends AbstractTestCase
 {
+
     public function testIndex()
     {
         $client = static::createClient();
@@ -22,4 +23,5 @@ class AdminControllerTest extends AbstractTestCase
 
         $this->assertTrue($crawler->filter('html:contains("Easy Admin")')->count() > 0);
     }
+
 }

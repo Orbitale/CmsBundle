@@ -10,21 +10,29 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity()
  * @ORM\Table(name="orbitale_cms_categories")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
+ * @Gedmo\TranslationEntity(class="Orbitale\Bundle\CmsBundle\Entity\CategoryTranslation")
+ * @UniqueEntity("slug")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
 
+    use SoftDeleteableEntity;
     use TimestampableEntity;
     use BlameableEntity;
     use IpTraceableEntity;
@@ -82,10 +90,36 @@ class Category
     protected $children;
 
     /**
-     * @var \Datetime
-     * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
+     * @var CategoryTranslation[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="CategoryTranslation", mappedBy="object", cascade={"persist", "remove"})
      */
-    protected $deletedAt;
+    private $translations;
+
+    public function __construct()
+    {
+        $this->translations = new ArrayCollection();
+    }
+
+    /**
+     * @return CategoryTranslation[]
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
+    }
+
+    /**
+     * @param CategoryTranslation $t
+     * @return Category
+     */
+    public function addTranslation(CategoryTranslation $t)
+    {
+        if (!$this->translations->contains($t)) {
+            $this->translations[] = $t;
+            $t->setObject($this);
+        }
+        return $this;
+    }
 
     /**
      * @return int
@@ -228,5 +262,27 @@ class Category
         return $this;
     }
 
+    /**
+     * @ORM\PreRemove()
+     * @param LifecycleEventArgs $event
+     */
+    public function onRemove(LifecycleEventArgs $event)
+    {
+        $om = $event->getObjectManager();
+        foreach ($this->translations as $translation) {
+            $om->remove($translation);
+        }
+        $om->flush();
+        foreach ($this->children as $child) {
+            $child->setParent(null);
+            $om->persist($child);
+        }
+        $this->enabled = false;
+        $this->parent = null;
+        $this->name .= '-'.$this->id.'-deleted';
+        $this->slug .= '-'.$this->id.'-deleted';
+        $om->persist($this);
+        $om->flush();
+    }
 
 }

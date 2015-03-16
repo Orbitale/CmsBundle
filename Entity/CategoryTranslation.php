@@ -15,15 +15,15 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="orbitale_cms_pages_translations",
+ * @ORM\Table(name="orbitale_cms_categories_translations",
  *     uniqueConstraints={
- *          @ORM\UniqueConstraint(name="lookup_unique_pages_translation_idx", columns={
+ *          @ORM\UniqueConstraint(name="lookup_unique_categories_translation_idx", columns={
  *             "locale", "object_id", "field"
  *          })
  *     }
  * )
  */
-class PageTranslation extends AbstractPersonalTranslation
+class CategoryTranslation extends AbstractPersonalTranslation
 {
 
     /**
@@ -41,7 +41,7 @@ class PageTranslation extends AbstractPersonalTranslation
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="Page", inversedBy="translations")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="translations")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $object;

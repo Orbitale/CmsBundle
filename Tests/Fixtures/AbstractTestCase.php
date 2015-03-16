@@ -42,17 +42,20 @@ class AbstractTestCase extends WebTestCase
      */
     protected function getKernel(array $options = array())
     {
-        static::bootKernel($options);
+        if (!static::$kernel) {
+            $this->setUp();
+        }
         return static::$kernel;
     }
 
     public function setUp()
     {
-        self::$kernel = static::createKernel();
-
-        self::$kernel->boot();
-        self::$container = self::$kernel->getContainer();
-        $kernel = self::getKernel();
+        if (static::$kernel) {
+            static::$kernel->shutdown();
+        }
+        static::$kernel = static::createKernel(array());
+        static::$kernel->boot();
+        $kernel = static::getKernel();
 
         $databaseFile = $kernel->getContainer()->getParameter('database_path');
         $application = new Application($kernel);

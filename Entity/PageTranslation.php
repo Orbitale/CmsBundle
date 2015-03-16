@@ -1,21 +1,21 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Pierstoval\Bundle\CmsBundle\Entity;
+namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="pierstoval_cms_pages_translations",
+ * @ORM\Table(name="orbitale_cms_pages_translations",
  *     uniqueConstraints={
  *          @ORM\UniqueConstraint(name="lookup_unique_idx", columns={
  *             "locale", "object_id", "field"

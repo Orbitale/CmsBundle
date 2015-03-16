@@ -1,14 +1,14 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Pierstoval\Bundle\CmsBundle\DependencyInjection;
+namespace Orbitale\Bundle\CmsBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class PierstovalCmsExtension extends Extension
+class OrbitaleCmsExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -48,6 +48,6 @@ class PierstovalCmsExtension extends Extension
             ), $layout);
         }
 
-        $container->setParameter('pierstoval_cms.config', $config);
+        $container->setParameter('orbitale_cms.config', $config);
     }
 }

@@ -1,5 +1,5 @@
-pierstoval_cms_front:
-    resource: "@PierstovalCmsBundle/Controller/FrontController.php"
+orbitale_cms_front:
+    resource: "@OrbitaleCmsBundle/Controller/FrontController.php"
     type:     annotation
     prefix:   /site/
 

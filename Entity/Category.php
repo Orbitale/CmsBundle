@@ -1,14 +1,14 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Pierstoval\Bundle\CmsBundle\Entity;
+namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="pierstoval_cms_categories")
+ * @ORM\Table(name="orbitale_cms_categories")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  */
 class Category
@@ -70,14 +70,14 @@ class Category
 
     /**
      * @var Category
-     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category", inversedBy="children")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $parent;
 
     /**
      * @var Category[]
-     * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category", mappedBy="parent")
      */
     protected $children;
 

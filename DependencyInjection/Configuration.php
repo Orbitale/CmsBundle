@@ -1,14 +1,14 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Pierstoval\Bundle\CmsBundle\DependencyInjection;
+namespace Orbitale\Bundle\CmsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -26,14 +26,14 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('pierstoval_cms');
+        $rootNode = $treeBuilder->root('orbitale_cms');
 
         $rootNode
             ->children()
                 ->arrayNode('layouts')
                     ->defaultValue(array(
                         'front' => array(
-                            'resource' => 'PierstovalCmsBundle::default_layout.html.twig',
+                            'resource' => 'OrbitaleCmsBundle::default_layout.html.twig',
                             'pattern' => '^/',
                         ),
                     ))

@@ -4,10 +4,10 @@ parameters:
 #    parameter_name: value
 
 services:
-    pierstoval_cms.listeners.layouts:
-        class: Pierstoval\Bundle\CmsBundle\Listeners\LayoutsListener
+    orbitale_cms.listeners.layouts:
+        class: Orbitale\Bundle\CmsBundle\Listeners\LayoutsListener
         arguments:
-            config: %pierstoval_cms.config%
+            config: %orbitale_cms.config%
             templating: @templating
         tags:
           - { name: kernel.event_subscriber }

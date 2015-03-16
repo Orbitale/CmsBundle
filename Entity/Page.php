@@ -1,14 +1,14 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Pierstoval\Bundle\CmsBundle\Entity;
+namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,10 +22,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="Pierstoval\Bundle\CmsBundle\Repository\PageRepository")
- * @ORM\Table(name="pierstoval_cms_pages")
+ * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
+ * @ORM\Table(name="orbitale_cms_pages")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @Gedmo\TranslationEntity(class="Pierstoval\Bundle\CmsBundle\Entity\PageTranslation")
+ * @Gedmo\TranslationEntity(class="Orbitale\Bundle\CmsBundle\Entity\PageTranslation")
  * @UniqueEntity("slug")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -91,7 +91,7 @@ class Page
 
     /**
      * @var Category
-     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Category")
+     * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category")
      * @ORM\JoinColumn(name="category_id", nullable=true)
      */
     protected $category;
@@ -128,14 +128,14 @@ class Page
 
     /**
      * @var Page
-     * @ORM\ManyToOne(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", inversedBy="children", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Page", inversedBy="children", fetch="EAGER")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $parent;
 
     /**
      * @var Page[]
-     * @ORM\OneToMany(targetEntity="Pierstoval\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
      */
     protected $children;
 

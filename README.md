@@ -1,4 +1,4 @@
-# Pierstoval CMS Bundle
+# Orbitale CMS Bundle
 
 This bundle is a simple helper to create a little CMS based on a classic system.
 
@@ -10,7 +10,7 @@ It proposes to use the awesome [EasyAdminBundle](https://github.com/javiereguilu
 * [Install](#install)
 * [Setup](#setup)
 * [Usage](#usage)
-* [Set up `PierstovalTranslationBundle` *(optional)*](#translation)
+* [Set up `OrbitaleTranslationBundle` *(optional)*](#translation)
 * [Setup Doctrine extensions](#doctrine_extensions)
 * [Using FOSUserBundle to have a secured backoffice](#fosuserbundle)
 
@@ -21,7 +21,7 @@ It proposes to use the awesome [EasyAdminBundle](https://github.com/javiereguilu
 Require the bundle in composer:
 
 ```shell
-$ composer require pierstoval/cms-bundle
+$ composer require orbitale/cms-bundle
 ```
 
 ## Setup 
@@ -35,8 +35,8 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Pierstoval\Bundle\CmsBundle\PierstovalCmsBundle(),
-        new Pierstoval\Bundle\TranslationBundle\PierstovalTranslationBundle(), # Optional
+        new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
+        new Orbitale\Bundle\TranslationBundle\OrbitaleTranslationBundle(), # Optional
         new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
     );
@@ -44,7 +44,7 @@ public function registerBundles()
 
 ```
 
-Activate the translator (it's mandatory for doctrine extensions, and also if you use `PierstovalTranslationBundle`)
+Activate the translator (it's mandatory for doctrine extensions, and also if you use `OrbitaleTranslationBundle`)
 
 ```yml
 # app/config/config.yml
@@ -55,14 +55,14 @@ framework:
 easy_admin:
     entities:
         "Cms Pages":
-            class: Pierstoval\Bundle\CmsBundle\Entity\Page
+            class: Orbitale\Bundle\CmsBundle\Entity\Page
             list:
                 fields: [ id, parent, title, slug, content, category, enabled ]
             form:
                 fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 
         "Cms Categories":
-            class: Pierstoval\Bundle\CmsBundle\Entity\Category
+            class: Orbitale\Bundle\CmsBundle\Entity\Category
             list:
                 fields: [ id, parent, title, slug, content, category, enabled ]
             form:
@@ -77,8 +77,8 @@ Import the necessary routing files:
 # Front-office, it has to be "alone" in its path, because there is a deep routing management.
 # If you set the prefix as "/" or any other route you are already using, you may have some
 #  unexpected "404" or other errors.
-pierstoval_cms_front:
-    resource: "@PierstovalCmsBundle/Controller/FrontController.php"
+orbitale_cms_front:
+    resource: "@OrbitaleCmsBundle/Controller/FrontController.php"
     type:     annotation
     prefix:   /site/
 
@@ -89,14 +89,14 @@ easy_admin:
     prefix: /admin/
 ```
 
-## <a name="translation"></a> Set up `PierstovalTranslationBundle` *(optional)*
+## <a name="translation"></a> Set up `OrbitaleTranslationBundle` *(optional)*
 
-If you use [PierstovalTranslationBundle](https://github.com/Pierstoval/TranslationBundle) , you can configure your locales.
+If you use [OrbitaleTranslationBundle](https://github.com/Orbitale/TranslationBundle) , you can configure your locales.
 (of course you need to have registered the bundle in your `AppKernel`)
 
 ```yml
 # app/config/config.yml
-pierstoval_translation:
+orbitale_translation:
     locales: fr,de,en,es # Add all locales you want to use in your application
 ```
 
@@ -288,16 +288,3 @@ security:
 
 The homepage is always the first `Page` object with its `homepage` attribute set to true. Be sure to have only one
 element defined as homepage, or you may have unexpected results.
-
-Conclusion
--------------------------
-
-You can also view this repository [on its Packagist.org page](https://packagist.org/packages/pierstoval/cms-bundle), even though it's not really useful to see.
-
-Feel free to send me a mail at pierstoval@gmail.com if you have any question !! (I LOVE questions, really, feel free to ask !)
- 
-If you find this bundle to be cool, feel free to propose improvements and send pull-requests !
-
-Thanks for reading and using !
-
-Pierstoval.

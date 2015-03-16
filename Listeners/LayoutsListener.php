@@ -1,7 +1,14 @@
 <?php
+/*
+* This file is part of the OrbitaleCmsBundle package.
+*
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
-namespace Pierstoval\Bundle\CmsBundle\Listeners;
-
+namespace Orbitale\Bundle\CmsBundle\Listeners;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -1,11 +1,44 @@
 language: php
 
 php:
-  - 5.3.3
-  - 5.4
-  - 5.5
-  - 5.6
+    - 5.3.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - nightly
+    - hhvm
+    - hhvm-nightly
 
-before_script: composer install --dev
+branches:
+    only:
+        - master
+        - /^\d+\.\d+$/
 
-script: phpunit
+matrix:
+    include:
+        - php: 5.5
+          env: SYMFONY_VERSION=2.3.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.4.*
+        - php: 5.5
+          env: SYMFONY_VERSION=2.6.*
+        - php: 5.5
+          env: SYMFONY_VERSION='2.7.*@dev'
+    allow_failures:
+        - php: nightly
+        - php: hhvm-nightly
+
+before_script:
+    - composer self-update
+    - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
+    - composer update --prefer-source
+
+script:
+    - mkdir -p build/logs
+    - phpunit --coverage-clover build/logs/clover.xml
+
+after_script:
+    - vendor/bin/coveralls -v --config .coveralls.yml
+
+notifications:
+    email: alex@orbitale.io

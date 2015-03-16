@@ -1,17 +1,17 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
 
-namespace Pierstoval\Bundle\CmsBundle\Controller;
+namespace Orbitale\Bundle\CmsBundle\Controller;
 
-use Pierstoval\Bundle\CmsBundle\Entity\Page;
-use Pierstoval\Bundle\CmsBundle\Repository\PageRepository;
+use Orbitale\Bundle\CmsBundle\Entity\Page;
+use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -31,12 +31,12 @@ class FrontController extends Controller
         $slugsArray = explode('/', $slugs);
 
         /** @var PageRepository $repo */
-        $repo = $this->getDoctrine()->getManager()->getRepository('PierstovalCmsBundle:Page');
+        $repo = $this->getDoctrine()->getManager()->getRepository('OrbitaleCmsBundle:Page');
 
         /** @var Page[] $pages */
         $pages = $repo->findBy(array('slug' => $slugsArray));
 
-        return $this->render('PierstovalCmsBundle:Front:index.html.twig', array(
+        return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
             'pages' => $pages,
             'page'  => $this->getFinalPage($slugsArray, $pages)
         ));
@@ -51,7 +51,7 @@ class FrontController extends Controller
     protected function getHomepage($host = null)
     {
         /** @var PageRepository $repo */
-        $repo = $this->getDoctrine()->getManager()->getRepository('PierstovalCmsBundle:Page');
+        $repo = $this->getDoctrine()->getManager()->getRepository('OrbitaleCmsBundle:Page');
 
         /** @var Page|null $homepage */
         $homepage = $repo->findHomepage($host);

@@ -4,14 +4,14 @@ parameters:
 easy_admin:
     entities:
         "Cms Pages":
-            class: Pierstoval\Bundle\CmsBundle\Entity\Page
+            class: Orbitale\Bundle\CmsBundle\Entity\Page
             list:
                 fields: [ id, parent, title, slug, content, category, enabled ]
             form:
                 fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 
         "Cms Categories":
-            class: Pierstoval\Bundle\CmsBundle\Entity\Category
+            class: Orbitale\Bundle\CmsBundle\Entity\Category
             list:
                 fields: [ id, parent, title, slug, content, category, enabled ]
             form:
@@ -31,7 +31,7 @@ framework:
 doctrine:
     dbal:
         driver:   pdo_sqlite
-        dbname:   pierstoval_cms_test
+        dbname:   orbitale_cms_test
         user:     root
         charset:  UTF8
         path:     %kernel.root_dir%/../../../vendor/test.db

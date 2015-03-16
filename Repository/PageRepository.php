@@ -1,10 +1,18 @@
 <?php
+/*
+* This file is part of the OrbitaleCmsBundle package.
+*
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
-namespace Pierstoval\Bundle\CmsBundle\Repository;
+namespace Orbitale\Bundle\CmsBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Pierstoval\Bundle\CmsBundle\Entity\Page;
+use Orbitale\Bundle\CmsBundle\Entity\Page;
 
 class PageRepository extends EntityRepository {
 

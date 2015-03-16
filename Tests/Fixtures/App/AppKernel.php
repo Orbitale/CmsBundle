@@ -1,8 +1,8 @@
 <?php
 /*
-* This file is part of the PierstovalCmsBundle package.
+* This file is part of the OrbitaleCmsBundle package.
 *
-* (c) Alexandre "Pierstoval" Rock Ancelet <pierstoval@gmail.com>
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
 *
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
@@ -23,8 +23,8 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
-            new Pierstoval\Bundle\CmsBundle\PierstovalCmsBundle(),
-            new Pierstoval\Bundle\TranslationBundle\PierstovalTranslationBundle(),
+            new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
+            new Orbitale\Bundle\TranslationBundle\OrbitaleTranslationBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
             new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
         );
@@ -50,7 +50,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return sys_get_temp_dir().'/PierstovalCmsBundle/cache';
+        return sys_get_temp_dir().'/OrbitaleCmsBundle/cache';
     }
 
     /**
@@ -58,6 +58,6 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return sys_get_temp_dir().'/PierstovalCmsBundle/logs';
+        return sys_get_temp_dir().'/OrbitaleCmsBundle/logs';
     }
 }

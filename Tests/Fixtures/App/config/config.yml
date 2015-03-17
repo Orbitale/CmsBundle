@@ -1,6 +1,6 @@
 parameters:
     locale: fr
-    database_path: %kernel.root_dir%/../../../vendor/test.db
+    database_path: %kernel.root_dir%/../../../build/test.db
 
 easy_admin:
     entities:
@@ -20,10 +20,10 @@ easy_admin:
 
 framework:
     secret:          secret
-    test: ~
+    test:            ~
     router:          { resource: "%kernel.root_dir%/config/routing.yml" }
     form:            true
-    csrf_protection: true
+    csrf_protection: false
     validation:      { enable_annotations: true }
     templating:      { engines: ['twig'] }
     session:
@@ -75,13 +75,7 @@ security:
     firewalls:
         secured_area:
             pattern:    ^/
-            anonymous: true
-
+            anonymous:  true
     providers:
         in_memory:
-             memory:
-                users:
-                    one_user: { password: password, roles: 'ROLE_USER' }
-
-    encoders:
-        Symfony\Component\Security\Core\User\User: plaintext
+             memory: ~

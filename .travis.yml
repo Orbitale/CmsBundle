@@ -40,4 +40,4 @@ after_script:
     - vendor/bin/coveralls -v --config .coveralls.yml
 
 notifications:
-    email: alex@orbitale.io
+    email: pierstoval@gmail.com

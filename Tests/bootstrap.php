@@ -9,13 +9,17 @@
 */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Symfony\Component\ClassLoader\ClassLoader;
 
 $file = __DIR__ . '/../vendor/autoload.php';
 if (!file_exists($file)) {
     throw new RuntimeException('Install dependencies to run test suite.');
 }
 $autoload = require_once $file;
+
+if (is_dir(__DIR__.'/../build')) {
+    echo "Removing files in the build directory.\n";
+    exec('rm -rf '.__DIR__.'/../build/*');
+}
 
 AnnotationRegistry::registerLoader(function($class) use ($autoload) {
     $autoload->loadClass($class);

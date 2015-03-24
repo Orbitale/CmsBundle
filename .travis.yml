@@ -29,8 +29,8 @@ matrix:
 
 before_script:
     - composer self-update
-    - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
-    - composer update --prefer-source
+    - sh -c 'if [ "$SYMFONY_VERSION" != "" ]; then composer require --no-update symfony/symfony=$SYMFONY_VERSION; fi;'
+    - composer update --prefer-dist
 
 script:
     - mkdir -p build/logs

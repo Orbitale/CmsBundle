@@ -32,24 +32,34 @@ class AbstractTestCase extends WebTestCase
     protected static $container;
 
     /**
+     * @param array $options
+     */
+    protected static function bootKernel(array $options = array())
+    {
+        if (method_exists('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase', 'bootKernel')) {
+            parent::bootKernel();
+        } else {
+            if (null !== static::$kernel) {
+                static::$kernel->shutdown();
+            }
+            static::$kernel = static::createKernel($options);
+            static::$kernel->boot();
+            static::$kernel;
+        }
+    }
+
+    /**
      * @param array $options An array of options to pass to the createKernel class
      * @return KernelInterface
      */
     protected function getKernel(array $options = array())
     {
-        if (!static::$kernel) {
-            $this->setUp();
-        }
+        static::bootKernel($options);
         return static::$kernel;
     }
 
     public function setUp()
     {
-        if (static::$kernel) {
-            static::$kernel->shutdown();
-        }
-        static::$kernel = static::createKernel(array());
-        static::$kernel->boot();
         $kernel = static::getKernel();
 
         $databaseFile = $kernel->getContainer()->getParameter('database_path');
@@ -70,19 +80,6 @@ class AbstractTestCase extends WebTestCase
         $application->add($command);
         $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
         $command->run($input, new NullOutput());
-
-        // Check security context, because of deprecation error
-        try {
-            $this->getKernel()->getContainer()->get('security.context');
-        } catch (\Exception $baseException) {
-            $e = $baseException;
-            do {
-                if ($e instanceof \PHPUnit_Framework_Error_Deprecated) {
-                    $this->markTestSkipped('Skip deprecated exceptions thrown by Symfony 2.7 until safe release.');
-                }
-                $e = $e->getPrevious();
-            } while ($e);
-        }
     }
 
 }

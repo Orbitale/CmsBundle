@@ -19,11 +19,11 @@ class FrontControllerTest extends AbstractTestCase
 
     public function testNoHomepage()
     {
+        $error = 'No homepage has been configured. Please check your existing pages or create a homepage in your backoffice. (404 Not Found)';
         $client = static::createClient();
         $crawler = $client->request('GET', '/site/');
-        $error500 = 'No homepage has been configured. Please check your existing pages or create a homepage in your backoffice. (500 Internal Server Error)';
-        $this->assertEquals($error500, trim($crawler->filter('title')->html()));
-        $this->assertEquals(500, $client->getResponse()->getStatusCode());
+        $this->assertEquals($error, trim($crawler->filter('title')->html()));
+        $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
     public function testNoPageWithSlug()
@@ -45,9 +45,10 @@ class FrontControllerTest extends AbstractTestCase
             ->setContent('Hello world!')
         ;
 
-        static::bootKernel();
-        static::$kernel->getContainer()->get('doctrine')->getManager()->persist($homepage);
-        static::$kernel->getContainer()->get('doctrine')->getManager()->flush();
+        /** @var EntityManager $em */
+        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em->persist($homepage);
+        $em->flush();
 
         $client = static::createClient();
 
@@ -65,10 +66,8 @@ class FrontControllerTest extends AbstractTestCase
 
     public function testTree()
     {
-        static::bootKernel();
-
         /** @var EntityManager $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Page();
@@ -121,10 +120,8 @@ class FrontControllerTest extends AbstractTestCase
 
     public function testMetas()
     {
-        static::bootKernel();
-
         /** @var EntityManager $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
 
         $page = new Page();
         $page

@@ -39,9 +39,8 @@ class CategoryTest extends AbstractTestCase
 
         $homepage->setCategory($category);
 
-        static::bootKernel();
         /** @var EntityManager $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
         $em->persist($homepage);
         $em->persist($category);
         $em->flush();

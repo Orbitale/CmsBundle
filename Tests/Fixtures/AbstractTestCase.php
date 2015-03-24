@@ -15,8 +15,8 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -63,13 +63,13 @@ class AbstractTestCase extends WebTestCase
         $command = new CreateDatabaseDoctrineCommand();
         $application->add($command);
         $input = new ArrayInput(array('command' => 'doctrine:database:create',));
-        $command->run($input, new ConsoleOutput());
+        $command->run($input, new NullOutput());
 
         // Create database schema
         $command = new CreateSchemaDoctrineCommand();
         $application->add($command);
         $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
-        $command->run($input, new ConsoleOutput());
+        $command->run($input, new NullOutput());
 
         // Check security context, because of deprecation error
         try {

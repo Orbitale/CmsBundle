@@ -231,17 +231,17 @@ class Category
      */
     public function onRemove(LifecycleEventArgs $event)
     {
-        $om = $event->getObjectManager();
-        foreach ($this->children as $child) {
-            $child->setParent(null);
-            $om->persist($child);
+        $em = $event->getEntityManager();
+        if ($this->children) {
+            foreach ($this->children as $child) {
+                $child->setParent(null);
+                $em->persist($child);
+            }
         }
         $this->enabled = false;
         $this->parent = null;
         $this->name .= '-'.$this->id.'-deleted';
         $this->slug .= '-'.$this->id.'-deleted';
-        $om->persist($this);
-        $om->flush();
     }
 
 }

@@ -4,30 +4,19 @@
 
 # Orbitale CMS Bundle
 
-This bundle is a simple helper to create a little CMS based on a classic system.
-
-It proposes to use the awesome [EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle/) by
-[Javier Eguiluz](https://github.com/javiereguiluz) to generate a simple backoffice
-
-## Index
-
-* [Install](#install)
-* [Setup](#setup)
-* [Setting up EasyAdmin](#easyadmin)
-* [Set up `OrbitaleTranslationBundle` *(optional)*](#translation)
-* [Setup Doctrine extensions *(optional)*](#doctrine_extensions)
-* [Customize homepage](#homepage)
+This bundle is a simple helper to create a very simple CMS based on a classic system with Pages and Categories.
 
 ## Requirements
 
 * PHP 5.4+ (because we are using Traits)
+* Symfony 2.3+
 * Doctrine ORM
 
 ## Install
 
 **Warning: This bundle uses PHP Traits, so you must have PHP 5.4+**
 
-Require the bundle in composer:
+Require the bundle by using [Composer](https://getcomposer.org/):
 
 ```shell
 $ composer require orbitale/cms-bundle
@@ -35,7 +24,7 @@ $ composer require orbitale/cms-bundle
 
 ## Setup 
 
-Setup the necessary bundles:
+Register the necessary bundles in your Kernel:
 
 ```php
 <?php
@@ -46,7 +35,6 @@ public function registerBundles()
         // ...
         new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
         new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-        new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),        // Optional
     );
 }
 
@@ -93,13 +81,17 @@ services:
 
 ## Usage
 
-Simply go to your backoffice in `/admin`, and login if you are using the `Security` component.
+### Manage pages 
 
-You can manage `Cms Pages` and `Cms Categories` as you wish, like in an usual backoffice.
+To manage your page, you should use any back-end solution, like [EasyAdmin](https://github.com/javiereguiluz/EasyAdminBundle/)
+(which we suggest) or [SonataAdmin](https://sonata-project.org/bundles/admin), or any else.
+You must have configured it to manage at least the `Orbitale\Bundle\CmsBundle\Entity\Page` entity.
+
+### View pages
 
 The `FrontController` handles some methods to view pages with a single `indexAction()`.
 
-The URI for a classic page is simply `/{slug}` where `slug` is the... page slug (wow, thanks captain hindsight!).
+The URI for a classic page is simply `/{slug}` where `slug` is the... page slug.
 
 If your page has one `parent`, then the URI is the following: `/{parentSlug}/{slug}`. As the slugs are verbose enough,
 you can notice that we respect the pages hierarchy in the generated url.

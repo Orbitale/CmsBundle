@@ -5,7 +5,7 @@ parameters:
 
 services:
     orbitale_cms.listeners.layouts:
-        class: Orbitale\Bundle\CmsBundle\Listeners\LayoutsListener
+        class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
         arguments:
             config: %orbitale_cms.config%
             templating: @templating

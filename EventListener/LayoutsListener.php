@@ -8,7 +8,7 @@
 * file that was distributed with this source code.
 */
 
-namespace Orbitale\Bundle\CmsBundle\Listeners;
+namespace Orbitale\Bundle\CmsBundle\EventListener;
 
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

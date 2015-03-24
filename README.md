@@ -11,8 +11,13 @@ It proposes to use the awesome [EasyAdminBundle](https://github.com/javiereguilu
 * [Setup](#setup)
 * [Usage](#usage)
 * [Set up `OrbitaleTranslationBundle` *(optional)*](#translation)
-* [Setup Doctrine extensions](#doctrine_extensions)
-* [Using FOSUserBundle to have a secured backoffice](#fosuserbundle)
+* [Setup Doctrine extensions *(optional)*](#doctrine_extensions)
+* [Using FOSUserBundle to have a secured backoffice *(optional)*](#fosuserbundle)
+
+## Requirements
+
+* PHP 5.4+ (because we are using Traits)
+* Doctrine ORM
 
 ## Install
 
@@ -36,9 +41,9 @@ public function registerBundles()
     $bundles = array(
         // ...
         new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
-        new Orbitale\Bundle\TranslationBundle\OrbitaleTranslationBundle(), # Optional
-        new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-        new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
+        new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),  // Optional
+        new Orbitale\Bundle\TranslationBundle\OrbitaleTranslationBundle(), // Optional
+        new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),        // Optional
     );
 }
 

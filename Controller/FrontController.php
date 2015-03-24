@@ -20,7 +20,7 @@ class FrontController extends Controller
 {
 
     /**
-     * @Route("/{slugs}", name="cms_home", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
+     * @Route("/{slugs}", name="orbitale_cms_home", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
      */
     public function indexAction($slugs = '', Request $request)
     {

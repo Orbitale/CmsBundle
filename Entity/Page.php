@@ -10,9 +10,8 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -25,7 +24,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
  * @ORM\Table(name="orbitale_cms_pages")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
- * @Gedmo\TranslationEntity(class="Orbitale\Bundle\CmsBundle\Entity\PageTranslation")
  * @UniqueEntity("slug")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -47,7 +45,6 @@ class Page
 
     /**
      * @var string
-     * @Gedmo\Translatable()
      * @ORM\Column(name="title", type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(max=255)
@@ -64,7 +61,6 @@ class Page
 
     /**
      * @var string
-     * @Gedmo\Translatable()
      * @ORM\Column(name="page_content", type="text", nullable=true)
      */
     protected $content;
@@ -139,20 +135,9 @@ class Page
      */
     protected $children;
 
-    /**
-     * @var PageTranslation[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="PageTranslation", mappedBy="object", cascade={"persist", "remove"})
-     */
-    private $translations;
-
     public function __toString()
     {
         return $this->title;
-    }
-
-    public function __construct()
-    {
-        $this->translations = new ArrayCollection();
     }
 
     /**
@@ -434,27 +419,6 @@ class Page
         return $this;
     }
 
-    /**
-     * @return PageTranslation[]
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
-     * @param PageTranslation $t
-     * @return Page
-     */
-    public function addTranslation(PageTranslation $t)
-    {
-        if (!$this->translations->contains($t)) {
-            $this->translations[] = $t;
-            $t->setObject($this);
-        }
-        return $this;
-    }
-
     public function getTree($separator = '/')
     {
         $tree = '';
@@ -475,10 +439,6 @@ class Page
     public function onRemove(LifecycleEventArgs $event)
     {
         $om = $event->getObjectManager();
-        foreach ($this->translations as $translation) {
-            $om->remove($translation);
-        }
-        $om->flush();
         foreach ($this->children as $child) {
             $child->setParent(null);
             $om->persist($child);

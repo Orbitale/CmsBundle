@@ -34,10 +34,6 @@ class OrbitaleCmsExtension extends Extension
         $loader->load('services.yml');
 
         foreach ($config['layouts'] as $type => $layout) {
-            if (is_numeric($type)) {
-                unset($config['layouts'][$type]);
-                $type = $layout['type'];
-            }
             $config['layouts'][$type] = array_merge(array(
                 'type' => $type,
                 'assets_css' => '',

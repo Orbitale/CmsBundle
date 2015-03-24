@@ -11,15 +11,16 @@
         "doctrine/doctrine-bundle": "~1.2",
         "sensio/framework-extra-bundle": "~3.0",
         "symfony/symfony": "~2.3",
-        "javiereguiluz/easyadmin-bundle": "~1.0",
-        "friendsofsymfony/user-bundle": "~1.3",
-        "stof/doctrine-extensions-bundle": "~1.1",
-        "orbitale/translation-bundle": "~1.3"
+        "stof/doctrine-extensions-bundle": "~1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4",
         "symfony/swiftmailer-bundle": "~2.3",
         "satooshi/php-coveralls": "~0.6"
+    },
+    "suggest": {
+        "javiereguiluz/easyadmin-bundle": "To manage your pages directly inside your CMS (view documentation)",
+        "orbitale/translation-bundle": "To use the database to store all your translations (not only cms)"
     },
     "autoload": {
         "psr-4": {

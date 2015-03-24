@@ -1,4 +1,4 @@
-{% extends app.request.attributes.get('_cms_layout') %}
+{% extends app.request.attributes.get('_orbitale_cms_layout') %}
 
 {% block stylesheets %}
 {{ parent() }}
@@ -11,10 +11,10 @@
 
 {% block title %}{{ page.title }}{% endblock %}
 
-{% block cms_breadcrumbs %}
+{% block orbitale_cms_breadcrumbs %}
     <div id="breadcrumbs">
         {% set slugsArray = [] %}
-        <a href="{{ url('cms_home') }}">{{ 'home' | trans }}</a> &gt;
+        <a href="{{ url('orbitale_cms_home') }}">{{ 'home' | trans }}</a> &gt;
         {% for key, breadcrumbPage in pages %}
 
             {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}
@@ -22,7 +22,7 @@
             {% if breadcrumbPage.id == page.id %}
                 {{ breadcrumbPage.title }}
             {% else %}
-                <a href="{{ url('cms_home', {slugs: slugsArray|join('/')}) }}">
+                <a href="{{ url('orbitale_cms_home', {slugs: slugsArray|join('/')}) }}">
                     {{ breadcrumbPage.title }}
                 </a>
             {% endif %}
@@ -33,7 +33,7 @@
     </div>
 {% endblock %}
 
-{% block cms_page_content %}
+{% block orbitale_cms_page_content %}
     <h1>{{ page.title }}</h1>
     <article>
         {{ page.content | raw }}

@@ -81,7 +81,7 @@ class LayoutsListener implements EventSubscriberInterface
             ), 0, $finalLayout, null);
         }
 
-        $event->getRequest()->attributes->set('_cms_layout', $finalLayout);
+        $event->getRequest()->attributes->set('_orbitale_cms_layout', $finalLayout);
 
     }
 }

@@ -70,25 +70,31 @@ class FrontController extends Controller
      */
     protected function getFinalPage(array $slugs, array $pages)
     {
-        if (count($slugs) !== count($pages)) {
+        if (!count($slugs) || count($slugs) !== count($pages)) {
             throw $this->createNotFoundException();
         }
+        /** @var Page $previousPage */
+        $previousPage = null;
+
         foreach ($slugs as $k => $slug) {
-            if (
-                isset($pages[$k])
-                && $pages[$k]->getSlug() === $slug
-                && $pages[$k]->isEnabled()
-                && (
-                    (isset($slugs[$k - 1]) && $pages[$k]->getParent()->getId() === $pages[$k - 1]->getId())
-                    || (!isset($slugs[$k - 1]) && !$pages[$k]->getParent())
-                )
-            ) {
+            $previousPage = null;
+            foreach ($pages as $p) {
+                if (
+                    $p->getSlug() === $slug
+                    && $p->isEnabled()
+                    && (!$previousPage || $previousPage && $previousPage->getId() === $previousPage->getId())
+                ) {
+                    $previousPage = $p;
+                    break;
+                }
+            }
+            if ($previousPage) {
                 continue;
             } else {
                 throw $this->createNotFoundException();
             }
         }
-        return array_pop($pages);
+        return $previousPage;
     }
 
 }

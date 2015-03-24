@@ -38,7 +38,7 @@ class PageRepository extends EntityRepository {
             $or->add($and);
             $qb->setParameter('host', $host);
         }
-        $qb->andWhere($or);// AND ( ... OR ... )
+        $qb->andWhere($or);// AND ( page.host is null OR ( page.host is not null and page.host = :host ) )
 
         return $qb
             ->getQuery()

@@ -345,7 +345,7 @@ class Page
      */
     public function setParent(Page $parent = null)
     {
-        if ($parent && $parent->getId() == $this->id) {
+        if ($parent === $this) {
             // Refuse the page to have itself as parent
             $this->parent = null;
             return $this;

@@ -59,7 +59,7 @@ class FrontController extends Controller
         if ($homepage) {
             return $homepage->getSlug();
         }
-        throw new \Exception('No homepage has been configured. Please check your existing pages or create a homepage in your backoffice.');
+        throw $this->createNotFoundException('No homepage has been configured. Please check your existing pages or create a homepage in your backoffice.');
     }
 
     /**

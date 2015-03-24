@@ -10,6 +10,7 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -130,10 +131,15 @@ class Page
     protected $parent;
 
     /**
-     * @var Page[]
+     * @var Page[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
      */
     protected $children;
+
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     public function __toString()
     {
@@ -363,7 +369,7 @@ class Page
     }
 
     /**
-     * @return Page[]
+     * @return Page[]|ArrayCollection
      */
     public function getChildren()
     {
@@ -371,13 +377,14 @@ class Page
     }
 
     /**
-     * @param Page[] $children
+     * @param Page $page
      *
      * @return Page
+     *
      */
-    public function setChildren($children)
+    public function addChild(Page $page)
     {
-        $this->children = $children;
+        $this->children->add($page);
         return $this;
     }
 
@@ -438,17 +445,17 @@ class Page
      */
     public function onRemove(LifecycleEventArgs $event)
     {
-        $om = $event->getObjectManager();
-        foreach ($this->children as $child) {
-            $child->setParent(null);
-            $om->persist($child);
+        $em = $event->getEntityManager();
+        if ($this->children) {
+            foreach ($this->children as $child) {
+                $child->setParent(null);
+                $em->persist($child);
+            }
         }
         $this->enabled = false;
         $this->parent = null;
         $this->title .= '-'.$this->id.'-deleted';
         $this->slug .= '-'.$this->id.'-deleted';
-        $om->persist($this);
-        $om->flush();
     }
 
 }

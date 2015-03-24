@@ -20,7 +20,7 @@
 {% block orbitale_cms_breadcrumbs %}
     <div id="breadcrumbs">
         {% set slugsArray = [] %}
-        <a href="{{ url('orbitale_cms_home') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a> &gt;
+        <a href="{{ path('orbitale_cms_home') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a> &gt;
         {% for key, breadcrumbPage in pages %}
 
             {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}
@@ -28,7 +28,7 @@
             {% if breadcrumbPage.id == page.id %}
                 {{ breadcrumbPage.title }}
             {% else %}
-                <a href="{{ url('orbitale_cms_home', {slugs: slugsArray|join('/')}) }}">
+                <a href="{{ path('orbitale_cms_home', {slugs: slugsArray|join('/')}) }}">
                     {{ breadcrumbPage.title }}
                 </a>
             {% endif %}

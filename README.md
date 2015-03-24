@@ -1,3 +1,7 @@
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/dcb6d7ad-83c6-458d-acd6-8dde8b8020bc/mini.png)](https://insight.sensiolabs.com/projects/dcb6d7ad-83c6-458d-acd6-8dde8b8020bc)
+[![Coverage Status](https://coveralls.io/repos/Orbitale/CmsBundle/badge.svg?branch=master)](https://coveralls.io/r/Orbitale/CmsBundle?branch=master)
+[![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=master)](https://travis-ci.org/Orbitale/CmsBundle)
+
 # Orbitale CMS Bundle
 
 This bundle is a simple helper to create a little CMS based on a classic system.
@@ -9,10 +13,10 @@ It proposes to use the awesome [EasyAdminBundle](https://github.com/javiereguilu
 
 * [Install](#install)
 * [Setup](#setup)
-* [Usage](#usage)
+* [Setting up EasyAdmin](#easyadmin)
 * [Set up `OrbitaleTranslationBundle` *(optional)*](#translation)
 * [Setup Doctrine extensions *(optional)*](#doctrine_extensions)
-* [Using FOSUserBundle to have a secured backoffice *(optional)*](#fosuserbundle)
+* [Customize homepage](#homepage)
 
 ## Requirements
 
@@ -41,37 +45,11 @@ public function registerBundles()
     $bundles = array(
         // ...
         new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
-        new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),  // Optional
-        new Orbitale\Bundle\TranslationBundle\OrbitaleTranslationBundle(), // Optional
+        new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),        // Optional
     );
 }
 
-```
-
-Activate the translator (it's mandatory for doctrine extensions, and also if you use `OrbitaleTranslationBundle`)
-
-```yml
-# app/config/config.yml
-framework:
-    translator:      { fallback: %locale% }
-
-## This configuration allows you to manage your pages and categories directly in the EasyAdminBundle way
-easy_admin:
-    entities:
-        "Cms Pages":
-            class: Orbitale\Bundle\CmsBundle\Entity\Page
-            list:
-                fields: [ id, parent, title, slug, content, category, enabled ]
-            form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
-
-        "Cms Categories":
-            class: Orbitale\Bundle\CmsBundle\Entity\Category
-            list:
-                fields: [ id, parent, title, slug, content, category, enabled ]
-            form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 ```
 
 Import the necessary routing files:
@@ -81,58 +59,23 @@ Import the necessary routing files:
 
 # Front-office, it has to be "alone" in its path, because there is a deep routing management.
 # If you set the prefix as "/" or any other route you are already using, you may have some
-#  unexpected "404" or other errors.
+#  unexpected "404" or other errors, depending on the routes priority.
 orbitale_cms_front:
     resource: "@OrbitaleCmsBundle/Controller/FrontController.php"
     type:     annotation
     prefix:   /site/
 
-# Admin panel, granted by @javiereguiluz's powerful EasyAdminBundle
-easy_admin:
-    resource: "@EasyAdminBundle/Controller"
-    type: annotation
-    prefix: /admin/
-```
-
-## <a name="translation"></a> Set up `OrbitaleTranslationBundle` *(optional)*
-
-If you use [OrbitaleTranslationBundle](https://github.com/Orbitale/TranslationBundle) , you can configure your locales.
-(of course you need to have registered the bundle in your `AppKernel`)
-
-```yml
-# app/config/config.yml
-orbitale_translation:
-    locales: fr,de,en,es # Add all locales you want to use in your application
 ```
 
 ## <a name="doctrine_extensions"></a> Setup Doctrine extensions
 
-In order to work properly, this bundle uses the power of GedmoDoctrine Extensions, provided by @stof.
-You have to add some configuration parameters in order to have it working properly:
+In order to work properly, this bundle uses the power of `GedmoDoctrineExtensions`, provided by @stof.
+You have to add some configuration parameters in order to have it working:
 
 ```yml
 # app/config/config.yml
 
-doctrine:
-    orm:
-        mappings:
-            translatable:
-                is_bundle: false
-                type: annotation
-                alias: Gedmo
-                prefix: Gedmo\Translatable\Entity
-                dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
-
 services:
-    gedmo.listener.translatable:
-        class: Gedmo\Translatable\TranslatableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ @annotations.cached_reader ] ]
-            - [ setDefaultLocale, [ %locale% ] ]
-            - [ setTranslationFallback, [ false ] ]
-
     gedmo.listener.timestampable:
         class: Gedmo\Timestampable\TimestampableListener
         tags:
@@ -201,95 +144,31 @@ Or in a controller:
 
 With this, you have a functional tree system for your CMS!
 
-## <a name="fosuserbundle"></a> Using FOSUserBundle to have a secured backoffice
+## <a name="easyadmin"></a> Setup EasyAdminBundle to manage pages and categories in its back-end
 
-If want to use `FOSUserBundle`, you have to setup the bundle by reading [FOSUserBundle's documentation](https://github.com/FriendsOfSymfony/FOSUserBundle#documentation).
+**Note: you need to `composer requier javiereguiluz/easyadmin-bundle` to use the component.**
 
-First, register the bundle in your kernel:
-
-```php
-<?php
-// app/AppKernel.php
-public function registerBundles()
-{
-    $bundles = array(
-        // ...
-        new FOS\UserBundle\FOSUserBundle(), // Only if you want a secured backoffice. See "Using FOSUserBundle" section below for more info.
-    );
-}
-
-```
-
-You can add these basic parameters if you want:
+This configuration allows you to manage your pages and categories directly in the [EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle) way.
 
 ```yml
-# app/config/routing.yml
-fos_user_security:
-    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+easy_admin:
+    entities:
+        "Cms Pages":
+            class: Orbitale\Bundle\CmsBundle\Entity\Page
+            list:
+                fields: [ id, parent, title, slug, content, category, enabled ]
+            form:
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 
-fos_user_profile:
-    resource: "@FOSUserBundle/Resources/config/routing/profile.xml"
-    prefix: /profile
-
-fos_user_register:
-    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
-    prefix: /register
-
-fos_user_resetting:
-    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
-    prefix: /resetting
-
-fos_user_change_password:
-    resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
-    prefix: /profile
+        "Cms Categories":
+            class: Orbitale\Bundle\CmsBundle\Entity\Category
+            list:
+                fields: [ id, parent, title, slug, content, category, enabled ]
+            form:
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
 ```
 
-```yml
-# app/config/config.yml
-# FOSUser basic config
-fos_user:
-    db_driver:     orm
-    firewall_name: main
-    user_class:    AppBundle\Entity\User # Specify your own User class, depending on its namespace and where you created it.
-```
-
-For this, use the basic `Security` component, configure your firewall as you would always do.
-
-If you do not know how-to, you can read the [Symfony documentation](http://symfony.com/fr/doc/current/book/security.html)
-
-Basically, you could add this settings as an example in your `security.yml` file:
-
-```yml
-# app/config/security.yml
-security:
-    encoders:
-        FOS\UserBundle\Model\UserInterface: sha512
-
-    role_hierarchy:
-        ROLE_ADMIN:       ROLE_USER
-        ROLE_SUPER_ADMIN: ROLE_ADMIN
-
-    providers:
-        fos_userbundle:
-            id: fos_user.user_provider.username
-
-    firewalls:
-        main:
-            pattern: ^/
-            form_login:
-                provider: fos_userbundle
-                csrf_provider: form.csrf_provider
-            logout:       true
-            anonymous:    true
-
-    access_control:
-        - { path: ^/login$,     role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register,   role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting,  role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/,     role: ROLE_ADMIN }
-```
-
-## <a name="homepage"></a> Customizing home page
+## <a name="homepage"></a> Customize home page
 
 The homepage is always the first `Page` object with its `homepage` attribute set to true. Be sure to have only one
 element defined as homepage, or you may have unexpected results.

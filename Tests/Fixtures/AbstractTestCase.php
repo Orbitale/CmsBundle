@@ -12,9 +12,6 @@ namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
-use Doctrine\DBAL\Schema\SchemaException;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
@@ -22,8 +19,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-
-use Doctrine\Bundle\DoctrineBundle\Command\Proxy\UpdateSchemaDoctrineCommand;
 
 /**
  * Class AbstractTestCase
@@ -75,6 +70,19 @@ class AbstractTestCase extends WebTestCase
         $application->add($command);
         $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
         $command->run($input, new ConsoleOutput());
+
+        // Check security context, because of deprecation error
+        try {
+            $this->getKernel()->getContainer()->get('security.context');
+        } catch (\Exception $baseException) {
+            $e = $baseException;
+            do {
+                if ($e instanceof \PHPUnit_Framework_Error_Deprecated) {
+                    $this->markTestSkipped('Skip deprecated exceptions thrown by Symfony 2.7 until safe release.');
+                }
+                $e = $e->getPrevious();
+            } while ($e);
+        }
     }
 
 }

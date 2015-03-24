@@ -2,8 +2,3 @@ orbitale_cms_front:
     resource: "@OrbitaleCmsBundle/Controller/FrontController.php"
     type:     annotation
     prefix:   /site/
-
-easy_admin:
-    resource: "@EasyAdminBundle/Controller"
-    type: annotation
-    prefix: /admin/

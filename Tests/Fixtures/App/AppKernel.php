@@ -24,9 +24,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
-            new Orbitale\Bundle\TranslationBundle\OrbitaleTranslationBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-            new JavierEguiluz\Bundle\EasyAdminBundle\EasyAdminBundle(),
         );
     }
 

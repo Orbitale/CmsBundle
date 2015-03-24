@@ -2,22 +2,6 @@ parameters:
     locale: fr
     database_path: %kernel.root_dir%/../../../build/test.db
 
-easy_admin:
-    entities:
-        "Cms Pages":
-            class: Orbitale\Bundle\CmsBundle\Entity\Page
-            list:
-                fields: [ id, parent, title, slug, content, category, enabled ]
-            form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
-
-        "Cms Categories":
-            class: Orbitale\Bundle\CmsBundle\Entity\Category
-            list:
-                fields: [ id, parent, title, slug, content, category, enabled ]
-            form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
-
 framework:
     secret:          secret
     test:            ~
@@ -39,24 +23,8 @@ doctrine:
     orm:
         auto_generate_proxy_classes: true
         auto_mapping: true
-        mappings:
-            translatable:
-                is_bundle: false
-                type: annotation
-                alias: Gedmo
-                prefix: Gedmo\Translatable\Entity
-                dir: "%kernel.root_dir%/../../../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
 
 services:
-    gedmo.listener.translatable:
-        class: Gedmo\Translatable\TranslatableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
-            - [ setDefaultLocale, [ %locale% ] ]
-            - [ setTranslationFallback, [ false ] ]
-
     gedmo.listener.timestampable:
         class: Gedmo\Timestampable\TimestampableListener
         tags:
@@ -79,3 +47,7 @@ security:
     providers:
         in_memory:
              memory: ~
+
+orbitale_cms:
+    layouts:
+        - { type: front, resource: @OrbitaleCms/default_layout.html.twig }

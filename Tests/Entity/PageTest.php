@@ -48,7 +48,6 @@ class PageTest extends AbstractTestCase
         $this->assertFalse($homepage->isEnabled());
         $this->assertFalse($homepage->isDeleted());
         $this->assertTrue($homepage->isHomepage());
-        $this->assertNull($homepage->getCategory());
 
         $homepage->setParent($homepage);
         $this->assertNull($homepage->getParent());

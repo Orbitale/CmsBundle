@@ -119,4 +119,42 @@ class FrontControllerTest extends AbstractTestCase
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
+    public function testMetas()
+    {
+        static::bootKernel();
+
+        /** @var EntityManager $em */
+        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+
+        $page = new Page();
+        $page
+            ->setEnabled(true)
+            ->setSlug('root')
+            ->setTitle('Root')
+            ->setContent('The root page')
+            ->setDeletedAt(null)
+            ->setCss('#home{color:red;}')
+            ->setJs('alert("ok");')
+            ->setMetaDescription('meta descri')
+            ->setMetaKeywords('this is a meta keyword list')
+            ->setMetaTitle('this title is only in the metas')
+        ;
+        $em->persist($page);
+        $em->flush();
+
+        $client = static::createClient();
+
+        $crawler = $client->request('GET', '/site/'.$page->getTree());
+        $this->assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
+        $this->assertEquals($page->getTitle(), trim($crawler->filter('h1')->html()));
+        $this->assertEquals($page->getContent(), trim($crawler->filter('article')->html()));
+
+        $this->assertEquals($page->getCss(), trim($crawler->filter('#orbitale_cms_css')->html()));
+        $this->assertEquals($page->getJs(), trim($crawler->filter('#orbitale_cms_js')->html()));
+        $this->assertEquals($page->getMetaDescription(), trim($crawler->filter('meta[name="description"]')->attr('content')));
+        $this->assertEquals($page->getMetaKeywords(), trim($crawler->filter('meta[name="keywords"]')->attr('content')));
+        $this->assertEquals($page->getMetaTitle(), trim($crawler->filter('meta[name="title"]')->attr('content')));
+
+    }
+
 }

@@ -52,7 +52,7 @@
     {{ parent() }}
     {% if page.js %}
         <script type="text/javascript" id="orbitale_cms_js">
-            {{- page.css | raw -}}
+            {{- page.js | raw -}}
         </script>
     {% endif %}
 {% endblock %}

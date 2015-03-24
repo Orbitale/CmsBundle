@@ -20,7 +20,7 @@
 {% block orbitale_cms_breadcrumbs %}
     <div id="breadcrumbs">
         {% set slugsArray = [] %}
-        <a href="{{ url('orbitale_cms_home') }}">{{ 'home' | trans }}</a> &gt;
+        <a href="{{ url('orbitale_cms_home') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a> &gt;
         {% for key, breadcrumbPage in pages %}
 
             {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}

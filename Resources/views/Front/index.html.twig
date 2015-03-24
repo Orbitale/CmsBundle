@@ -3,7 +3,7 @@
 {% block stylesheets %}
 {{ parent() }}
 {% if page.css %}
-    <style type="text/css">
+    <style type="text/css" id="orbitale_cms_css">
         {{ page.css | escape('css') }}
     </style>
 {% endif %}
@@ -51,7 +51,7 @@
 {% block javascripts %}
     {{ parent() }}
     {% if page.js %}
-        <script type="text/javascript">
+        <script type="text/javascript" id="orbitale_cms_js">
             {{ page.css | escape('js') }}
         </script>
     {% endif %}

@@ -19,8 +19,7 @@
         "satooshi/php-coveralls": "~0.6"
     },
     "suggest": {
-        "javiereguiluz/easyadmin-bundle": "To manage your pages directly inside your CMS (view documentation)",
-        "orbitale/translation-bundle": "To use the database to store all your translations (not only cms)"
+        "javiereguiluz/easyadmin-bundle": "To manage your pages directly inside your CMS (view documentation)"
     },
     "autoload": {
         "psr-4": {

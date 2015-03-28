@@ -10,17 +10,17 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
+use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class FrontController extends Controller
+class PageController extends AbstractCmsController
 {
 
     /**
-     * @Route("/{slugs}", name="orbitale_cms_home", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
+     * @Route("/{slugs}", name="orbitale_cms_page", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
      */
     public function indexAction($slugs = '', Request $request)
     {
@@ -38,10 +38,9 @@ class FrontController extends Controller
 
         return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
             'pages' => $pages,
-            'page'  => $this->getFinalPage($slugsArray, $pages)
+            'page'  => $this->getFinalTreeElement($slugsArray, $pages)
         ));
     }
-
     /**
      * @param string $host
      *
@@ -60,41 +59,6 @@ class FrontController extends Controller
             return $homepage->getSlug();
         }
         throw $this->createNotFoundException('No homepage has been configured. Please check your existing pages or create a homepage in your backoffice.');
-    }
-
-    /**
-     * @param array  $slugs
-     * @param Page[] $pages
-     *
-     * @return Page
-     */
-    protected function getFinalPage(array $slugs, array $pages)
-    {
-        if (!count($slugs) || count($slugs) !== count($pages)) {
-            throw $this->createNotFoundException();
-        }
-        /** @var Page $previousPage */
-        $previousPage = null;
-
-        foreach ($slugs as $k => $slug) {
-            $previousPage = null;
-            foreach ($pages as $p) {
-                if (
-                    $p->getSlug() === $slug
-                    && $p->isEnabled()
-                    && (!$previousPage || $previousPage && $previousPage->getId() === $previousPage->getId())
-                ) {
-                    $previousPage = $p;
-                    break;
-                }
-            }
-            if ($previousPage) {
-                continue;
-            } else {
-                throw $this->createNotFoundException();
-            }
-        }
-        return $previousPage;
     }
 
 }

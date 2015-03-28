@@ -39,19 +39,24 @@ public function registerBundles()
 
 ```
 
-Import the necessary routing files:
+Import the necessary routing files.
+
+*Warning:*
+ Both `Page` and `Category` controllers have to be "alone" in its path, because there is a "tree" routing management.
+ If you set the prefix as "/" or any other route you are already using, you may have some unexpected "404" or other
+ errors, depending on the routes priority.
 
 ```yml
 # app/config/routing.yml
-
-# Front-office, it has to be "alone" in its path, because there is a deep routing management.
-# If you set the prefix as "/" or any other route you are already using, you may have some
-#  unexpected "404" or other errors, depending on the routes priority.
-orbitale_cms_front:
-    resource: "@OrbitaleCmsBundle/Controller/FrontController.php"
+orbitale_cms_page:
+    resource: "@OrbitaleCmsBundle/Controller/PageController.php"
     type:     annotation
-    prefix:   /site/
+    prefix:   /page/
 
+orbitale_cms_category:
+    resource: "@OrbitaleCmsBundle/Controller/CategoryController.php"
+    type:     annotation
+    prefix:   /category/
 ```
 
 ## Usage
@@ -130,9 +135,9 @@ easy_admin:
         "Cms Categories":
             class: Orbitale\Bundle\CmsBundle\Entity\Category
             list:
-                fields: [ id, parent, title, slug, content, category, enabled ]
+                fields: [ id, name, slug, description, parent, enabled ]
             form:
-                fields: [ name, slug, description, category, parent, enabled ]
+                fields: [ name, slug, description, parent, enabled ]
 ```
 
 ## <a name="homepage"></a> Change homepage

@@ -34,7 +34,6 @@ public function registerBundles()
     $bundles = array(
         // ...
         new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
-        new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
     );
 }
 
@@ -69,14 +68,14 @@ services:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ @annotations.cached_reader ] ]
+            - [ setAnnotationReader, [ @annotation_reader ] ]
 
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ @annotations.cached_reader ] ]
+            - [ setAnnotationReader, [ @annotation_reader ] ]
 ```
 
 ## Usage
@@ -148,19 +147,19 @@ easy_admin:
         "Cms Pages":
             class: Orbitale\Bundle\CmsBundle\Entity\Page
             list:
-                fields: [ id, parent, title, slug, content, category, enabled ]
+                fields: [ id, parent, title, slug, content, category, homepage, enabled ]
             form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, homepage, enabled ]
 
         "Cms Categories":
             class: Orbitale\Bundle\CmsBundle\Entity\Category
             list:
                 fields: [ id, parent, title, slug, content, category, enabled ]
             form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, enabled ]
+                fields: [ name, slug, description, category, parent, enabled ]
 ```
 
-## <a name="homepage"></a> Customize home page
+## <a name="homepage"></a> Change homepage
 
 The homepage is always the first `Page` object with its `homepage` attribute set to true. Be sure to have only one
 element defined as homepage, or you may have unexpected results.

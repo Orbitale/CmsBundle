@@ -54,30 +54,6 @@ orbitale_cms_front:
 
 ```
 
-## <a name="doctrine_extensions"></a> Setup Doctrine extensions
-
-In order to work properly, this bundle uses the power of `GedmoDoctrineExtensions`, provided by @stof.
-You have to add some configuration parameters in order to have it working:
-
-```yml
-# app/config/config.yml
-
-services:
-    gedmo.listener.timestampable:
-        class: Gedmo\Timestampable\TimestampableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
-
-    gedmo.listener.sluggable:
-        class: Gedmo\Sluggable\SluggableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: default }
-        calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
-```
-
 ## Usage
 
 ### Manage pages 

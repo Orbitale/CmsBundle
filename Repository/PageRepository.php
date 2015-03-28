@@ -32,10 +32,7 @@ class PageRepository extends EntityRepository {
         $or = $qb->expr()->orX(); // Create an "OR" group
         $or->add($qb->expr()->isNull('page.host')); // Where page.host is null
         if ($host) {
-            $and = $qb->expr()->andX();
-            $and->add($qb->expr()->isNotNull('page.host')); // page.host is not null
-            $and->add($qb->expr()->eq('page.host', ':host')); // and page.host = :host
-            $or->add($and);
+            $or->add($qb->expr()->eq('page.host', ':host'));
             $qb->setParameter('host', $host);
         }
         $qb->andWhere($or);// AND ( page.host is null OR ( page.host is not null and page.host = :host ) )
@@ -44,6 +41,25 @@ class PageRepository extends EntityRepository {
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * @param array $criteria
+     *
+     * @return array The objects.
+     */
+    public function findCountBy(array $criteria)
+    {
+        $qb = $this->createQueryBuilder('page')
+            ->select('count(page)')
+        ;
+        foreach ($criteria as $key => $value) {
+            $qb
+                ->andWhere('page.'.$key.' = :'.$key)
+                ->setParameter($key, $value)
+            ;
+        }
+        return $qb->getQuery()->getSingleScalarResult();
     }
 
 }

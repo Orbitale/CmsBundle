@@ -36,7 +36,7 @@
             <directory suffix=".php">./Controller</directory>
             <directory suffix=".php">./DependencyInjection</directory>
             <directory suffix=".php">./Entity</directory>
-            <directory suffix=".php">./Listeners</directory>
+            <directory suffix=".php">./EventListener</directory>
             <directory suffix=".php">./Repository</directory>
             <directory suffix=".php">./Resources</directory>
             <exclude>

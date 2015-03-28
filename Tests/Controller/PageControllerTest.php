@@ -14,14 +14,14 @@ use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
-class FrontControllerTest extends AbstractTestCase
+class PageControllerTest extends AbstractTestCase
 {
 
     public function testNoHomepage()
     {
         $error = 'No homepage has been configured. Please check your existing pages or create a homepage in your backoffice. (404 Not Found)';
         $client = static::createClient();
-        $crawler = $client->request('GET', '/site/');
+        $crawler = $client->request('GET', '/page/');
         $this->assertEquals($error, trim($crawler->filter('title')->html()));
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
@@ -29,7 +29,7 @@ class FrontControllerTest extends AbstractTestCase
     public function testNoPageWithSlug()
     {
         $client = static::createClient();
-        $client->request('GET', '/site/inexistent-slug');
+        $client->request('GET', '/page/inexistent-slug');
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
@@ -52,16 +52,16 @@ class FrontControllerTest extends AbstractTestCase
 
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/site/');
+        $crawler = $client->request('GET', '/page/');
         $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
-        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('h1')->html()));
-        $this->assertEquals($homepage->getContent(), trim($crawler->filter('article')->html()));
+        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
+        $this->assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
-        $crawler = $client->request('GET', '/site/home');
+        $crawler = $client->request('GET', '/page/home');
         $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
-        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('h1')->html()));
-        $this->assertEquals($homepage->getContent(), trim($crawler->filter('article')->html()));
+        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
+        $this->assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
     }
 
     public function testTree()
@@ -108,13 +108,13 @@ class FrontControllerTest extends AbstractTestCase
         $client = static::createClient();
 
         // Repeat with the homepage directly in the url
-        $crawler = $client->request('GET', '/site/'.$childOne->getTree());
+        $crawler = $client->request('GET', '/page/'.$childOne->getTree());
         $this->assertEquals($childOne->getTitle(), trim($crawler->filter('title')->html()));
-        $this->assertEquals($childOne->getTitle(), trim($crawler->filter('h1')->html()));
-        $this->assertEquals($childOne->getContent(), trim($crawler->filter('article')->html()));
+        $this->assertEquals($childOne->getTitle(), trim($crawler->filter('article > h1')->html()));
+        $this->assertContains($childOne->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
-        $client->request('GET', '/site/root/second-level');
+        $client->request('GET', '/page/root/second-level');
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
@@ -141,10 +141,10 @@ class FrontControllerTest extends AbstractTestCase
 
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/site/'.$page->getTree());
+        $crawler = $client->request('GET', '/page/'.$page->getTree());
         $this->assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
-        $this->assertEquals($page->getTitle(), trim($crawler->filter('h1')->html()));
-        $this->assertEquals($page->getContent(), trim($crawler->filter('article')->html()));
+        $this->assertEquals($page->getTitle(), trim($crawler->filter('article > h1')->html()));
+        $this->assertContains($page->getContent(), trim($crawler->filter('article')->html()));
 
         $this->assertEquals($page->getCss(), trim($crawler->filter('#orbitale_cms_css')->html()));
         $this->assertEquals($page->getJs(), trim($crawler->filter('#orbitale_cms_js')->html()));

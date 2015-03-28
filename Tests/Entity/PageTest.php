@@ -19,8 +19,8 @@ class PageTest extends AbstractTestCase
 
     public function getDummyPage()
     {
-        $homepage = new Page();
-        return $homepage
+        $page = new Page();
+        return $page
             ->setHomepage(true)
             ->setEnabled(false)
             ->setSlug('home')
@@ -48,6 +48,7 @@ class PageTest extends AbstractTestCase
         $this->assertFalse($homepage->isEnabled());
         $this->assertFalse($homepage->isDeleted());
         $this->assertTrue($homepage->isHomepage());
+        $this->assertEquals('localhost', $homepage->getHost());
 
         $homepage->setParent($homepage);
         $this->assertNull($homepage->getParent());
@@ -84,6 +85,47 @@ class PageTest extends AbstractTestCase
         $this->assertNull($homepage);
         $this->assertNull($child->getParent());
 
+    }
+
+    public function testRemoval()
+    {
+        $page = new Page();
+        $page
+            ->setTitle('Default page')
+            ->setSlug('default')
+            ->setEnabled(true)
+        ;
+
+        $child = new Page();
+        $child
+            ->setTitle('Child page')
+            ->setSlug('child')
+            ->setEnabled(true)
+            ->setParent($page)
+        ;
+        $page->addChild($child);
+
+        /** @var EntityManager $em */
+        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em->persist($page);
+        $em->persist($child);
+        $em->flush();
+
+        $page = $em->getRepository(get_class($page))->find($page->getId());
+
+        $children = $page->getChildren();
+        $first = $children[0];
+        $this->assertEquals($child->getId(), $first->getId());
+
+        $page->removeChild($child);
+        $child->setParent(null);
+
+        $em->remove($page);
+        $em->flush();
+
+        $child = $em->getRepository(get_class($child))->find($child->getId());
+
+        $this->assertNull($child->getParent());
     }
 
 }

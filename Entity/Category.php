@@ -10,6 +10,7 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -32,8 +33,6 @@ class Category
 
     use SoftDeleteableEntity;
     use TimestampableEntity;
-    use BlameableEntity;
-    use IpTraceableEntity;
 
     /**
      * @var integer
@@ -66,7 +65,7 @@ class Category
     protected $description;
 
     /**
-     * @var bool
+     * @var boolean
      * @ORM\Column(name="enabled", type="boolean")
      */
     protected $enabled = false;
@@ -79,10 +78,20 @@ class Category
     protected $parent;
 
     /**
-     * @var Category[]
+     * @var Category[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category", mappedBy="parent")
      */
     protected $children;
+
+    public function __toString()
+    {
+        return $this->id.' - '.$this->name;
+    }
+
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+    }
 
     /**
      * @return int
@@ -169,7 +178,7 @@ class Category
     }
 
     /**
-     * @return mixed
+     * @return Category
      */
     public function getParent()
     {
@@ -181,14 +190,19 @@ class Category
      *
      * @return Category
      */
-    public function setParent($parent)
+    public function setParent(Category $parent = null)
     {
+        if ($parent === $this) {
+            // Refuse the category to have itself as parent
+            $this->parent = null;
+            return $this;
+        }
         $this->parent = $parent;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return Category[]|ArrayCollection
      */
     public function getChildren()
     {
@@ -196,33 +210,43 @@ class Category
     }
 
     /**
-     * @param mixed $children
+     * @param Category $child
      *
-     * @return Category
+     * @return Category[]
      */
-    public function setChildren($children)
+    public function addChild(Category $child)
     {
-        $this->children = $children;
+        $this->children->add($child);
         return $this;
     }
 
     /**
-     * @return \Datetime
+     * @param Category $child
+     *
+     * @return Category[]
      */
-    public function getDeletedAt()
+    public function removeChild(Category $child)
     {
-        return $this->deletedAt;
+        $this->children->removeElement($child);
+        return $this;
     }
 
     /**
-     * @param \Datetime $deletedAt
+     * @param string $separator
      *
-     * @return Category
+     * @return string
      */
-    public function setDeletedAt($deletedAt)
+    public function getTree($separator = '/')
     {
-        $this->deletedAt = $deletedAt;
-        return $this;
+        $tree = '';
+
+        $current = $this;
+        do {
+            $tree = $current->getSlug().$separator.$tree;
+            $current = $current->getParent();
+        } while ($current);
+
+        return trim($tree, $separator);
     }
 
     /**

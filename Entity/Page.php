@@ -33,8 +33,6 @@ class Page
 
     use SoftDeleteableEntity;
     use TimestampableEntity;
-    use BlameableEntity;
-    use IpTraceableEntity;
 
     /**
      * @var integer
@@ -119,9 +117,9 @@ class Page
 
     /**
      * @var string
-     * @ORM\Column(name="host", type="string", length=255)
+     * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
-    protected $host = '';
+    protected $host;
 
     /**
      * @var Page
@@ -389,6 +387,18 @@ class Page
     }
 
     /**
+     * @param Page $page
+     *
+     * @return Page
+     *
+     */
+    public function removeChild(Page $page)
+    {
+        $this->children->removeElement($page);
+        return $this;
+    }
+
+    /**
      * @return boolean
      */
     public function isHomepage()
@@ -426,6 +436,11 @@ class Page
         return $this;
     }
 
+    /**
+     * @param string $separator
+     *
+     * @return string
+     */
     public function getTree($separator = '/')
     {
         $tree = '';

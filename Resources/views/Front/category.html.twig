@@ -1,0 +1,64 @@
+{% extends app.request.attributes.get('_orbitale_cms_layout') %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style type="text/css" id="orbitale_cms_css">
+    {%- for page in pages -%}
+        {%- if page.css -%}
+            {{- page.css | raw -}}
+        {%- endif -%}
+    {%- endfor -%}
+    </style>
+{% endblock %}
+
+{% block title %}{{- category.name -}}{% endblock %}
+
+{% block orbitale_cms_breadcrumbs %}
+    <div id="breadcrumbs">
+        {% set slugsArray = [] %}
+        <a href="{{ path('orbitale_cms_page') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a> &gt;
+        {% for key, breadcrumbCategory in categories %}
+
+            {% set slugsArray = slugsArray | merge({ (key): breadcrumbCategory.slug }) %}
+
+            {% if loop.last %}
+                {{ breadcrumbCategory.name }}
+            {% else %}
+                <a href="{{ path('orbitale_cms_category', {slugs: slugsArray|join('/')}) }}">
+                    {{ breadcrumbCategory.name }}
+                </a>
+            {% endif %}
+
+            {% if not loop.last %} &gt; {% endif %}
+
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block orbitale_cms_page_content %}
+    <article>
+        <h1>{{ category.name }}</h1>
+        {{ category.description | raw }}
+    </article>
+    {% block orbitale_cms_pages_list %}
+        {% for page in pages %}
+            <section>
+                <article>
+                    <h2><a href="{{ path('orbitale_cms_page', {slugs: page.tree}) }}">{{ page.title }}</a></h2>
+                    {{ page.content | raw }}
+                </article>
+            </section>
+        {% endfor %}
+    {% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" id="orbitale_cms_js">
+        {%- for page in pages -%}
+            {% if page.js %}
+                {{- page.js | raw -}}
+            {%- endif -%}
+        {%- endfor -%}
+    </script>
+{% endblock %}

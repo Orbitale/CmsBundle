@@ -33,13 +33,12 @@ class OrbitaleCmsExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        foreach ($config['layouts'] as $type => $layout) {
-            $config['layouts'][$type] = array_merge(array(
-                'type' => $type,
+        foreach ($config['layouts'] as $name => $layout) {
+            $config['layouts'][$name] = array_merge(array(
+                'name' => $name,
                 'assets_css' => '',
                 'assets_js' => '',
-                'host' => null,
-                'route' => '',
+                'host' => '',
                 'pattern' => '^/',
             ), $layout);
         }

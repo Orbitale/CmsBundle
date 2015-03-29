@@ -37,15 +37,15 @@ class Configuration implements ConfigurationInterface
                             'pattern' => '^/',
                         ),
                     ))
-                    ->useAttributeAsKey('type')
+                    ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->children()
-                            ->scalarNode('type')->end()
+                            ->scalarNode('name')->end()
                             ->scalarNode('resource')->isRequired()->end()
                             ->arrayNode('assets_css')->end()
                             ->arrayNode('assets_js')->end()
-                            ->scalarNode('route')->end()
                             ->scalarNode('pattern')->end()
+                            ->scalarNode('host')->end()
                         ->end()
                     ->end()
                 ->end()

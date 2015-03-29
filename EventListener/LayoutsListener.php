@@ -40,7 +40,7 @@ class LayoutsListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            KernelEvents::REQUEST => array('setRequestLayout', 0),
+            KernelEvents::REQUEST => array('setRequestLayout', 1),
         );
     }
 
@@ -49,7 +49,6 @@ class LayoutsListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Get the necessary informations to check them in layout configurations
-        $route = $request->attributes->get('_route');
         $path  = $request->getPathInfo();
         $host  = $request->getHost();
 
@@ -61,10 +60,6 @@ class LayoutsListener implements EventSubscriberInterface
 
         foreach ($layouts as $layoutConfig) {
             if ($host === $layoutConfig['host']) {
-                $finalLayout = $layoutConfig;
-                break;
-            }
-            if ($route === $layoutConfig['route']) {
                 $finalLayout = $layoutConfig;
                 break;
             }

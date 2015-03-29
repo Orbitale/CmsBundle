@@ -49,6 +49,7 @@ class CategoryTest extends AbstractTestCase
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
         $this->assertEquals($homepage->getCategory(), $category);
+        $this->assertEquals($category->getName(), (string) $category);
     }
 
     public function testIdenticalParent()

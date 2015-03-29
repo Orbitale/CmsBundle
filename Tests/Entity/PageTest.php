@@ -114,6 +114,7 @@ class PageTest extends AbstractTestCase
         $page = $em->getRepository(get_class($page))->find($page->getId());
 
         $children = $page->getChildren();
+        /** @var Page $first */
         $first = $children[0];
         $this->assertEquals($child->getId(), $first->getId());
 

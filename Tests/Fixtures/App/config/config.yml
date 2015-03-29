@@ -50,4 +50,4 @@ security:
 
 orbitale_cms:
     layouts:
-        - { type: front, resource: @OrbitaleCms/default_layout.html.twig }
+        front: { resource: @OrbitaleCms/default_layout.html.twig }

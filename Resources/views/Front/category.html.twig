@@ -16,8 +16,10 @@
 {% block orbitale_cms_breadcrumbs %}
     <div id="breadcrumbs">
         {% set slugsArray = [] %}
-        <a href="{{ path('orbitale_cms_page') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a> &gt;
+        <a href="{{ path('orbitale_cms_page') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a>
         {% for key, breadcrumbCategory in categories %}
+
+            &gt;
 
             {% set slugsArray = slugsArray | merge({ (key): breadcrumbCategory.slug }) %}
 
@@ -28,8 +30,6 @@
                     {{ breadcrumbCategory.name }}
                 </a>
             {% endif %}
-
-            {% if not loop.last %} &gt; {% endif %}
 
         {% endfor %}
     </div>

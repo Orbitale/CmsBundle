@@ -1,8 +1,12 @@
-{% extends app.request.attributes.get('_orbitale_cms_layout').resource %}
+{% set layout = app.request.attributes.get('_orbitale_cms_layout') -%}
+{% extends layout.resource %}
 
 {% block stylesheets %}
-{{ parent() }}
-{% if page.css %}
+    {{ parent() }}
+    {% for asset_css in layout.assets_css %}
+        <link rel="stylesheet" href="{{ asset(asset_css) }}">
+    {% endfor %}
+    {% if page.css %}
     <style type="text/css" id="orbitale_cms_css">
         {{- page.css | raw -}}
     </style>
@@ -20,8 +24,10 @@
 {% block orbitale_cms_breadcrumbs %}
     <div id="breadcrumbs">
         {% set slugsArray = [] %}
-        <a href="{{ path('orbitale_cms_page') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a> &gt;
+        <a href="{{ path('orbitale_cms_page') }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a>
         {% for key, breadcrumbPage in pages %}
+
+            &gt;
 
             {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}
 
@@ -32,8 +38,6 @@
                     {{ breadcrumbPage.title }}
                 </a>
             {% endif %}
-
-            {% if not loop.last %} &gt; {% endif %}
 
         {% endfor %}
     </div>
@@ -50,6 +54,9 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {% for asset_js in layout.assets_js %}
+        <script type="text/javascript" src="{{ asset(asset_js) }}"></script>
+    {% endfor %}
     {% if page.js %}
         <script type="text/javascript" id="orbitale_cms_js">
             {{- page.js | raw -}}

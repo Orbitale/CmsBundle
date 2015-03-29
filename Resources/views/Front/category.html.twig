@@ -1,7 +1,11 @@
-{% extends app.request.attributes.get('_orbitale_cms_layout').resource %}
+{% set layout = app.request.attributes.get('_orbitale_cms_layout') -%}
+{% extends layout.resource %}
 
 {% block stylesheets %}
     {{ parent() }}
+    {% for asset_css in layout.assets_css %}
+        <link rel="stylesheet" href="{{ asset(asset_css) }}">
+    {% endfor %}
     <style type="text/css" id="orbitale_cms_css">
     {%- for page in pages -%}
         {%- if page.css -%}
@@ -54,6 +58,9 @@
 
 {% block javascripts %}
     {{ parent() }}
+    {% for asset_js in layout.assets_js %}
+        <script type="text/javascript" src="{{ asset(asset_js) }}"></script>
+    {% endfor %}
     <script type="text/javascript" id="orbitale_cms_js">
         {%- for page in pages -%}
             {% if page.js %}

@@ -61,24 +61,24 @@ class LayoutsListener implements EventSubscriberInterface
 
         foreach ($layouts as $layoutConfig) {
             if ($host === $layoutConfig['host']) {
-                $finalLayout = $layoutConfig['resource'];
+                $finalLayout = $layoutConfig;
                 break;
             }
             if ($route === $layoutConfig['route']) {
-                $finalLayout = $layoutConfig['resource'];
+                $finalLayout = $layoutConfig;
                 break;
             }
             if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
-                $finalLayout = $layoutConfig['resource'];
+                $finalLayout = $layoutConfig;
                 break;
             }
         }
 
-        if (!$this->templating->exists($finalLayout)) {
+        if (!$this->templating->exists($finalLayout['resource'])) {
             throw new \Twig_Error_Loader(sprintf(
-                'Unable to find template %s. The "layout" parameter must be a valid twig view to be used as a layout.',
-                $finalLayout
-            ), 0, $finalLayout, null);
+                'Unable to find template %s for layout type %s. The "layout" parameter must be a valid twig view to be used as a layout.',
+                $finalLayout['resource'], $finalLayout['type']
+            ), 0, $finalLayout['resource']);
         }
 
         $event->getRequest()->attributes->set('_orbitale_cms_layout', $finalLayout);

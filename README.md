@@ -14,7 +14,7 @@ This bundle is a simple helper to create a very simple CMS based on a classic sy
 
 ## Install
 
-**Warning: This bundle uses PHP Traits, so you must have PHP 5.4+**
+*Warning:* This bundle uses PHP Traits, so you must have PHP 5.4+
 
 Require the bundle by using [Composer](https://getcomposer.org/):
 
@@ -22,7 +22,7 @@ Require the bundle by using [Composer](https://getcomposer.org/):
 $ composer require orbitale/cms-bundle
 ```
 
-## Setup 
+## Setup
 
 Register the necessary bundles in your Kernel:
 
@@ -42,9 +42,9 @@ public function registerBundles()
 Import the necessary routing files.
 
 *Warning:*
- Both `Page` and `Category` controllers have to be "alone" in its path, because there is a "tree" routing management.
- If you set the prefix as "/" or any other route you are already using, you may have some unexpected "404" or other
- errors, depending on the routes priority.
+ Both `Page` and `Category` controllers have to be "alone" in their routing path, because there is a "tree" routing
+ management. If you set the prefix as "/" or any other path you are already using, you may have some unexpected "404"
+ or other  errors, depending on the routes priority.
 
 ```yml
 # app/config/routing.yml
@@ -61,28 +61,31 @@ orbitale_cms_category:
 
 ## Usage
 
-### Manage pages 
+### <a name="manage"></a> Manage pages 
 
-To manage your page, you should use any back-end solution, like [EasyAdmin](https://github.com/javiereguiluz/EasyAdminBundle/)
+To manage your pages, you should use any back-end solution, like [EasyAdmin](https://github.com/javiereguiluz/EasyAdminBundle/)
 (which we suggest) or [SonataAdmin](https://sonata-project.org/bundles/admin), or any else.
 You must have configured it to manage at least the `Orbitale\Bundle\CmsBundle\Entity\Page` entity.
 
-### View pages
+### <a name="view"></a>  View pages
 
-The `FrontController` handles some methods to view pages with a single `indexAction()`.
+The `PageController` handles some methods to view pages with a single `indexAction()`, and the `CategoryController` 
+uses its route to show all pages within a specified `Category`.
 
-The URI for a classic page is simply `/{slug}` where `slug` is the... page slug.
+The URI for both is simply `/{slug}` where `slug` is the... page or category slug.
 
-If your page has one `parent`, then the URI is the following: `/{parentSlug}/{slug}`. As the slugs are verbose enough,
-you can notice that we respect the pages hierarchy in the generated url.
-You can navigate through a complex list of pages, as long as they're related as `parent` and `child`.
+If your page or category has one `parent`, then the URI is the following: `/{parentSlug}/{slug}`. 
+You can notice that we respect the pages hierarchy in the generated url.
+You can navigate through a complex list of pages or categories, as long as they're related as `parent` and `child`.
 This allows you to have such urls like this one :
 `http://www.mysite.com/about/company/team/members` for instance, will show only the `members` page, but its parent has
-a parent, that has a parent, and so on, until you reach the "root" parent.
-** Note: this behavior is the precise reason why you have to use a specific prefix for your `FrontController` routing
-import, unless you may have many "404" errors.**
+a parent, that has a parent, and so on, until you reach the "root" parent. And it's the same behavior for categories.
+*Note:* this behavior is the precise reason why you have to use a specific prefix for your controllers routing import,
+unless you may have many "404" errors.
 
-### Generate a route based on a single page
+### <a name="route"></a> Generate a route based on a single page
+
+*Note:* This behavior also works for categories.
 
 If you have a `Page` object in a view or in a controller, you can get the whole arborescence by using the `getTree()`
 method, which will navigate through all parents and return a string based on a separator argument (default `/`, for urls).
@@ -102,7 +105,7 @@ Imagine we want to generate the url for the "Team" page. You have this `Page` ob
 
 ```twig
     {# Page : "Team" #}
-    {{ path('cms_home', {"slugs": page.tree}) }}
+    {{ path('orbitale_cms_page', {"slugs": page.tree}) }}
     {# Will show : /welcome/our-company/team #}
 ```
 
@@ -110,19 +113,90 @@ Or in a controller:
 
 ```php
     // Page : "Team"
-    $url = $this->generateUrl('cms_home', array('slugs' => $page->getTree()));
+    $url = $this->generateUrl('orbitale_cms_page', array('slugs' => $page->getTree()));
     // $url === /welcome/our-company/team
 ```
 
 With this, you have a functional tree system for your CMS!
 
-## <a name="easyadmin"></a> Setup EasyAdminBundle to manage pages and categories in its back-end
+## <a name="homepage"></a> Change homepage
 
-**Note: you need to `composer requier javiereguiluz/easyadmin-bundle` to use the component.**
+The homepage is always the first `Page` object with its `homepage` attribute set to true. Be sure to have only one
+element defined as homepage, or you may have unexpected results.
+
+*Note:* If you are hosting your application in a multi-domain platform, you can use the `host` attribute in your page
+to restrict the view only to the specified host.
+It's great for instance if you want to have different articles in different languages in something like `fr.mydomain.com`
+and `en.mydomain.com` for instance.
+
+## <a name="layout"></a> Using different layouts
+
+Obviously, the default layout has no style.
+
+To change the layout, simply change the OrbitaleCmsBundle configuration to add your own layout:
+
+```yaml
+# app/config/config.yml
+orbitale_cms:
+    layouts:
+        front: { resource: @App/layout.html.twig } # The Twig path to your layout
+```
+
+Without overriding anything, you can easily change the layout for your CMS!
+
+Take a look at the [default layout](Resources/views/default_layout.html.twig) to see which Twig blocks are mandatory to 
+render correctly the pages.
+
+## <a name="layout_advanced"></a> Advanced layout configuration
+
+Here is the global configuration reference for the layouts:
+
+```yaml
+orbitale_cms:
+    layouts:
+        # One layout prototype
+        name: 
+            resource:   ~ # Required.
+            assets_css: [] 
+            assets_js:  []
+            pattern:    ^/ 
+```
+
+Explanation:
+* *name* (attribute used as key for the layouts list):<br>
+ The name of your layout. Simply for readability issues, and maybe to get it directly from the config.
+* *resource*:<br>
+ The Twig template used to render all the pages (see the [above](#layout) section)
+* *assets_css* and *assets_js*:<br>
+ Any asset to send to the Twig `asset()` function. The CSS is rendered in the `stylesheets` block, and js in the
+ `javascripts` block.
+* *pattern*:<br>
+ The regexp of the URI path you want to match for this layout.
+ It's nice if you want to use a different layout for categories and pages. You can use it this way for this kind of 
+ behavior:
+ 
+ ```yaml
+ # app/config/config.yml
+ orbitale_cms:
+     layouts:
+         page: 
+             resource:   @App/layout_page.html.twig
+             pattern:    ^/page/
+         category: 
+             resource:   @App/layout_category.html.twig
+             pattern:    ^/category/
+ ```
+
+## <a name="easyadmin"></a> Setup EasyAdminBundle to manage pages and categories in its back-end
 
 This configuration allows you to manage your pages and categories directly in the [EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle) way.
 
+First, install `EasyAdminBundle`, and set it up by reading its documentation (view link above).
+
+After you installed it, you can add this configuration to inject your new classes in EasyAdmin:
+
 ```yml
+# app/config/config.yml
 easy_admin:
     entities:
         "Cms Pages":
@@ -140,7 +214,7 @@ easy_admin:
                 fields: [ name, slug, description, parent, enabled ]
 ```
 
-## <a name="homepage"></a> Change homepage
+## Changelog
 
-The homepage is always the first `Page` object with its `homepage` attribute set to true. Be sure to have only one
-element defined as homepage, or you may have unexpected results.
+Go to the [releases](https://github.com/Orbitale/CmsBundle/releases) page to see what are the changes between each
+new version of Orbitale CmsBundle!

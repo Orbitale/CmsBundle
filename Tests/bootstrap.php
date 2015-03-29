@@ -18,7 +18,8 @@ $autoload = require_once $file;
 
 if (is_dir(__DIR__.'/../build')) {
     echo "Removing files in the build directory.\n";
-    exec('rm -rf '.__DIR__.'/../build/*');
+    exec('rm -rf '.__DIR__.'/../build/cache/');
+    exec('rm -rf '.__DIR__.'/../build/test.db');
 }
 
 AnnotationRegistry::registerLoader(function($class) use ($autoload) {

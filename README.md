@@ -59,6 +59,12 @@ orbitale_cms_category:
     prefix:   /category/
 ```
 
+Update your database by executing this command from your Symfony root directory:
+
+```bash
+$ php app/console doctrine:schema:update --force
+```
+
 ## Usage
 
 ### <a name="manage"></a> Manage pages 

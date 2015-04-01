@@ -17,9 +17,16 @@ if (!file_exists($file)) {
 $autoload = require_once $file;
 
 if (is_dir(__DIR__.'/../build')) {
-    echo "Removing files in the build directory.\n";
-    exec('rm -rf '.__DIR__.'/../build/cache/');
-    exec('rm -rf '.__DIR__.'/../build/test.db');
+    echo "Removing files in the build directory.\n".__DIR__."\n";
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator(__DIR__.'/../build/', RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::CHILD_FIRST
+    );
+
+    foreach ($files as $fileinfo) {
+        $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+        $todo($fileinfo->getRealPath());
+    }
 }
 
 AnnotationRegistry::registerLoader(function($class) use ($autoload) {

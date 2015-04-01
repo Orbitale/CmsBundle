@@ -37,7 +37,7 @@ class AbstractTestCase extends WebTestCase
     protected static function bootKernel(array $options = array())
     {
         if (method_exists('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase', 'bootKernel')) {
-            parent::bootKernel();
+            parent::bootKernel($options);
         } else {
             if (null !== static::$kernel) {
                 static::$kernel->shutdown();

@@ -1,0 +1,9 @@
+orbitale_cms:
+    layouts:
+        first:
+            host: a-first-host
+            resource: test_only
+        second:
+            host: b-second-host
+            pattern: ^/only_this_one
+            resource: test_only

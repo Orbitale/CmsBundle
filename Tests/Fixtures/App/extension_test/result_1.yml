@@ -1,0 +1,16 @@
+orbitale_cms:
+    layouts:
+        first:
+            name: first
+            assets_css: ~
+            assets_js: ~
+            host: localhost
+            pattern: ~
+            resource: test_only
+        second:
+            name: second
+            assets_css: ~
+            assets_js: ~
+            host: ~
+            pattern: "^/"
+            resource: test_only

@@ -1,0 +1,7 @@
+orbitale_cms:
+    layouts:
+        first:
+            resource: test_only
+        second:
+            host: localhost
+            resource: test_only

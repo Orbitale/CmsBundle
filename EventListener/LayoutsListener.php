@@ -56,23 +56,23 @@ class LayoutsListener implements EventSubscriberInterface
 
         // As a layout must be set, we force it to be empty if no layout is properly configured.
         // Then this will throw an exception, and the user will be warned of the "no-layout" config problem.
-        $finalLayout = '';
+        $finalLayout = null;
 
         foreach ($layouts as $layoutConfig) {
-            if ($host === $layoutConfig['host']) {
-                $finalLayout = $layoutConfig;
-                break;
-            } elseif ($layoutConfig['host']) {
-                // If host is specified and does not match, we never check for pattern
-                continue;
+            $match = false;
+            if ($layoutConfig['host'] && $host === $layoutConfig['host']) {
+                $match = true;
             }
             if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+                $match = true;
+            }
+            if ($match) {
                 $finalLayout = $layoutConfig;
                 break;
             }
         }
 
-        if (!$this->templating->exists($finalLayout['resource'])) {
+        if (null === $finalLayout || !$this->templating->exists($finalLayout['resource'])) {
             throw new \Twig_Error_Loader(sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
                 $finalLayout['resource'], $finalLayout['name']

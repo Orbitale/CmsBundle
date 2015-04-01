@@ -39,8 +39,13 @@ class OrbitaleCmsExtension extends Extension
                 'assets_css' => '',
                 'assets_js' => '',
                 'host' => '',
-                'pattern' => '^/',
+                'pattern' => '',
             ), $layout);
+            if (!$config['layouts'][$name]['host'] && !$config['layouts'][$name]['pattern']) {
+                // If the user does not specify anything in the host nor the pattern,
+                //  we force the pattern to match at least the root, else the layout would never be used...
+                $config['layouts'][$name]['pattern'] = '^/';
+            }
         }
 
         // Sort configs by host, because host is checked before pattern.

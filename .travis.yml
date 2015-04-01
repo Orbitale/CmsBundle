@@ -36,8 +36,8 @@ script:
     - mkdir -p build/logs
     - phpunit --coverage-clover build/logs/clover.xml
 
-after_script:
-    - vendor/bin/coveralls -v --config .coveralls.yml
+after_success:
+    - sh -c 'if [ "$TRAVIS_PHP_VERSION" != "hhvm" ] && [ "$TRAVIS_PHP_VERSION" != "hhvm-nightly" ]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;'
 
 notifications:
     email: pierstoval@gmail.com

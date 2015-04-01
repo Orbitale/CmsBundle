@@ -27,6 +27,8 @@ class CategoryControllerTest extends AbstractTestCase
 
     public function testSingleCategory()
     {
+        $client = static::createClient();
+
         $category = new Category();
         $category
             ->setSlug('default')
@@ -36,11 +38,9 @@ class CategoryControllerTest extends AbstractTestCase
         ;
 
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
         $em->persist($category);
         $em->flush();
-
-        $client = static::createClient();
 
         // Repeat with the homepage directly in the url
         $crawler = $client->request('GET', '/category/default');
@@ -52,8 +52,10 @@ class CategoryControllerTest extends AbstractTestCase
 
     public function testTree()
     {
+        $client = static::createClient();
+
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Category();
@@ -88,8 +90,6 @@ class CategoryControllerTest extends AbstractTestCase
         $em->persist($childTwoDisabled);
         $em->flush();
 
-        $client = static::createClient();
-
         // Repeat with the homepage directly in the url
         $crawler = $client->request('GET', '/category/'.$childOne->getTree());
         $this->assertEquals($childOne->getName(), trim($crawler->filter('title')->html()));
@@ -103,6 +103,8 @@ class CategoryControllerTest extends AbstractTestCase
 
     public function testWithPages()
     {
+        $client = static::createClient();
+
         $category = new Category();
         $category
             ->setSlug('default')
@@ -112,7 +114,7 @@ class CategoryControllerTest extends AbstractTestCase
         ;
 
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
         $em->persist($category);
         $em->flush();
 
@@ -139,8 +141,6 @@ class CategoryControllerTest extends AbstractTestCase
         $em->persist($page1);
         $em->persist($page2);
         $em->flush();
-
-        $client = static::createClient();
 
         $crawler = $client->request('GET', '/category/'.$category->getTree());
 

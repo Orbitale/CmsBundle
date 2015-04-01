@@ -34,9 +34,10 @@ class PageTest extends AbstractTestCase
     {
         $homepage = $this->getDummyPage();
 
-        static::bootKernel();
+        $kernel = static::getKernel();
+
         /** @var EntityManager $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em = $kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($homepage);
         $em->flush();
 
@@ -63,9 +64,10 @@ class PageTest extends AbstractTestCase
         $homepage->addChild($child);
         $child->setParent($homepage);
 
-        static::bootKernel();
+        $kernel = static::getKernel();
+
         /** @var EntityManager $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em = $kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($homepage);
         $em->persist($child);
         $em->flush();
@@ -105,8 +107,10 @@ class PageTest extends AbstractTestCase
         ;
         $page->addChild($child);
 
+        $kernel = static::getKernel();
+
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($page);
         $em->persist($child);
         $em->flush();

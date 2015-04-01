@@ -35,6 +35,8 @@ class PageControllerTest extends AbstractTestCase
 
     public function testOneHomepage()
     {
+        $client = static::createClient();
+
         $homepage = new Page();
         $homepage
             ->setHomepage(true)
@@ -46,11 +48,9 @@ class PageControllerTest extends AbstractTestCase
         ;
 
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
         $em->persist($homepage);
         $em->flush();
-
-        $client = static::createClient();
 
         $crawler = $client->request('GET', '/page/');
         $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
@@ -66,8 +66,10 @@ class PageControllerTest extends AbstractTestCase
 
     public function testTree()
     {
+        $client = static::createClient();
+
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Page();
@@ -105,8 +107,6 @@ class PageControllerTest extends AbstractTestCase
         $em->persist($childTwoDisabled);
         $em->flush();
 
-        $client = static::createClient();
-
         // Repeat with the homepage directly in the url
         $crawler = $client->request('GET', '/page/'.$childOne->getTree());
         $this->assertEquals($childOne->getTitle(), trim($crawler->filter('title')->html()));
@@ -120,8 +120,10 @@ class PageControllerTest extends AbstractTestCase
 
     public function testMetas()
     {
+        $client = static::createClient();
+
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
         $page = new Page();
         $page
@@ -138,8 +140,6 @@ class PageControllerTest extends AbstractTestCase
         ;
         $em->persist($page);
         $em->flush();
-
-        $client = static::createClient();
 
         $crawler = $client->request('GET', '/page/'.$page->getTree());
         $this->assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));

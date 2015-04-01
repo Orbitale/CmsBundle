@@ -39,8 +39,10 @@ class CategoryTest extends AbstractTestCase
 
         $homepage->setCategory($category);
 
+        $kernel = static::getKernel();
+
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($homepage);
         $em->persist($category);
         $em->flush();
@@ -79,9 +81,10 @@ class CategoryTest extends AbstractTestCase
         $category->addChild($child);
         $child->setParent($category);
 
-        static::bootKernel();
+        $kernel = static::getKernel();
+
         /** @var EntityManager $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
+        $em = $kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($category);
         $em->persist($child);
         $em->flush();
@@ -121,8 +124,10 @@ class CategoryTest extends AbstractTestCase
         ;
         $category->addChild($child);
 
+        $kernel = static::getKernel();
+
         /** @var EntityManager $em */
-        $em = static::getKernel()->getContainer()->get('doctrine')->getManager();
+        $em = $kernel->getContainer()->get('doctrine')->getManager();
         $em->persist($category);
         $em->persist($child);
         $em->flush();

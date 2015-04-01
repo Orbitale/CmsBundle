@@ -10,7 +10,6 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

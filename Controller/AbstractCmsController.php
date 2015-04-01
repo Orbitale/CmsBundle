@@ -1,29 +1,34 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Pierstoval
- * Date: 28/03/2015
- * Time: 22:40
- */
+/*
+* This file is part of the OrbitaleCmsBundle package.
+*
+* (c) Alexandre Rock Ancelet <alex@orbitale.io>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
+use Orbitale\Bundle\CmsBundle\Entity\Category;
+use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 abstract class AbstractCmsController extends Controller
 {
 
     /**
-     * @param array $slugs
-     * @param array $elements
+     * @param array             $slugs
+     * @param Page[]|Category[] $elements
      *
      * @return Category|Page
      */
-    public function getFinalTreeElement(array $slugs, array $elements)
+    protected function getFinalTreeElement(array $slugs, array $elements)
     {
         if (!count($slugs) || count($slugs) !== count($elements)) {
             throw $this->createNotFoundException();
         }
+
         /** @var Page|Category $element */
         $element = null;
 

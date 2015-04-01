@@ -50,7 +50,13 @@ class OrbitaleCmsExtension extends Extension
 
         // Sort configs by host, because host is checked before pattern.
         uasort($config['layouts'], function($a, $b) {
-            return ($a['host'] - $b['host']) < 0 ? -1 : 0;
+            if ($a['host'] && $b['host']) {
+                return strcasecmp($a['host'], $b['host']);
+            } elseif ($a['host'] && !$b['host']) {
+                return -1;
+            } else {
+                return 1;
+            }
         });
 
         $container->setParameter('orbitale_cms.config', $config);

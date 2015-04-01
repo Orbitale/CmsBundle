@@ -27,19 +27,9 @@ class AppKernel extends Kernel
         );
     }
 
-    public function getEnvironment()
-    {
-        return 'test';
-    }
-
-    public function isDebug()
-    {
-        return true;
-    }
-
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(__DIR__.'/config/config.yml');
+        $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
 
     /**
@@ -47,7 +37,7 @@ class AppKernel extends Kernel
      */
     public function getCacheDir()
     {
-        return __DIR__.'/../../../build/cache';
+        return __DIR__.'/../../../build/cache/'.$this->getEnvironment();
     }
 
     /**
@@ -55,6 +45,6 @@ class AppKernel extends Kernel
      */
     public function getLogDir()
     {
-        return __DIR__.'/../../../build/kernel_logs';
+        return __DIR__.'/../../../build/kernel_logs/'.$this->getEnvironment();
     }
 }

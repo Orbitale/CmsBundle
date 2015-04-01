@@ -47,7 +47,3 @@ security:
     providers:
         in_memory:
              memory: ~
-
-orbitale_cms:
-    layouts:
-        front: { resource: @OrbitaleCms/default_layout.html.twig }

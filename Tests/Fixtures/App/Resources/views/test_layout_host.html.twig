@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.attributes.get('_locale') }}">
+<head>
+    <meta charset="UTF-8" />
+    <title>This layout is only for local.host. {% block title %}{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    {% block orbitale_cms_head_metas %}{% endblock %}
+</head>
+<body>
+
+{% block orbitale_cms_breadcrumbs %}{% endblock %}
+
+{% block orbitale_cms_page_content %}
+    {% block orbitale_cms_pages_list %}{% endblock %}
+{% endblock %}
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>

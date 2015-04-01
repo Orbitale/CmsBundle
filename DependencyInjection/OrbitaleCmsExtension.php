@@ -43,6 +43,11 @@ class OrbitaleCmsExtension extends Extension
             ), $layout);
         }
 
+        // Sort configs by host, because host is checked before pattern.
+        uasort($config['layouts'], function($a, $b) {
+            return ($a['host'] - $b['host']) < 0 ? -1 : 0;
+        });
+
         $container->setParameter('orbitale_cms.config', $config);
     }
 }

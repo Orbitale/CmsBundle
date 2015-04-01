@@ -36,10 +36,6 @@ class LayoutsListenerTest extends AbstractTestCase
         $this->assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
     }
 
-    /**
-     * @expectedException
-     * @expectedExceptionMessage
-     */
     public function testLayoutWrong()
     {
         $exception = false;

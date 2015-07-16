@@ -62,4 +62,39 @@ class PageRepository extends EntityRepository {
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @param array $slugs
+     * @param array $params
+     *
+     * @return Page
+     */
+    public function findFrontPage($slugs, $params = array())
+    {
+        $qb = $this->createQueryBuilder('page')
+            ->where('page.slug IN ( :slugs )')
+            ->setParameter('slugs', $slugs)
+        ;
+        if (isset($params['locale'])) {
+            $qb
+                ->andWhere('page.locale IS NULL OR page.locale = :locale')
+                ->setParameter('locale', $params['locale'])
+            ;
+        } else {
+            $qb->andWhere('page.locale IS NULL');
+        }
+
+        $pages = $qb->getQuery()->getResult();
+
+        $withLocale = array_reduce($pages, function($page) {
+            return $page->getLocale() ? $page : null;
+        });
+
+
+        $withoutLocale = array_reduce($pages, function($page) {
+            return $page->getLocale() ? $page : null;
+        });
+
+        return $pages;
+    }
+
 }

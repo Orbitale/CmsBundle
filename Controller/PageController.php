@@ -21,7 +21,7 @@ class PageController extends AbstractCmsController
     /**
      * @Route("/{slugs}", name="orbitale_cms_page", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
      */
-    public function indexAction($slugs = '', Request $request)
+    public function indexAction($slugs = '', $_locale = null, Request $request)
     {
         if (!$slugs) {
             $slugs = $this->getHomepage($request->getHost());
@@ -32,8 +32,12 @@ class PageController extends AbstractCmsController
         /** @var PageRepository $repo */
         $repo = $this->getDoctrine()->getManager()->getRepository('OrbitaleCmsBundle:Page');
 
+        $params = array(
+            'locale' => $request->getLocale(),
+        );
+
         /** @var Page[] $pages */
-        $pages = $repo->findBy(array('slug' => $slugsArray));
+        $pages = $repo->findFrontPage($slugsArray, $params);
 
         return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
             'pages' => $pages,

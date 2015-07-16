@@ -122,6 +122,12 @@ class Page
     protected $host;
 
     /**
+     * @var string
+     * @ORM\Column(name="locale", type="string", length=6, nullable=true)
+     */
+    protected $locale;
+
+    /**
      * @var Page
      * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Page", inversedBy="children", fetch="EAGER")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
@@ -433,6 +439,26 @@ class Page
     public function setHost($host)
     {
         $this->host = $host;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return Page
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
         return $this;
     }
 

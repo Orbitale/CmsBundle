@@ -22,7 +22,6 @@ class PageTest extends AbstractTestCase
         $page = new Page();
         return $page
             ->setHomepage(true)
-            ->setEnabled(false)
             ->setSlug('home')
             ->setTitle('My homepage')
             ->setHost('localhost')
@@ -46,7 +45,7 @@ class PageTest extends AbstractTestCase
 
         $this->assertEquals($homepage->getTitle(), (string) $homepage);
 
-        $this->assertFalse($homepage->isEnabled());
+        $this->assertFalse($homepage->isEnabled()); // Base value in entity
         $this->assertFalse($homepage->isDeleted());
         $this->assertTrue($homepage->isHomepage());
         $this->assertEquals('localhost', $homepage->getHost());

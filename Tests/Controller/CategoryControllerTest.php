@@ -43,7 +43,11 @@ class CategoryControllerTest extends AbstractTestCase
         $em->flush();
 
         // Repeat with the homepage directly in the url
-        $crawler = $client->request('GET', '/category/default');
+        // First, check that any right trimming "/" will redirect
+        $client->request('GET', '/category/default/');
+        $this->assertTrue($client->getResponse()->isRedirect('/category/default'));
+
+        $crawler = $client->followRedirect();
         $this->assertEquals($category->getName(), trim($crawler->filter('title')->html()));
         $this->assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
         $this->assertContains($category->getDescription(), trim($crawler->filter('article')->first()->html()));

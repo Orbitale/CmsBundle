@@ -36,24 +36,13 @@ class LayoutsListenerTest extends AbstractTestCase
         $this->assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
     }
 
+    /**
+     * @expectedException \Twig_Error_Loader
+     * @expectedExceptionMessage Unable to find template ::this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout.
+     */
     public function testLayoutWrong()
     {
-        $exception = false;
-        $message = false;
-        try {
-            static::createClient(array('environment' => 'layout_wrong'))->request('GET', '/page/');
-        } catch (\Exception $e) {
-            do {
-                if ($e instanceof \Twig_Error_Loader) {
-                    $exception = true;
-                    $message = $e->getMessage() === 'Unable to find template ::this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout.';
-                }
-                $e = $e->getPrevious();
-            } while ($e);
-        }
-
-        $this->assertTrue($exception);
-        $this->assertTrue($message);
+        static::createClient(array('environment' => 'layout_wrong'))->request('GET', '/page/');
     }
 
     /**

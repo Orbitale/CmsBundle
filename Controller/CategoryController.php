@@ -23,8 +23,8 @@ class CategoryController extends AbstractCmsController
      */
     public function indexAction($slugs = '', Request $request)
     {
-        if (preg_match('~/$~', $slugs)) {
-            return $this->redirectToRoute('orbitale_cms_category', array('slugs' => rtrim($slugs, '/')));
+        if (preg_match('#/$#', $slugs)) {
+            return $this->redirect($this->generateUrl('orbitale_cms_category', array('slugs' => rtrim($slugs, '/'))));
         }
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);

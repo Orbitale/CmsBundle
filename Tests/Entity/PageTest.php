@@ -78,8 +78,10 @@ class PageTest extends AbstractTestCase
 
         $this->assertNotNull($homepage);
 
-        $em->remove($homepage);
-        $em->flush();
+        if (null !== $homepage) {
+            $em->remove($homepage);
+            $em->flush();
+        }
 
         $homepage = $em->getRepository(get_class($homepage))->findOneBy(array('id' => $homepage->getId()));
 

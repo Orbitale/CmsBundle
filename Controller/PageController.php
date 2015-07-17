@@ -36,7 +36,7 @@ class PageController extends AbstractCmsController
         /** @var Page[] $pages */
         $pages = $this->getDoctrine()->getManager()
             ->getRepository('OrbitaleCmsBundle:Page')
-            ->findFrontPages($slugsArray, $request->getHost(), $request->getLocale())
+            ->findFrontPages($slugsArray, $request->getHost(), $_locale ?: $request->getLocale())
         ;
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {

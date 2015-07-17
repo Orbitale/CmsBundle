@@ -161,11 +161,11 @@ class PageControllerTest extends AbstractTestCase
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
-        $parent = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host'   => 'localhost', 'locale' => 'en'));
+        $parent = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host' => 'localhost', 'locale' => 'en'));
         $em->persist($parent);
         $em->flush();
 
-        $child = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only',   'host'   => 'localhost', 'parent' => $parent));
+        $child = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only', 'host' => 'localhost', 'parent' => $parent));
         $em->persist($child);
         $em->flush();
 
@@ -192,8 +192,8 @@ class PageControllerTest extends AbstractTestCase
         // First, create the pages
         /** @var Page[] $pages */
         $pages = array(
-            'both'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host'   => 'localhost', 'locale' => 'en')),
-            'host'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only',   'host'   => 'localhost')),
+            'both'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host' => 'localhost', 'locale' => 'en')),
+            'host'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only', 'host' => 'localhost')),
             'locale' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale only', 'locale' => 'en')),
             'none'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'No match')),
         );

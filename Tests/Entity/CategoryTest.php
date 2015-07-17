@@ -96,8 +96,10 @@ class CategoryTest extends AbstractTestCase
 
         $this->assertNotNull($category);
 
-        $em->remove($category);
-        $em->flush();
+        if (null !== $category) {
+            $em->remove($category);
+            $em->flush();
+        }
 
         $category = $em->getRepository(get_class($category))->findOneBy(array('id' => $category->getId()));
 

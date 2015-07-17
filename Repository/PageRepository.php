@@ -71,14 +71,14 @@ class PageRepository extends EntityRepository
         }
 
         $hostWhere = 'page.host IS NULL';
-        if ($host) {
+        if (null !== $host) {
             $hostWhere .= ' OR page.host = :host';
             $qb->setParameter('host', $host);
         }
         $qb->andWhere($hostWhere);
 
         $localeWhere = 'page.locale IS NULL';
-        if ($locale) {
+        if (null !== $locale) {
             $localeWhere .= ' OR page.locale = :locale';
             $qb->setParameter('locale', $locale);
         }

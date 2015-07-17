@@ -2,6 +2,21 @@
 [![Coverage Status](https://coveralls.io/repos/Orbitale/CmsBundle/badge.svg?branch=master)](https://coveralls.io/r/Orbitale/CmsBundle?branch=master)
 [![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=master)](https://travis-ci.org/Orbitale/CmsBundle)
 
+##### Index
+
+* [Requirements](#requirements)
+* [Install](#install)
+* [Setup](#setup)
+* [Usage](#usage)
+* * [Manage pages](#manage-pages)
+* * [View pages](#view-pages)
+* * [Generate a route based on a single page](#generate-a-route-based-on-a-single-page)
+* [Change homepage](#change-homepage)
+* [Using different layouts](#using-different-layouts)
+* * [Advanced layout configuration](#advanced-layout-configuration)
+* [Setup EasyAdminBundle to manage pages and categories in its back-end](#easyadmin)
+* [Changelog](#changelog)
+
 # Orbitale CMS Bundle
 
 This bundle is a simple helper to create a very simple CMS based on a classic system with Pages and Categories.
@@ -67,13 +82,13 @@ $ php app/console doctrine:schema:update --force
 
 ## Usage
 
-### <a name="manage"></a> Manage pages 
+### Manage pages 
 
 To manage your pages, you should use any back-end solution, like [EasyAdmin](https://github.com/javiereguiluz/EasyAdminBundle/)
 (which we suggest) or [SonataAdmin](https://sonata-project.org/bundles/admin), or any else.
 You must have configured it to manage at least the `Orbitale\Bundle\CmsBundle\Entity\Page` entity.
 
-### <a name="view"></a>  View pages
+### View pages
 
 The `PageController` handles some methods to view pages with a single `indexAction()`, and the `CategoryController` 
 uses its route to show all pages within a specified `Category`.
@@ -89,7 +104,7 @@ a parent, that has a parent, and so on, until you reach the "root" parent. And i
 *Note:* this behavior is the precise reason why you have to use a specific prefix for your controllers routing import,
 unless you may have many "404" errors.
 
-### <a name="route"></a> Generate a route based on a single page
+### Generate a route based on a single page
 
 *Note:* This behavior also works for categories.
 
@@ -125,17 +140,34 @@ Or in a controller:
 
 With this, you have a functional tree system for your CMS!
 
-## <a name="homepage"></a> Change homepage
+## Change homepage
 
 The homepage is always the first `Page` object with its `homepage` attribute set to true. Be sure to have only one
 element defined as homepage, or you may have unexpected results.
 
-*Note:* If you are hosting your application in a multi-domain platform, you can use the `host` attribute in your page
-to restrict the view only to the specified host.
-It's great for instance if you want to have different articles in different languages in something like `fr.mydomain.com`
-and `en.mydomain.com` for instance.
+## <a name="page-restriction"></a>Page restriction based `host` and/or `locale`
 
-## <a name="layout"></a> Using different layouts
+If you are hosting your application in a multi-domain platform, you can use the `host` attribute in your page
+to restrict the view only to the specified host.
+
+It's great for example if you want to have different articles on different domains like `blog.mydomain.com`
+and `www.mydomain.com`.
+
+If you want to restrict by `locale`, you can specify the locale in the page.
+The best conjointed use is with prefixed routes in the routing file:
+
+```yml
+# app/config/routing.yml
+orbitale_cms_page:
+    resource: "@OrbitaleCmsBundle/Controller/PageController.php"
+    type:     annotation
+    # Add the locale to the prefix for if the page's locale is specified and is not
+    # equal to request locale, the app will return a 404 error.
+    prefix:   /{_locale}/page/ 
+```
+
+
+## Using different layouts
 
 Obviously, the default layout has no style.
 
@@ -153,7 +185,7 @@ Without overriding anything, you can easily change the layout for your CMS!
 Take a look at the [default layout](Resources/views/default_layout.html.twig) to see which Twig blocks are mandatory to 
 render correctly the pages.
 
-## <a name="layout_advanced"></a> Advanced layout configuration
+### Advanced layout configuration
 
 Here is the global configuration reference for the layouts:
 
@@ -172,7 +204,7 @@ Explanation:
 * *name* (attribute used as key for the layouts list):<br>
  The name of your layout. Simply for readability issues, and maybe to get it directly from the config.
 * *resource*:<br>
- The Twig template used to render all the pages (see the [above](#layout) section)
+ The Twig template used to render all the pages (see the [above](#using-different-layouts) section)
 * *assets_css* and *assets_js*:<br>
  Any asset to send to the Twig `asset()` function. The CSS is rendered in the `stylesheets` block, and js in the
  `javascripts` block.
@@ -193,7 +225,7 @@ Explanation:
              pattern:    ^/category/
  ```
 
-## <a name="easyadmin"></a> Setup EasyAdminBundle to manage pages and categories in its back-end
+## <a name="easyadmin"></a>Setup EasyAdminBundle to manage pages and categories in its back-end
 
 This configuration allows you to manage your pages and categories directly in the [EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle) way.
 

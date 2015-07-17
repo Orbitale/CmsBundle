@@ -11,37 +11,10 @@
 namespace Orbitale\Bundle\CmsBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 
-class PageRepository extends EntityRepository {
-
-    /**
-     * @param null $host
-     *
-     * @return Page
-     * @throws NonUniqueResultException
-     */
-    public function findHomepage($host = null)
-    {
-        $qb = $this->createQueryBuilder('page')
-            ->where('page.homepage = :homepage')
-            ->setParameter('homepage', true)
-        ;
-
-        $or = $qb->expr()->orX(); // Create an "OR" group
-        $or->add($qb->expr()->isNull('page.host')); // Where page.host is null
-        if ($host) {
-            $or->add($qb->expr()->eq('page.host', ':host'));
-            $qb->setParameter('host', $host);
-        }
-        $qb->andWhere($or);// AND ( page.host is null OR ( page.host is not null and page.host = :host ) )
-
-        return $qb
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
+class PageRepository extends EntityRepository
+{
 
     /**
      * @param array $criteria
@@ -60,6 +33,90 @@ class PageRepository extends EntityRepository {
             ;
         }
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Will search for pages to show in front depending on the arguments.
+     * If slugs are defined, there's no problem in looking for nulled host or locale,
+     * because slugs are unique, so it does not
+     *
+     * @param array $slugs
+     * @param string $host
+     * @param string $locale
+     *
+     * @return Page
+     */
+    public function findFrontPages(array $slugs = array(), $host = null, $locale = null)
+    {
+        $qb = $this->createQueryBuilder('page')
+            ->where('page.enabled = :enabled')
+            ->leftJoin('page.category', 'category')
+            ->andWhere('page.category is null OR category.enabled = :enabled')
+            ->setParameter('enabled', true)
+        ;
+
+        // Will search differently if we're looking for homepage.
+        $searchForHomepage = count($slugs) === 0;
+
+        if ($searchForHomepage) {
+            $qb
+                ->andWhere('page.homepage = :homepage')
+                ->setParameter('homepage', true)
+            ;
+        } else {
+            $qb
+                ->andWhere('page.slug IN ( :slugs )')
+                ->setParameter('slugs', $slugs)
+            ;
+        }
+
+        $hostWhere = 'page.host IS NULL';
+        if (null !== $host) {
+            $hostWhere .= ' OR page.host = :host';
+            $qb->setParameter('host', $host);
+        }
+        $qb->andWhere($hostWhere);
+
+        $localeWhere = 'page.locale IS NULL';
+        if (null !== $locale) {
+            $localeWhere .= ' OR page.locale = :locale';
+            $qb->setParameter('locale', $locale);
+        }
+        $qb->andWhere($localeWhere);
+
+        // This will allow getting first the pages that match both criteria
+        $qb
+            ->orderBy('page.host', 'DESC')
+            ->addOrderBy('page.locale', 'DESC')
+        ;
+
+        /** @var Page[] $results */
+        $results = $qb->getQuery()->getResult();
+
+        if ($searchForHomepage) {
+            $homepage = null;
+
+            foreach ($results as $page) {
+                if (
+                    ($page->getLocale() && $page->getHost())
+                    || $page->getHost() || $page->getLocale()
+                    || !$page->getLocale() || !$page->getHost()
+                ) {
+                    $homepage = $page;
+                    break;
+                }
+            }
+
+            $results = $homepage ? array($homepage) : array();
+        }
+
+        $resultsSortedBySlug = array();
+
+        foreach ($results as $page) {
+            $resultsSortedBySlug[$page->getSlug()] = $page;
+        }
+
+        return $resultsSortedBySlug;
     }
 
 }

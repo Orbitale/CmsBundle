@@ -34,7 +34,6 @@ class CategoryTest extends AbstractTestCase
         $category
             ->setName('Default category')
             ->setSlug('default')
-            ->setEnabled(true)
         ;
 
         $homepage->setCategory($category);
@@ -52,6 +51,7 @@ class CategoryTest extends AbstractTestCase
 
         $this->assertEquals($homepage->getCategory(), $category);
         $this->assertEquals($category->getName(), (string) $category);
+        $this->assertFalse($category->isEnabled()); // Base value
     }
 
     public function testIdenticalParent()
@@ -96,8 +96,10 @@ class CategoryTest extends AbstractTestCase
 
         $this->assertNotNull($category);
 
-        $em->remove($category);
-        $em->flush();
+        if (null !== $category) {
+            $em->remove($category);
+            $em->flush();
+        }
 
         $category = $em->getRepository(get_class($category))->findOneBy(array('id' => $category->getId()));
 

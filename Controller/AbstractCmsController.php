@@ -18,6 +18,12 @@ abstract class AbstractCmsController extends Controller
 {
 
     /**
+     * Slugs HAVE TO be ordered exactly as in the request.
+     * This method will check that, in $elements, we have the same keys as in $slugs,
+     * and that the hierarchy is correct.
+     * This also prevents things like /children/parent to work,
+     * as it should be /parent/children
+     *
      * @param array             $slugs
      * @param Page[]|Category[] $elements
      *
@@ -25,29 +31,35 @@ abstract class AbstractCmsController extends Controller
      */
     protected function getFinalTreeElement(array $slugs, array $elements)
     {
-        if (!count($slugs) || count($slugs) !== count($elements)) {
+        // Will check that slugs and elements match
+        $slugsElements = array_keys($elements);
+        $sortedSlugs = $slugs;
+        sort($sortedSlugs);
+        sort($slugsElements);
+
+        if ($sortedSlugs !== $slugsElements || !count($slugs) || count($slugs) !== count($elements)) {
             throw $this->createNotFoundException();
         }
 
         /** @var Page|Category $element */
         $element = null;
+        /** @var Page|Category $previousElement */
+        $previousElement = null;
 
-        foreach ($slugs as $k => $slug) {
-            $element = null;
-            foreach ($elements as $p) {
-                if (
-                    $p->getSlug() === $slug
-                    && $p->isEnabled()
-                    && (!$element || $element && $element->getId() === $element->getId())
-                ) {
-                    $element = $p;
-                    break;
-                }
-            }
+        foreach ($slugs as $slug) {
+            $element = isset($elements[$slug]) ? $elements[$slug] : null;
+            $match = false;
             if ($element) {
-                continue;
-            } else {
-                throw $this->createNotFoundException();
+                if ($previousElement) {
+                    $match = $element->getParent() && $previousElement->getSlug() === $element->getParent()->getSlug();
+                } else {
+                    // Only for the first iteration
+                    $match = true;
+                }
+                $previousElement = $element;
+            }
+            if (!$match) {
+                throw $this->createNotFoundException(($element instanceof Page ? 'Page' : ($element instanceof Category ? 'Cateogry' : 'Elements')).' hierarchy not found.');
             }
         }
 

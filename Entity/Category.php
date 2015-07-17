@@ -13,8 +13,6 @@ namespace Orbitale\Bundle\CmsBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Gedmo\Blameable\Traits\BlameableEntity;
-use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -22,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository")
  * @ORM\Table(name="orbitale_cms_categories")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("slug")

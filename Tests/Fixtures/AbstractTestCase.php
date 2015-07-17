@@ -12,6 +12,7 @@ namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
+use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
@@ -30,6 +31,30 @@ class AbstractTestCase extends WebTestCase
      * @var ContainerInterface
      */
     protected static $container;
+
+    public function setUp()
+    {
+        $kernel = static::getKernel();
+
+        $databaseFile = $kernel->getContainer()->getParameter('database_path');
+        $application = new Application($kernel);
+
+        if (file_exists($databaseFile)) {
+            unlink($databaseFile);
+        }
+
+        // Create database
+        $command = new CreateDatabaseDoctrineCommand();
+        $application->add($command);
+        $input = new ArrayInput(array('command' => 'doctrine:database:create',));
+        $command->run($input, new NullOutput());
+
+        // Create database schema
+        $command = new CreateSchemaDoctrineCommand();
+        $application->add($command);
+        $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
+        $command->run($input, new NullOutput());
+    }
 
     /**
      * @param array $options
@@ -58,28 +83,16 @@ class AbstractTestCase extends WebTestCase
         return static::$kernel;
     }
 
-    public function setUp()
+    /**
+     * @param array $values
+     * @return Page
+     */
+    protected function createPage(array $values = array())
     {
-        $kernel = static::getKernel();
-
-        $databaseFile = $kernel->getContainer()->getParameter('database_path');
-        $application = new Application($kernel);
-
-        if (file_exists($databaseFile)) {
-            unlink($databaseFile);
+        $page = new Page();
+        foreach ($values as $key => $value) {
+            $page->{'set'.ucFirst($key)}($value);
         }
-
-        // Create database
-        $command = new CreateDatabaseDoctrineCommand();
-        $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:database:create',));
-        $command->run($input, new NullOutput());
-
-        // Create database schema
-        $command = new CreateSchemaDoctrineCommand();
-        $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
-        $command->run($input, new NullOutput());
+        return $page;
     }
-
 }

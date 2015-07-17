@@ -13,8 +13,6 @@ namespace Orbitale\Bundle\CmsBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Gedmo\Blameable\Traits\BlameableEntity;
-use Gedmo\IpTraceable\Traits\IpTraceableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -120,6 +118,12 @@ class Page
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
     protected $host;
+
+    /**
+     * @var string
+     * @ORM\Column(name="locale", type="string", length=6, nullable=true)
+     */
+    protected $locale;
 
     /**
      * @var Page
@@ -433,6 +437,26 @@ class Page
     public function setHost($host)
     {
         $this->host = $host;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param string $locale
+     *
+     * @return Page
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
         return $this;
     }
 

@@ -1,5 +1,5 @@
 parameters:
-    locale: fr
+    locale: en
     database_path: %kernel.root_dir%/../../../build/test.db
 
 framework:

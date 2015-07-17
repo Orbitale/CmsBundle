@@ -51,7 +51,7 @@ class PageRepository extends EntityRepository
         $qb = $this->createQueryBuilder('page')
             ->where('page.enabled = :enabled')
             ->leftJoin('page.category', 'category')
-            ->andWhere('category is null OR category.enabled = :enabled')
+            ->andWhere('page.category is null OR category.enabled = :enabled')
             ->setParameter('enabled', true)
         ;
 

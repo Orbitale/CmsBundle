@@ -23,7 +23,11 @@ class CategoryController extends AbstractCmsController
      */
     public function indexAction($slugs = '', Request $request)
     {
-        $slugsArray = explode('/', $slugs);
+        if (preg_match('~/$~', $slugs)) {
+            return $this->redirectToRoute('orbitale_cms_category', array('slugs' => rtrim($slugs, '/')));
+        }
+
+        $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
 
         /** @var EntityManager $em */
         $em = $this->getDoctrine()->getManager();
@@ -31,12 +35,11 @@ class CategoryController extends AbstractCmsController
         /** @var PageRepository $pagesRepo */
         $pagesRepo = $em->getRepository('OrbitaleCmsBundle:Page');
 
-        $categories = $em->getRepository('OrbitaleCmsBundle:Category')->findBy(array('slug' => $slugsArray));
+        $categories = $em->getRepository('OrbitaleCmsBundle:Category')->findFrontCategories($slugsArray);
 
         $category = $this->getFinalTreeElement($slugsArray, $categories);
 
-        $validOrderFields = array('createdAt', 'updatedAt', 'title', 'content',);
-        reset($validOrderFields);
+        $validOrderFields = array('createdAt', 'updatedAt', 'title', 'content');
 
         $limit   = $request->query->get('limit', 10);
         $page    = $request->query->get('page', 1);

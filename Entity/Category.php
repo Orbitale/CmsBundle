@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository")
  * @ORM\Table(name="orbitale_cms_categories")
  * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("slug")

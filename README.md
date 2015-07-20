@@ -237,14 +237,18 @@ After you installed it, you can add this configuration to inject your new classe
 # app/config/config.yml
 easy_admin:
     entities:
-        "Cms Pages":
+        Pages:
+            label: "Cms Pages":
             class: Orbitale\Bundle\CmsBundle\Entity\Page
+            show:
+                fields: [ id, parent, title, slug, tree, content, metaDescription, metaTitle, metaKeywords, css, js, category, host, locale, homepage, enabled ]
             list:
-                fields: [ id, parent, title, slug, content, category, homepage, enabled ]
+                fields: [ id, parent, title, slug, tree, content, category, homepage, host, locale, enabled ]
             form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, homepage, enabled ]
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, host, locale, homepage, enabled ]
 
-        "Cms Categories":
+        Categories:
+            label: "Cms Categories":
             class: Orbitale\Bundle\CmsBundle\Entity\Category
             list:
                 fields: [ id, name, slug, description, parent, enabled ]

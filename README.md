@@ -238,7 +238,7 @@ After you installed it, you can add this configuration to inject your new classe
 easy_admin:
     entities:
         Pages:
-            label: "Cms Pages":
+            label: "Cms Pages"
             class: Orbitale\Bundle\CmsBundle\Entity\Page
             show:
                 fields: [ id, parent, title, slug, tree, content, metaDescription, metaTitle, metaKeywords, css, js, category, host, locale, homepage, enabled ]
@@ -248,7 +248,7 @@ easy_admin:
                 fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, host, locale, homepage, enabled ]
 
         Categories:
-            label: "Cms Categories":
+            label: "Cms Categories"
             class: Orbitale\Bundle\CmsBundle\Entity\Category
             list:
                 fields: [ id, name, slug, description, parent, enabled ]

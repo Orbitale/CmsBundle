@@ -61,7 +61,10 @@ class PageControllerTest extends AbstractTestCase
         // First, check that any right trimming "/" will redirect
         $client->request('GET', '/page/home/');
         $this->assertTrue($client->getResponse()->isRedirect('/page/home'));
+        $client->followRedirect();
 
+        // Check that the homepage with slug is redirected to the root page
+        $this->assertTrue($client->getResponse()->isRedirect('/page'));
         $crawler = $client->followRedirect();
 
         $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
@@ -142,7 +145,7 @@ class PageControllerTest extends AbstractTestCase
         $em->persist($page);
         $em->flush();
 
-        $crawler = $client->request('GET', '/page/'.$page->getTree());
+        $crawler = $client->request('GET', '/page');
         $this->assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
         $this->assertEquals($page->getTitle(), trim($crawler->filter('article > h1')->html()));
         $this->assertContains($page->getContent(), trim($crawler->filter('article')->html()));

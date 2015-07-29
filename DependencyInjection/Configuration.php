@@ -54,8 +54,9 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('breadcrumbs_class')->defaultValue('')->end()
                         ->scalarNode('breadcrumbs_link_class')->defaultValue('')->end()
-                        ->scalarNode('breadcrumbs_link_current_class')->defaultValue('')->end()
+                        ->scalarNode('breadcrumbs_current_class')->defaultValue('')->end()
                         ->scalarNode('breadcrumbs_separator')->defaultValue('>')->end()
+                        ->scalarNode('breadcrumbs_separator_class')->defaultValue('breadcrumb-separator')->end()
                     ->end()
                 ->end()
             ->end();

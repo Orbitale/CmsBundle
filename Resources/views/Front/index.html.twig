@@ -27,19 +27,19 @@
     <div id="breadcrumbs" class="{{ _design_options.breadcrumbs_class }}">
         {% set slugsArray = [] %}
         {% if page.homepage %}
-            <span class="{{ _design_options.breadcrumbs_link_current_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }} - {{ page.title }}</span>
+            <span class="{{ _design_options.breadcrumbs_current_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }} - {{ page.title }}</span>
         {% else %}
             <a href="{{ path('orbitale_cms_page') }}" class="{{ _design_options.breadcrumbs_link_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a>
             {% for key, breadcrumbPage in pages %}
 
-                {{ _design_options.breadcrumbs_separator }}
+                <span class="{{ _design_options.breadcrumbs_separator_class }}">{{ _design_options.breadcrumbs_separator }}</span>
 
                 {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}
 
                 {% if breadcrumbPage.id == page.id %}
-                    <span class="{{ _design_options.breadcrumbs_link_current_class }}">{{ breadcrumbPage.title }}</span>
+                    <span class="{{ _design_options.breadcrumbs_current_class }}" >{{ breadcrumbPage.title }}</span>
                 {% else %}
-                    <a href="{{ path('orbitale_cms_page', {slugs: slugsArray|join('/')}) }}">
+                    <a href="{{ path('orbitale_cms_page', {slugs: slugsArray|join('/')}) }}" class="{{ _design_options.breadcrumbs_link_class }}">
                         {{ breadcrumbPage.title }}
                     </a>
                 {% endif %}

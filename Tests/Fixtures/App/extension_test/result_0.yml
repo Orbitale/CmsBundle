@@ -17,5 +17,6 @@ orbitale_cms:
     design:
         breadcrumbs_class: ""
         breadcrumbs_link_class: ""
-        breadcrumbs_link_current_class: ""
+        breadcrumbs_current_class: ""
         breadcrumbs_separator: ">"
+        breadcrumbs_separator_class: "breadcrumb-separator"

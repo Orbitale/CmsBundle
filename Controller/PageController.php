@@ -54,6 +54,10 @@ class PageController extends AbstractCmsController
             $currentPage = current($pages);
         }
 
+        if ($currentPage->isHomepage() && strlen($slugs)) {
+            return $this->redirect($this->generateUrl('orbitale_cms_page', array('slugs' => '', '_locale' => $_locale)));
+        }
+
         return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
             'pages' => $pages,
             'page'  => $currentPage,

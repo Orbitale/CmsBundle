@@ -229,28 +229,38 @@ class PageControllerTest extends AbstractTestCase
 
         $crawler = $client->request('GET', '/page/'.$pageChild->getTree());
 
-        $this->assertEquals('breadcrumb-test-class', $crawler->filter('#breadcrumbs')->getNode(0)->getAttribute('class'));
+        $this->assertEquals('breadcrumb-test-class', $crawler->filter('#breadcrumbs')->first()->attr('class'));
         $nodes = $crawler->filter('#breadcrumbs *');
-        $homeNode = $nodes->getNode(0);
+
+        /** @var \DOMElement[] $nodesArray */
+        $nodesArray = array();
+        foreach ($nodes as $k => $node) {
+            // This is a trick for SF2.3 and the lack of "getNode" method.
+            $nodesArray[$k] = $node;
+        }
+
+        $homeNode = $nodesArray[0];
         $this->assertEquals('a', $homeNode->tagName);
         $this->assertEquals('breadcrumb-link', $homeNode->getAttribute('class'));
 
-        $separator = $nodes->getNode(1);
+        $separator = $nodesArray[1];
         $this->assertEquals('span', $separator->tagName);
         $this->assertEquals('breadcrumb-overriden-separator-class', $separator->getAttribute('class'));
         $this->assertEquals('|', $separator->textContent);
 
-        $firstLinkNode = $nodes->getNode(2);
+        $firstLinkNode = $nodesArray[2];
         $this->assertEquals('a', $firstLinkNode->tagName);
         $this->assertEquals('breadcrumb-link', $firstLinkNode->getAttribute('class'));
         $this->assertEquals($page->getTitle(), trim($firstLinkNode->textContent));
 
         // We sort of skip node 3 because it should be a separator
-        $this->assertEquals('breadcrumb-overriden-separator-class', $nodes->getNode(3)->getAttribute('class'));
+        $this->assertEquals('breadcrumb-overriden-separator-class', $nodesArray[3]->getAttribute('class'));
 
-        $currentLinkNode = $nodes->getNode(4);
+        $currentLinkNode = $nodesArray[4];
         $this->assertEquals('span', $currentLinkNode->tagName);
         $this->assertEquals('breadcrumb-current', $currentLinkNode->getAttribute('class'));
         $this->assertEquals($pageChild->getTitle(), trim($currentLinkNode->textContent));
+
+        $crawler->clear();
     }
 }

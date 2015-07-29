@@ -215,4 +215,45 @@ class PageControllerTest extends AbstractTestCase
             $em->flush();
         }
     }
+
+    public function testBreadcrumbsDesign()
+    {
+        $client = static::createClient(array('environment' => 'design_breadcrumbs'));
+
+        /** @var EntityManager $em */
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+
+        $page = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Breadcrumbs test 1'));
+        $pageChild = $this->createPage(array('enabled' => true, 'homepage' => false, 'title' => 'Breadcrumbs test 2', 'parent' => $page));
+        $em->persist($page);
+        $em->persist($pageChild);
+        $em->flush();
+
+        $crawler = $client->request('GET', '/page/'.$pageChild->getTree());
+
+        $this->assertEquals('breadcrumb-test-class', $crawler->filter('#breadcrumbs')->getNode(0)->getAttribute('class'));
+        $nodes = $crawler->filter('#breadcrumbs *');
+        $homeNode = $nodes->getNode(0);
+        $this->assertEquals('a', $homeNode->tagName);
+        $this->assertEquals('breadcrumb-link', $homeNode->getAttribute('class'));
+
+        $separator = $nodes->getNode(1);
+        $this->assertEquals('span', $separator->tagName);
+        $this->assertEquals('breadcrumb-overriden-separator-class', $separator->getAttribute('class'));
+        $this->assertEquals('|', $separator->textContent);
+
+        $firstLinkNode = $nodes->getNode(2);
+        $this->assertEquals('a', $firstLinkNode->tagName);
+        $this->assertEquals('breadcrumb-link', $firstLinkNode->getAttribute('class'));
+        $this->assertEquals($page->getTitle(), trim($firstLinkNode->textContent));
+
+        // We sort of skip node 3 because it should be a separator
+        $this->assertEquals('breadcrumb-overriden-separator-class', $nodes->getNode(3)->getAttribute('class'));
+
+        $currentLinkNode = $nodes->getNode(4);
+        $this->assertEquals('span', $currentLinkNode->tagName);
+        $this->assertEquals('breadcrumb-current', $currentLinkNode->getAttribute('class'));
+        $this->assertEquals($pageChild->getTitle(), trim($currentLinkNode->textContent));
+
+    }
 }

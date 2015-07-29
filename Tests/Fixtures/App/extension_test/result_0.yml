@@ -14,3 +14,8 @@ orbitale_cms:
             host: b-second-host
             pattern: "^/only_this_one"
             resource: test_only
+    design:
+        breadcrumbs_class: ""
+        breadcrumbs_link_class: ""
+        breadcrumbs_link_current_class: ""
+        breadcrumbs_separator: ">"

@@ -49,6 +49,15 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
+                ->arrayNode('design')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('breadcrumbs_class')->defaultValue('')->end()
+                        ->scalarNode('breadcrumbs_link_class')->defaultValue('')->end()
+                        ->scalarNode('breadcrumbs_link_current_class')->defaultValue('')->end()
+                        ->scalarNode('breadcrumbs_separator')->defaultValue('>')->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

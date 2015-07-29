@@ -8,6 +8,12 @@ services:
         tags:
           - { name: kernel.event_subscriber }
 
+    orbitale_cms.twig.extension:
+        class: Orbitale\Bundle\CmsBundle\Twig\CmsExtension
+        arguments:
+            - %orbitale_cms.config%
+        tags: [ { name: twig.extension } ]
+
     # These are the Gedmo services needed to manage Doctrine Extensions
     gedmo.listener.timestampable:
         class: Gedmo\Timestampable\TimestampableListener

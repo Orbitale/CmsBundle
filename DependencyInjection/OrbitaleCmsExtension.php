@@ -30,9 +30,6 @@ class OrbitaleCmsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-
         foreach ($config['layouts'] as $name => $layout) {
             $config['layouts'][$name] = array_merge(array(
                 'name' => $name,
@@ -60,5 +57,8 @@ class OrbitaleCmsExtension extends Extension
         });
 
         $container->setParameter('orbitale_cms.config', $config);
+
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yml');
     }
 }

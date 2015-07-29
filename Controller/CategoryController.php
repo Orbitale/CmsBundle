@@ -46,7 +46,7 @@ class CategoryController extends AbstractCmsController
         $orderBy = $request->query->get('order_by', current($validOrderFields));
         $order = $request->query->get('order', 'asc');
 
-        $pages = $pagesRepo->findBy(array('category' => $category), array($orderBy => $order), $limit, $limit * ($page - 1));
+        $pages = $pagesRepo->findBy(array('category' => $category), array($orderBy => $order), $limit, $limit * ($page-1));
         $pagesCount = $pagesRepo->findCountBy(array('category' => $category));
 
         return $this->render('OrbitaleCmsBundle:Front:category.html.twig', array(

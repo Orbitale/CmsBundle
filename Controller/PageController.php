@@ -50,6 +50,7 @@ class PageController extends AbstractCmsController
         }
 
         if (count($pages) === count($slugsArray)) {
+            /** @var Page $currentPage */
             $currentPage = $this->getFinalTreeElement($slugsArray, $pages);
         } else {
             $currentPage = current($pages);

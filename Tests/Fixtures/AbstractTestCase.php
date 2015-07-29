@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -15,15 +16,13 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Class AbstractTestCase
- * @package Orbitale\Bundle\CmsBundle\Tests\Fixtures
+ * Class AbstractTestCase.
  */
 class AbstractTestCase extends WebTestCase
 {
@@ -46,13 +45,13 @@ class AbstractTestCase extends WebTestCase
         // Create database
         $command = new CreateDatabaseDoctrineCommand();
         $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:database:create',));
+        $input = new ArrayInput(array('command' => 'doctrine:database:create'));
         $command->run($input, new NullOutput());
 
         // Create database schema
         $command = new CreateSchemaDoctrineCommand();
         $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:schema:create',));
+        $input = new ArrayInput(array('command' => 'doctrine:schema:create'));
         $command->run($input, new NullOutput());
     }
 
@@ -75,16 +74,19 @@ class AbstractTestCase extends WebTestCase
 
     /**
      * @param array $options An array of options to pass to the createKernel class
+     *
      * @return KernelInterface
      */
     protected function getKernel(array $options = array())
     {
         static::bootKernel($options);
+
         return static::$kernel;
     }
 
     /**
      * @param array $values
+     *
      * @return Page
      */
     protected function createPage(array $values = array())
@@ -93,6 +95,7 @@ class AbstractTestCase extends WebTestCase
         foreach ($values as $key => $value) {
             $page->{'set'.ucFirst($key)}($value);
         }
+
         return $page;
     }
 }

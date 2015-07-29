@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -12,7 +13,6 @@ namespace Orbitale\Bundle\CmsBundle\Twig;
 
 class CmsExtension extends \Twig_Extension
 {
-
     /**
      * @var array
      */

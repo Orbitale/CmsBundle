@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -7,6 +8,7 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
+
 namespace Orbitale\Bundle\CmsBundle\Tests\DependencyInjection;
 
 use Orbitale\Bundle\CmsBundle\DependencyInjection\OrbitaleCmsExtension;
@@ -15,9 +17,9 @@ use Symfony\Component\Yaml\Yaml;
 
 class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @dataProvider provideConfiguration
+     *
      * @param $config
      * @param $expected
      */
@@ -34,7 +36,6 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function provideConfiguration()
     {
-
         $dir = __DIR__.'/../Fixtures/App/extension_test/';
 
         $configFiles = glob($dir.'config_*.yml');
@@ -53,5 +54,4 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
 
         return $tests;
     }
-
 }

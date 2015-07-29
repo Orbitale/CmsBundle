@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -16,7 +17,6 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
 class LayoutsListenerTest extends AbstractTestCase
 {
-
     public function testDifferentLayout()
     {
         $client = static::createClient(array('environment' => 'layout'));

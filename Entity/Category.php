@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -28,12 +29,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Category
 {
-
     use SoftDeleteableEntity;
     use TimestampableEntity;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -63,7 +63,7 @@ class Category
     protected $description;
 
     /**
-     * @var boolean
+     * @var bool
      * @ORM\Column(name="enabled", type="boolean")
      */
     protected $enabled = false;
@@ -115,6 +115,7 @@ class Category
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -134,6 +135,7 @@ class Category
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -153,11 +155,12 @@ class Category
     public function setSlug($slug)
     {
         $this->slug = $slug;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isEnabled()
     {
@@ -165,13 +168,14 @@ class Category
     }
 
     /**
-     * @param boolean $enabled
+     * @param bool $enabled
      *
      * @return Category
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
@@ -193,9 +197,11 @@ class Category
         if ($parent === $this) {
             // Refuse the category to have itself as parent
             $this->parent = null;
+
             return $this;
         }
         $this->parent = $parent;
+
         return $this;
     }
 
@@ -215,6 +221,7 @@ class Category
     public function addChild(Category $child)
     {
         $this->children->add($child);
+
         return $this;
     }
 
@@ -226,6 +233,7 @@ class Category
     public function removeChild(Category $child)
     {
         $this->children->removeElement($child);
+
         return $this;
     }
 
@@ -249,6 +257,7 @@ class Category
 
     /**
      * @ORM\PreRemove()
+     *
      * @param LifecycleEventArgs $event
      */
     public function onRemove(LifecycleEventArgs $event)
@@ -265,5 +274,4 @@ class Category
         $this->name .= '-'.$this->id.'-deleted';
         $this->slug .= '-'.$this->id.'-deleted';
     }
-
 }

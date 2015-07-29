@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -16,7 +17,6 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
 class PageControllerTest extends AbstractTestCase
 {
-
     public function testNoHomepage()
     {
         $error = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
@@ -155,7 +155,6 @@ class PageControllerTest extends AbstractTestCase
         $this->assertEquals($page->getMetaDescription(), trim($crawler->filter('meta[name="description"]')->attr('content')));
         $this->assertEquals($page->getMetaKeywords(), trim($crawler->filter('meta[name="keywords"]')->attr('content')));
         $this->assertEquals($page->getMetaTitle(), trim($crawler->filter('meta[name="title"]')->attr('content')));
-
     }
 
     public function testParentAndChildrenDontReverse()
@@ -174,7 +173,6 @@ class PageControllerTest extends AbstractTestCase
 
         $client->request('GET', '/page/'.$child->getSlug().'/'.$parent->getSlug());
         $this->assertEquals(404, $client->getResponse()->getStatusCode());
-
     }
 
     /**
@@ -195,10 +193,10 @@ class PageControllerTest extends AbstractTestCase
         // First, create the pages
         /** @var Page[] $pages */
         $pages = array(
-            'both'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host' => 'localhost', 'locale' => 'en')),
-            'host'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only', 'host' => 'localhost')),
+            'both' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host' => 'localhost', 'locale' => 'en')),
+            'host' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only', 'host' => 'localhost')),
             'locale' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale only', 'locale' => 'en')),
-            'none'   => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'No match')),
+            'none' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'No match')),
         );
         foreach ($pages as $page) {
             $em->persist($page);
@@ -254,6 +252,5 @@ class PageControllerTest extends AbstractTestCase
         $this->assertEquals('span', $currentLinkNode->tagName);
         $this->assertEquals('breadcrumb-current', $currentLinkNode->getAttribute('class'));
         $this->assertEquals($pageChild->getTitle(), trim($currentLinkNode->textContent));
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -17,7 +18,6 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
 class CategoryTest extends AbstractTestCase
 {
-
     public function testCategory()
     {
         $homepage = new Page();
@@ -105,7 +105,6 @@ class CategoryTest extends AbstractTestCase
 
         $this->assertNull($category);
         $this->assertNull($child->getParent());
-
     }
 
     public function testRemoval()

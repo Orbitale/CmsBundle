@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -16,9 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PageController extends AbstractCmsController
 {
-
     /**
      * @Route("/{slugs}", name="orbitale_cms_page", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
+     *
      * @param string  $slugs
      * @param string  $_locale
      * @param Request $request
@@ -60,8 +61,7 @@ class PageController extends AbstractCmsController
 
         return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
             'pages' => $pages,
-            'page'  => $currentPage,
+            'page' => $currentPage,
         ));
     }
-
 }

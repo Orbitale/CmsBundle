@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -29,7 +30,8 @@ if (is_dir(__DIR__.'/../build')) {
     }
 }
 
-AnnotationRegistry::registerLoader(function($class) use ($autoload) {
+AnnotationRegistry::registerLoader(function ($class) use ($autoload) {
     $autoload->loadClass($class);
+
     return class_exists($class, false);
 });

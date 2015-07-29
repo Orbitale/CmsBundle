@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -15,7 +16,6 @@ use Orbitale\Bundle\CmsBundle\Entity\Category;
 
 class CategoryRepository extends EntityRepository
 {
-
     /**
      * @param array $slugs
      *
@@ -41,5 +41,4 @@ class CategoryRepository extends EntityRepository
 
         return $resultsSortedBySlug;
     }
-
 }

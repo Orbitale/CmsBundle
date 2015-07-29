@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -28,12 +29,11 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  */
 class Page
 {
-
     use SoftDeleteableEntity;
     use TimestampableEntity;
 
     /**
-     * @var integer
+     * @var int
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -164,6 +164,7 @@ class Page
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -183,6 +184,7 @@ class Page
     public function setSlug($slug)
     {
         $this->slug = $slug;
+
         return $this;
     }
 
@@ -202,6 +204,7 @@ class Page
     public function setContent($content)
     {
         $this->content = $content;
+
         return $this;
     }
 
@@ -221,6 +224,7 @@ class Page
     public function setMetaDescription($metaDescription)
     {
         $this->metaDescription = $metaDescription;
+
         return $this;
     }
 
@@ -240,6 +244,7 @@ class Page
     public function setMetaTitle($metaTitle)
     {
         $this->metaTitle = $metaTitle;
+
         return $this;
     }
 
@@ -259,6 +264,7 @@ class Page
     public function setMetaKeywords($metaKeywords)
     {
         $this->metaKeywords = $metaKeywords;
+
         return $this;
     }
 
@@ -278,6 +284,7 @@ class Page
     public function setCategory($category)
     {
         $this->category = $category;
+
         return $this;
     }
 
@@ -297,6 +304,7 @@ class Page
     public function setCss($css)
     {
         $this->css = $css;
+
         return $this;
     }
 
@@ -316,11 +324,12 @@ class Page
     public function setJs($js)
     {
         $this->js = $js;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isEnabled()
     {
@@ -328,13 +337,14 @@ class Page
     }
 
     /**
-     * @param boolean $enabled
+     * @param bool $enabled
      *
      * @return Page
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+
         return $this;
     }
 
@@ -356,14 +366,16 @@ class Page
         if ($parent === $this) {
             // Refuse the page to have itself as parent
             $this->parent = null;
+
             return $this;
         }
         $this->parent = $parent;
+
         return $this;
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -382,11 +394,11 @@ class Page
      * @param Page $page
      *
      * @return Page
-     *
      */
     public function addChild(Page $page)
     {
         $this->children->add($page);
+
         return $this;
     }
 
@@ -394,16 +406,16 @@ class Page
      * @param Page $page
      *
      * @return Page
-     *
      */
     public function removeChild(Page $page)
     {
         $this->children->removeElement($page);
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isHomepage()
     {
@@ -411,13 +423,14 @@ class Page
     }
 
     /**
-     * @param boolean $homepage
+     * @param bool $homepage
      *
      * @return Page
      */
     public function setHomepage($homepage)
     {
         $this->homepage = $homepage;
+
         return $this;
     }
 
@@ -437,6 +450,7 @@ class Page
     public function setHost($host)
     {
         $this->host = $host;
+
         return $this;
     }
 
@@ -480,6 +494,7 @@ class Page
 
     /**
      * @ORM\PreRemove()
+     *
      * @param LifecycleEventArgs $event
      */
     public function onRemove(LifecycleEventArgs $event)
@@ -496,5 +511,4 @@ class Page
         $this->title .= '-'.$this->id.'-deleted';
         $this->slug .= '-'.$this->id.'-deleted';
     }
-
 }

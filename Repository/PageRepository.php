@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -15,7 +16,6 @@ use Orbitale\Bundle\CmsBundle\Entity\Page;
 
 class PageRepository extends EntityRepository
 {
-
     /**
      * @param array $criteria
      *
@@ -32,15 +32,16 @@ class PageRepository extends EntityRepository
                 ->setParameter($key, $value)
             ;
         }
+
         return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
      * Will search for pages to show in front depending on the arguments.
      * If slugs are defined, there's no problem in looking for nulled host or locale,
-     * because slugs are unique, so it does not
+     * because slugs are unique, so it does not.
      *
-     * @param array $slugs
+     * @param array  $slugs
      * @param string $host
      * @param string $locale
      *
@@ -118,5 +119,4 @@ class PageRepository extends EntityRepository
 
         return $resultsSortedBySlug;
     }
-
 }

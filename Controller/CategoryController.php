@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -17,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CategoryController extends AbstractCmsController
 {
-
     /**
      * @Route("/{slugs}", name="orbitale_cms_category", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)+"})
      */
@@ -41,26 +41,25 @@ class CategoryController extends AbstractCmsController
 
         $validOrderFields = array('createdAt', 'updatedAt', 'title', 'content');
 
-        $limit   = $request->query->get('limit', 10);
-        $page    = $request->query->get('page', 1);
+        $limit = $request->query->get('limit', 10);
+        $page = $request->query->get('page', 1);
         $orderBy = $request->query->get('order_by', current($validOrderFields));
-        $order   = $request->query->get('order', 'asc');
+        $order = $request->query->get('order', 'asc');
 
-        $pages = $pagesRepo->findBy(array('category' => $category), array($orderBy => $order), $limit, $limit * ($page-1));
+        $pages = $pagesRepo->findBy(array('category' => $category), array($orderBy => $order), $limit, $limit * ($page - 1));
         $pagesCount = $pagesRepo->findCountBy(array('category' => $category));
 
         return $this->render('OrbitaleCmsBundle:Front:category.html.twig', array(
-            'category'   => $category,
+            'category' => $category,
             'categories' => $categories,
-            'pages'      => $pages,
+            'pages' => $pages,
             'pagesCount' => $pagesCount,
-            'filters'    => array(
-                'page'    => $page,
-                'limit'   => $limit,
+            'filters' => array(
+                'page' => $page,
+                'limit' => $limit,
                 'orderBy' => $orderBy,
-                'order'   => $order,
+                'order' => $order,
             ),
         ));
     }
-
 }

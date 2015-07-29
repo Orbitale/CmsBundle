@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -17,7 +18,6 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 
 class CategoryControllerTest extends AbstractTestCase
 {
-
     public function testNoCategoryWithSlug()
     {
         $client = static::createClient();
@@ -51,7 +51,6 @@ class CategoryControllerTest extends AbstractTestCase
         $this->assertEquals($category->getName(), trim($crawler->filter('title')->html()));
         $this->assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
         $this->assertContains($category->getDescription(), trim($crawler->filter('article')->first()->html()));
-
     }
 
     public function testTree()

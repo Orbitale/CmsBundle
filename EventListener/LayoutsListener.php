@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -17,7 +18,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class LayoutsListener implements EventSubscriberInterface
 {
-
     /**
      * @var array
      */
@@ -30,7 +30,7 @@ class LayoutsListener implements EventSubscriberInterface
 
     public function __construct(array $config, TwigEngine $templating)
     {
-        $this->config     = $config;
+        $this->config = $config;
         $this->templating = $templating;
     }
 
@@ -49,8 +49,8 @@ class LayoutsListener implements EventSubscriberInterface
         $request = $event->getRequest();
 
         // Get the necessary informations to check them in layout configurations
-        $path  = $request->getPathInfo();
-        $host  = $request->getHost();
+        $path = $request->getPathInfo();
+        $host = $request->getHost();
 
         $layouts = $this->config['layouts'];
 
@@ -80,6 +80,5 @@ class LayoutsListener implements EventSubscriberInterface
         }
 
         $event->getRequest()->attributes->set('_orbitale_cms_layout', $finalLayout);
-
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /*
 * This file is part of the OrbitaleCmsBundle package.
 *
@@ -16,13 +17,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 abstract class AbstractCmsController extends Controller
 {
-
     /**
      * Slugs HAVE TO be ordered exactly as in the request.
      * This method will check that, in $elements, we have the same keys as in $slugs,
      * and that the hierarchy is correct.
      * This also prevents things like /children/parent to work,
-     * as it should be /parent/children
+     * as it should be /parent/children.
      *
      * @param array             $slugs
      * @param Page[]|Category[] $elements
@@ -65,5 +65,4 @@ abstract class AbstractCmsController extends Controller
 
         return $element;
     }
-
 }

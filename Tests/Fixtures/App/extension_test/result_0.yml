@@ -15,7 +15,7 @@ orbitale_cms:
             pattern: "^/only_this_one"
             resource: test_only
     design:
-        breadcrumbs_class: ""
+        breadcrumbs_class: "breadcrumb"
         breadcrumbs_link_class: ""
         breadcrumbs_current_class: ""
         breadcrumbs_separator: ">"

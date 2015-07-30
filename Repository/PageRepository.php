@@ -41,9 +41,9 @@ class PageRepository extends EntityRepository
      * If slugs are defined, there's no problem in looking for nulled host or locale,
      * because slugs are unique, so it does not.
      *
-     * @param array  $slugs
-     * @param string $host
-     * @param string $locale
+     * @param array       $slugs
+     * @param string|null $host
+     * @param string|null $locale
      *
      * @return Page
      */

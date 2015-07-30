@@ -20,13 +20,13 @@ class PageController extends AbstractCmsController
     /**
      * @Route("/{slugs}", name="orbitale_cms_page", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
      *
-     * @param string  $slugs
-     * @param string  $_locale
-     * @param Request $request
+     * @param Request     $request
+     * @param string      $slugs
+     * @param string|null $_locale
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction($slugs = '', $_locale = null, Request $request)
+    public function indexAction(Request $request, $slugs = '', $_locale = null)
     {
         if (preg_match('~/$~', $slugs)) {
             return $this->redirect($this->generateUrl('orbitale_cms_page', array('slugs' => rtrim($slugs, '/'))));

@@ -357,7 +357,7 @@ class Page
     }
 
     /**
-     * @param Page $parent
+     * @param Page|null $parent
      *
      * @return Page
      */

@@ -53,7 +53,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('design')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('breadcrumbs_class')->defaultValue('')->end()
+                        ->scalarNode('breadcrumbs_class')->defaultValue('breadcrumb')->end()
                         ->scalarNode('breadcrumbs_link_class')->defaultValue('')->end()
                         ->scalarNode('breadcrumbs_current_class')->defaultValue('')->end()
                         ->scalarNode('breadcrumbs_separator')->defaultValue('>')->end()

@@ -221,15 +221,18 @@ class PageControllerTest extends AbstractTestCase
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
-        $page = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Breadcrumbs test 1'));
-        $pageChild = $this->createPage(array('enabled' => true, 'homepage' => false, 'title' => 'Breadcrumbs test 2', 'parent' => $page));
+        $page = $this->createPage(array('enabled' => true, 'slug' => 'parent', 'title' => 'Parent page'));
         $em->persist($page);
+        $em->flush();
+        $pageChild = $this->createPage(array('enabled' => true, 'slug' => 'child', 'title' => 'Child page', 'parent' => $page));
         $em->persist($pageChild);
         $em->flush();
 
+        $this->assertEquals('parent/child', $pageChild->getTree());
         $crawler = $client->request('GET', '/page/'.$pageChild->getTree());
 
         $this->assertEquals('breadcrumb-test-class', $crawler->filter('#breadcrumbs')->first()->attr('class'));
+
         $nodes = $crawler->filter('#breadcrumbs *');
 
         /** @var \DOMElement[] $nodesArray */
@@ -239,15 +242,18 @@ class PageControllerTest extends AbstractTestCase
             $nodesArray[$k] = $node;
         }
 
+        // First element = homepage
         $homeNode = $nodesArray[0];
         $this->assertEquals('a', $homeNode->tagName);
         $this->assertEquals('breadcrumb-link', $homeNode->getAttribute('class'));
 
+        // Second element = separator
         $separator = $nodesArray[1];
         $this->assertEquals('span', $separator->tagName);
         $this->assertEquals('breadcrumb-overriden-separator-class', $separator->getAttribute('class'));
         $this->assertEquals('|', $separator->textContent);
 
+        // Third element = link to the parent page
         $firstLinkNode = $nodesArray[2];
         $this->assertEquals('a', $firstLinkNode->tagName);
         $this->assertEquals('breadcrumb-link', $firstLinkNode->getAttribute('class'));

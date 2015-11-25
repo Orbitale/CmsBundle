@@ -4,11 +4,18 @@ sudo: false
 
 branches:
   only:
-      - master
+     - master
 
 cache:
   directories:
     - $HOME/.composer/cache
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - hhvm
 
 env:
   global:
@@ -17,24 +24,19 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 5.4
-    - php: 5.5
-    - php: 5.6
     - php: 5.6
       env: SYMFONY_VERSION="2.3.x"
-    - php: 5.6
-      env: SYMFONY_VERSION="2.6.x"
     - php: 5.6
       env: SYMFONY_VERSION="2.7.x"
     - php: 5.6
       env: SYMFONY_VERSION="2.8.x-dev"
+    - php: 5.6
+      env: SYMFONY_VERSION="3.0.x-dev"
     - php: hhvm
-    - php: nightly
   allow_failures:
     - php: hhvm
-    - php: nightly
-    - env: SYMFONY_VERSION="2.7.x-dev"
     - env: SYMFONY_VERSION="2.8.x-dev"
+    - env: SYMFONY_VERSION="3.0.x-dev"
 
 before_install:
   - composer selfupdate
@@ -47,7 +49,7 @@ install:
 script: phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
 after_success: |
-    if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;
+  if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;
 
 notifications:
-    email: pierstoval@gmail.com
+  email: pierstoval@gmail.com

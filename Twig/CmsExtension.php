@@ -11,7 +11,7 @@
 
 namespace Orbitale\Bundle\CmsBundle\Twig;
 
-class CmsExtension extends \Twig_Extension
+class CmsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
 {
     /**
      * @var array

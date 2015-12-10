@@ -4,7 +4,7 @@ services:
         class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
         arguments:
             config: %orbitale_cms.config%
-            templating: @templating
+            templating: "@templating"
         tags:
           - { name: kernel.event_subscriber }
 
@@ -20,10 +20,10 @@ services:
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
         tags:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
-            - [ setAnnotationReader, [ @annotation_reader ] ]
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]

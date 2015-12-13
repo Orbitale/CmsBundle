@@ -72,8 +72,7 @@ class PageController extends AbstractCmsController
     protected function getPages(array $slugsArray = array())
     {
         /** @var Page[] $pages */
-        $pages = $this->getDoctrine()->getManager()
-            ->getRepository('OrbitaleCmsBundle:Page')
+        $pages = $this->get('orbitale_cms.page_repository')
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
         ;
 

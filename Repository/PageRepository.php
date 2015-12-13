@@ -11,29 +11,31 @@
 
 namespace Orbitale\Bundle\CmsBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Orbitale\Bundle\CmsBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 
-class PageRepository extends EntityRepository
+class PageRepository extends AbstractRepository
 {
+
     /**
-     * @param array $criteria
-     *
-     * @return array The objects.
+     * @param Category $category
+     * @param string $order
+     * @param string $orderBy
+     * @param int $page
+     * @param int $limit
+     * @return Paginator
      */
-    public function findCountBy(array $criteria)
+    public function findByCategory(Category $category, $order, $orderBy, $page, $limit)
     {
         $qb = $this->createQueryBuilder('page')
-            ->select('count(page)')
-        ;
-        foreach ($criteria as $key => $value) {
-            $qb
-                ->andWhere('page.'.$key.' = :'.$key)
-                ->setParameter($key, $value)
-            ;
-        }
+            ->where('page.category = :category')
+            ->orderBy('page.'.$orderBy, $order)
+            ->setMaxResults($limit)
+            ->setFirstResult($limit * ($page-1))
+            ->setParameter('category', $category);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return new Paginator($qb->getQuery()->useResultCache($this->cacheEnabled, $this->cacheTtl));
     }
 
     /**
@@ -92,7 +94,9 @@ class PageRepository extends EntityRepository
         ;
 
         /** @var Page[] $results */
-        $results = $qb->getQuery()->getResult();
+        $results = $qb->getQuery()
+            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
+            ->getResult();
 
         if ($searchForHomepage) {
             $homepage = null;

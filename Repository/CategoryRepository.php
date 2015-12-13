@@ -11,10 +11,9 @@
 
 namespace Orbitale\Bundle\CmsBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Orbitale\Bundle\CmsBundle\Entity\Category;
 
-class CategoryRepository extends EntityRepository
+class CategoryRepository extends AbstractRepository
 {
     /**
      * @param array $slugs
@@ -31,7 +30,10 @@ class CategoryRepository extends EntityRepository
         ;
 
         /** @var Category[] $results */
-        $results = $qb->getQuery()->getResult();
+        $results = $qb
+            ->getQuery()
+            ->useResultCache($this->cacheEnabled, $this->cacheTtl)
+            ->getResult();
 
         $resultsSortedBySlug = array();
 

@@ -29,13 +29,9 @@ class CategoryController extends AbstractCmsController
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
 
-        /** @var EntityManager $em */
-        $em = $this->getDoctrine()->getManager();
 
-        /** @var PageRepository $pagesRepo */
-        $pagesRepo = $em->getRepository('OrbitaleCmsBundle:Page');
 
-        $categories = $em->getRepository('OrbitaleCmsBundle:Category')->findFrontCategories($slugsArray);
+        $categories = $this->get('orbitale_cms.category_repository')->findFrontCategories($slugsArray);
 
         $category = $this->getFinalTreeElement($slugsArray, $categories);
 
@@ -46,14 +42,19 @@ class CategoryController extends AbstractCmsController
         $orderBy = $request->query->get('order_by', current($validOrderFields));
         $order = $request->query->get('order', 'asc');
 
-        $pages = $pagesRepo->findBy(array('category' => $category), array($orderBy => $order), $limit, $limit * ($page-1));
-        $pagesCount = $pagesRepo->findCountBy(array('category' => $category));
+        $pages = $this->get('orbitale_cms.page_repository')->findByCategory(
+            $category,
+            $order,
+            $orderBy,
+            $page,
+            $limit
+        );
 
         return $this->render('OrbitaleCmsBundle:Front:category.html.twig', array(
             'category' => $category,
             'categories' => $categories,
             'pages' => $pages,
-            'pagesCount' => $pagesCount,
+            'pagesCount' => count($pages),
             'filters' => array(
                 'page' => $page,
                 'limit' => $limit,

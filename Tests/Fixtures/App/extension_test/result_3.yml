@@ -20,3 +20,6 @@ orbitale_cms:
         breadcrumbs_current_class: ""
         breadcrumbs_separator: ">"
         breadcrumbs_separator_class: "breadcrumb-separator"
+    cache:
+        enabled: false
+        ttl: 300

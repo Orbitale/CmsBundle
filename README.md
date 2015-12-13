@@ -278,6 +278,26 @@ Basically, it will look like this:
   You can specify a class for the separator (which is wrapped by a `<span>` tag),
   if you want to use special design or interaction on it.
 
+## Cache
+
+If you want to cache your cms results, just activate it via the config:
+
+```yml
+    cache:
+        enabled: true
+        ttl: 300
+```
+
+It uses Doctrine Result Cache so you need to activate it to:
+
+```yml
+    doctrine:    
+        orm:
+            result_cache_driver: apc            
+```
+
+You can read more about DoctrineCache <a href="http://symfony.com/doc/current/reference/configuration/doctrine.html#caching-drivers">here</a>.
+
 ## <a name="easyadmin"></a>Setup EasyAdminBundle to manage pages and categories in its back-end
 
 This configuration allows you to manage your pages and categories directly in the [EasyAdminBundle](https://github.com/javiereguiluz/EasyAdminBundle) way.
@@ -329,6 +349,10 @@ orbitale_cms:
         breadcrumbs_current_class:   ""
         breadcrumbs_separator:       ">"
         breadcrumbs_separator_class: "breadcrumb-separator"
+    cache:
+        enabled: false
+        ttl: 300
+        
 ```
 
 ## Changelog

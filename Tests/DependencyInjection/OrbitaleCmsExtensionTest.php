@@ -11,7 +11,7 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\DependencyInjection;
 
-use Orbitale\Bundle\CmsBundle\DependencyInjection\OrbitaleCmsExtension;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\App\Stub\OrbitaleCmsExtensionStub;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Yaml;
 
@@ -27,7 +27,24 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
 
-        $ext = new OrbitaleCmsExtension();
+        $ext = new OrbitaleCmsExtensionStub(true);
+
+        $ext->load($config, $builder);
+
+        $this->assertEquals($expected['orbitale_cms'], $builder->getParameter('orbitale_cms.config'));
+    }
+
+    /**
+     * @dataProvider provideConfiguration
+     *
+     * @param $config
+     * @param $expected
+     */
+    public function testConfigurationSymfony2($config, $expected)
+    {
+        $builder = new ContainerBuilder();
+
+        $ext = new OrbitaleCmsExtensionStub(false);
 
         $ext->load($config, $builder);
 

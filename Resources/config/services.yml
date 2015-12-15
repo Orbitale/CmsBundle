@@ -1,4 +1,3 @@
-
 services:
     orbitale_cms.listeners.layouts:
         class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener

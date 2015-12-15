@@ -60,6 +60,13 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('breadcrumbs_separator_class')->defaultValue('breadcrumb-separator')->end()
                     ->end()
                 ->end()
+                ->arrayNode('cache')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('enabled')->defaultFalse()->end()
+                        ->scalarNode('ttl')->defaultValue('300')->end()
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

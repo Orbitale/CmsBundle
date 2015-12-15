@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PageController extends AbstractCmsController
 {
-
     /**
      * @var Request
      */
@@ -72,8 +71,7 @@ class PageController extends AbstractCmsController
     protected function getPages(array $slugsArray = array())
     {
         /** @var Page[] $pages */
-        $pages = $this->getDoctrine()->getManager()
-            ->getRepository('OrbitaleCmsBundle:Page')
+        $pages = $this->get('orbitale_cms.page_repository')
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
         ;
 
@@ -90,7 +88,7 @@ class PageController extends AbstractCmsController
     }
 
     /**
-     * Retrieves the current page based on page list and entered slugs
+     * Retrieves the current page based on page list and entered slugs.
      *
      * @param Page[] $pages
      * @param array  $slugsArray

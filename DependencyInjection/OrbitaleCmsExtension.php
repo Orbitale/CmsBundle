@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -47,7 +48,7 @@ class OrbitaleCmsExtension extends Extension
         }
 
         // Sort configs by host, because host is checked before pattern.
-        uasort($config['layouts'], function($a, $b) {
+        uasort($config['layouts'], function ($a, $b) {
             if ($a['host'] && $b['host']) {
                 return strcasecmp($a['host'], $b['host']);
             } elseif ($a['host'] && !$b['host']) {
@@ -61,5 +62,18 @@ class OrbitaleCmsExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        if ($this->isSymfony3()) {
+            $loader->load('services_v3.yml');
+        } else {
+            $loader->load('services_v2.yml');
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isSymfony3()
+    {
+        return 3 === Kernel::MAJOR_VERSION;
     }
 }

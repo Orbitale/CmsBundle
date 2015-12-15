@@ -17,13 +17,13 @@ use Orbitale\Bundle\CmsBundle\Entity\Page;
 
 class PageRepository extends AbstractRepository
 {
-
     /**
      * @param Category $category
-     * @param string $order
-     * @param string $orderBy
-     * @param int $page
-     * @param int $limit
+     * @param string   $order
+     * @param string   $orderBy
+     * @param int      $page
+     * @param int      $limit
+     *
      * @return Paginator
      */
     public function findByCategory(Category $category, $order, $orderBy, $page, $limit)
@@ -32,7 +32,7 @@ class PageRepository extends AbstractRepository
             ->where('page.category = :category')
             ->orderBy('page.'.$orderBy, $order)
             ->setMaxResults($limit)
-            ->setFirstResult($limit * ($page-1))
+            ->setFirstResult($limit * ($page - 1))
             ->setParameter('category', $category);
 
         return new Paginator($qb->getQuery()->useResultCache($this->cacheEnabled, $this->cacheTtl));

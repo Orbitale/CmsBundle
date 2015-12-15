@@ -11,8 +11,6 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
-use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,8 +26,6 @@ class CategoryController extends AbstractCmsController
         }
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
-
-
 
         $categories = $this->get('orbitale_cms.category_repository')->findFrontCategories($slugsArray);
 

@@ -18,7 +18,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PageController extends AbstractCmsController
 {
-
     /**
      * @var Request
      */
@@ -89,7 +88,7 @@ class PageController extends AbstractCmsController
     }
 
     /**
-     * Retrieves the current page based on page list and entered slugs
+     * Retrieves the current page based on page list and entered slugs.
      *
      * @param Page[] $pages
      * @param array  $slugsArray

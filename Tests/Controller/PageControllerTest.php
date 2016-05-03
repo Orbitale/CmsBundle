@@ -64,7 +64,7 @@ class PageControllerTest extends AbstractTestCase
         $client->followRedirect();
 
         // Check that the homepage with slug is redirected to the root page
-        $this->assertTrue($client->getResponse()->isRedirect('/page'));
+        $this->assertTrue($client->getResponse()->isRedirect('/page'), 'Fail to Check that the homepage with slug is redirected to the root page');
         $crawler = $client->followRedirect();
 
         $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));

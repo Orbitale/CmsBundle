@@ -11,13 +11,8 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 
-use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
-use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -33,26 +28,9 @@ class AbstractTestCase extends WebTestCase
 
     public function setUp()
     {
-        $kernel = static::getKernel();
-
-        $databaseFile = $kernel->getContainer()->getParameter('database_path');
-        $application = new Application($kernel);
-
-        if (file_exists($databaseFile)) {
-            unlink($databaseFile);
-        }
-
-        // Create database
-        $command = new CreateDatabaseDoctrineCommand();
-        $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:database:create'));
-        $command->run($input, new NullOutput());
-
-        // Create database schema
-        $command = new CreateSchemaDoctrineCommand();
-        $application->add($command);
-        $input = new ArrayInput(array('command' => 'doctrine:schema:create'));
-        $command->run($input, new NullOutput());
+        $c = static::getKernel()->getContainer()->get('doctrine')->getConnection();
+        $c->query('delete from orbitale_cms_pages where 1');
+        $c->query('delete from orbitale_cms_categories where 1');
     }
 
     /**

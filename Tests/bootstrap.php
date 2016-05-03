@@ -10,6 +10,11 @@
 */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
+use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 
 $file = __DIR__.'/../vendor/autoload.php';
 if (!file_exists($file)) {
@@ -32,6 +37,32 @@ if (is_dir(__DIR__.'/../build')) {
 
 AnnotationRegistry::registerLoader(function ($class) use ($autoload) {
     $autoload->loadClass($class);
-
     return class_exists($class, false);
 });
+
+
+include __DIR__.'/Fixtures/App/AppKernel.php';
+
+$kernel = new AppKernel('test', true);
+$kernel->boot();
+
+$databaseFile = $kernel->getContainer()->getParameter('database_path');
+$application = new Application($kernel);
+
+if (file_exists($databaseFile)) {
+    unlink($databaseFile);
+}
+
+// Create database
+$command = new CreateDatabaseDoctrineCommand();
+$application->add($command);
+$input = new ArrayInput(array('command' => 'doctrine:database:create'));
+$command->run($input, new NullOutput());
+
+// Create database schema
+$command = new CreateSchemaDoctrineCommand();
+$application->add($command);
+$input = new ArrayInput(array('command' => 'doctrine:schema:create'));
+$command->run($input, new NullOutput());
+
+$kernel->shutdown();

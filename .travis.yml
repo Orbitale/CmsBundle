@@ -1,53 +1,72 @@
+# This .travis.yml file is just a copy of EasyAdminBundle's one
+# Check it out there: https://github.com/javiereguiluz/EasyAdminBundle
+# We just rise the lowest PHP version to 5.4 because we use traits.
+
 language: php
 
 sudo: false
 
-branches:
-  only:
-     - master
-
 cache:
   directories:
     - $HOME/.composer/cache
-
-php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - hhvm
+    - $HOME/.app/cache
 
 env:
   global:
+    - deps="no"
     - SYMFONY_VERSION=""
+    - CHECK_PHP_SYNTAX="no"
+    - SYMFONY_DEPRECATIONS_HELPER="weak"
+    - ENABLE_CODE_COVERAGE="false"
 
 matrix:
   fast_finish: true
   include:
+    # jobs are ordered in a specific way to get Travis results faster (first
+    # execute the fastest jobs, then the slowest and finally the jobs that can fail)
+    - php: 7.0
+      env: CHECK_PHP_SYNTAX="yes"
+      env: SYMFONY_VERSION="3.0.*"
     - php: 5.6
-      env: SYMFONY_VERSION="2.3.x"
+      env: SYMFONY_VERSION="2.3.*"
     - php: 5.6
-      env: SYMFONY_VERSION="2.7.x"
+      env: SYMFONY_VERSION="2.7.*"
     - php: 5.6
-      env: SYMFONY_VERSION="2.8.x"
+      env: SYMFONY_VERSION="2.8.*"
+    - php: 5.4
+      env: COMPOSER_FLAGS="--prefer-lowest"
+      env: SYMFONY_VERSION="2.8.*"
+    - php: hhvm
+      env: SYMFONY_VERSION="2.8.*"
+    - php: 7.0
+      env: SYMFONY_VERSION="3.0.*"
+      env: ENABLE_CODE_COVERAGE="true"
     - php: 5.6
-      env: SYMFONY_VERSION="dev-master"
+      env: TWIG_VERSION="2.0.x-dev"
   allow_failures:
     - php: hhvm
-    - env: SYMFONY_VERSION="dev-master"
+    - env: TWIG_VERSION="2.0.x-dev"
+    - env: ENABLE_CODE_COVERAGE="true"
 
 before_install:
+  - if [[ "SYMFONY_VERSION" == "2.8.*" || "SYMFONY_VERSION" == "3.0.*" ]]; then export SYMFONY_DEPRECATIONS_HELPER="strict"; fi;
   - composer selfupdate
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev --no-update symfony/symfony:$SYMFONY_VERSION; fi
+  - if [[ "$SYMFONY_VERSION" != "" ]]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+  - if [[ "$TWIG_VERSION" != "" ]]; then composer require "twig/twig:${TWIG_VERSION}" --no-update; fi;
+  - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_PHP_VERSION" != hhvm ]]; then phpenv config-rm xdebug.ini; fi;
 
 install:
-  - composer install
-  - composer require --dev satooshi/php-coveralls:~0.6
+  - if [[ "$CHECK_PHP_SYNTAX" == "yes" ]]; then curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer; fi;
+  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then composer require --dev satooshi/php-coveralls; fi
 
-script: vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+script:
+  - if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then phpunit --coverage-text --coverage-clover build/logs/clover.xml; else phpunit; fi;
+  - if [[ "$CHECK_PHP_SYNTAX" == "yes" ]]; then php php-cs-fixer --no-interaction --dry-run --diff -v fix; fi;
+  - if [[ "$CHECK_PHP_SYNTAX" == "yes" ]]; then mv ./.php_cs.cache $HOME/.app/cache/.php_cs.cache; fi;
 
 after_success: |
-  if [ "$TRAVIS_PHP_VERSION" != "hhvm" ]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;
+    if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then php vendor/bin/coveralls -v --config .coveralls.yml; fi;
 
 notifications:
   email: pierstoval@gmail.com

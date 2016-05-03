@@ -1,16 +1,16 @@
 services:
     orbitale_cms.page_repository:
         class: Orbitale\Bundle\CmsBundle\Repository\PageRepository
-        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - Orbitale\Bundle\CmsBundle\Entity\Page
         calls:
-            - [ "setConfig", [%orbitale_cms.config%] ]
+            - [ 'setConfig', ['%orbitale_cms.config%'] ]
 
     orbitale_cms.category_repository:
         class: Orbitale\Bundle\CmsBundle\Repository\CategoryRepository
-        factory: ["@doctrine.orm.entity_manager", "getRepository"]
+        factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - Orbitale\Bundle\CmsBundle\Entity\Category
         calls:
-            - [ "setConfig", [%orbitale_cms.config%] ]
+            - [ 'setConfig', ['%orbitale_cms.config%'] ]

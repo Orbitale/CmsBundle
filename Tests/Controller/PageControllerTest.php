@@ -64,7 +64,47 @@ class PageControllerTest extends AbstractTestCase
         $client->followRedirect();
 
         // Check that the homepage with slug is redirected to the root page
-        $this->assertTrue($client->getResponse()->isRedirect('/page'), 'Fail to Check that the homepage with slug is redirected to the root page');
+        $this->assertTrue($client->getResponse()->isRedirect('/page'));
+        $crawler = $client->followRedirect();
+
+        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
+        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
+        $this->assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+    }
+
+    public function testOneHomepageWithLocale()
+    {
+        $client = static::createClient();
+
+        $homepage = $this->createPage(array(
+            'homepage' => true,
+            'enabled' => true,
+            'locale' => 'en',
+            'slug' => 'home',
+            'title' => 'My homepage',
+            'host' => 'localhost',
+            'content' => 'Hello world!',
+        ));
+
+        /** @var EntityManager $em */
+        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        $em->persist($homepage);
+        $em->flush();
+
+        $crawler = $client->request('GET', '/page/');
+        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
+        $this->assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
+        $this->assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+
+        // Repeat with the homepage directly in the url
+
+        // First, check that any right trimming "/" will redirect
+        $client->request('GET', '/page/home/');
+        $this->assertTrue($client->getResponse()->isRedirect('/page/home'));
+        $client->followRedirect();
+
+        // Check that the homepage with slug is redirected to the root page
+        $this->assertTrue($client->getResponse()->isRedirect('/page?_locale=en'));
         $crawler = $client->followRedirect();
 
         $this->assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));

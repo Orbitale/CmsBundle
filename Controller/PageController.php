@@ -48,7 +48,12 @@ class PageController extends AbstractCmsController
         $currentPage = $this->getCurrentPage($pages, $slugsArray);
 
         if ($currentPage->isHomepage() && strlen($slugs)) {
-            return $this->redirect($this->generateUrl('orbitale_cms_page', array('slugs' => '', '_locale' => $this->request->getLocale())));
+            $params = array('slugs' => '');
+            if ($currentPage->getLocale()) {
+                // Force locale if the Page has one
+                $params['_locale'] = $currentPage->getLocale();
+            }
+            return $this->redirect($this->generateUrl('orbitale_cms_page', $params));
         }
 
         return $currentPage instanceof Response

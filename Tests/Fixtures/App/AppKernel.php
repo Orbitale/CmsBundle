@@ -33,7 +33,7 @@ class AppKernel extends Kernel
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
 
         if ($this->isSymfony3()) {
-            $loader->load(function (ContainerBuilder $container) {
+            $loader->load(function(ContainerBuilder $container) {
                 $container->loadFromExtension('framework', array(
                     'assets' => null,
                 ));

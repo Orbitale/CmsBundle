@@ -48,7 +48,7 @@ class OrbitaleCmsExtension extends Extension
         }
 
         // Sort configs by host, because host is checked before pattern.
-        uasort($config['layouts'], function ($a, $b) {
+        uasort($config['layouts'], function($a, $b) {
             if ($a['host'] && $b['host']) {
                 return strcasecmp($a['host'], $b['host']);
             } elseif ($a['host'] && !$b['host']) {

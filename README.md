@@ -63,11 +63,11 @@ Import the necessary routing files.
 *Warning:*
  Both `Page` and `Category` controllers have to be "alone" in their routing path,
  because there is a "tree" routing management. If you set the prefix as "/"
- or any other path you are already using, make sure that `OrbitaleCmsBundle` 
- routes are loaded **at the end of your routing file**, or you may have some 
+ or any other path you are already using, make sure that `OrbitaleCmsBundle`
+ routes are loaded **at the end of your routing file**, or you may have some
  unexpected "404" or other errors, depending on the routes priority.<br>
  This is why we recommend you to **load the `CategoryController` _before_ the
- `PageController`**, and let both routes config be **the last ones** of your 
+ `PageController`**, and let both routes config be **the last ones** of your
  `routing.yml` file.<br>
  **Note:** In technical terms, the whole URI is scanned, not a simple part of it,
  this is why it can analyze very deep URIs like
@@ -81,7 +81,7 @@ orbitale_cms_category:
     resource: "@OrbitaleCmsBundle/Controller/CategoryController.php"
     type:     annotation
     prefix:   /category/
-    
+
 orbitale_cms_page:
     resource: "@OrbitaleCmsBundle/Controller/PageController.php"
     type:     annotation
@@ -96,7 +96,7 @@ $ php app/console doctrine:schema:update --force
 
 ## Usage
 
-### Manage pages 
+### Manage pages
 
 To manage your pages, you should use any back-end solution, like
 [EasyAdmin](https://github.com/javiereguiluz/EasyAdminBundle/) (which we suggest)
@@ -114,7 +114,7 @@ within a specified `Category`.
 The URI for both is simply `/{slug}` where `slug` is the... page or category slug.
 
 If your page or category has one `parent`, then the URI is the following:
-`/{parentSlug}/{slug}`. 
+`/{parentSlug}/{slug}`.
 
 You can notice that we respect the pages hierarchy in the generated url.
 
@@ -194,7 +194,7 @@ orbitale_cms_page:
     type:     annotation
     # Add the locale to the prefix for if the page's locale is specified and is
     # not equal to request locale, the app will return a 404 error.
-    prefix:   /{_locale}/page/ 
+    prefix:   /{_locale}/page/
 ```
 
 ## Design
@@ -245,13 +245,13 @@ Prototype of a layout configuration:
  The regexp of the path you want to match with for this layout.
  It's nice if you want to use a different layout for categories and pages. For
  example, you can specify a layout for the `^/page/` pattern, and another for
- `^/category/`. 
+ `^/category/`.
  If you specify a very deep pattern, you can even change the layout for a single
  page!
 
 Take another look on the [config reference](#configuration-reference) if you
 need to get the prototype defaults.
- 
+
 ### <a name="breadcrumbs"></a>Changing the "breadcrumbs" look
 
 Under the `design` option, you have some that you can use to optimize the
@@ -291,9 +291,9 @@ If you want to cache your cms results, just activate it via the config:
 It uses Doctrine Result Cache so you need to activate it to:
 
 ```yml
-    doctrine:    
+    doctrine:
         orm:
-            result_cache_driver: apc            
+            result_cache_driver: apc
 ```
 
 You can read more about DoctrineCache <a href="http://symfony.com/doc/current/reference/configuration/doctrine.html#caching-drivers">here</a>.
@@ -352,7 +352,7 @@ orbitale_cms:
     cache:
         enabled: false
         ttl: 300
-        
+
 ```
 
 ## Changelog

@@ -56,13 +56,10 @@ class PageController extends AbstractCmsController
             return $this->redirect($this->generateUrl('orbitale_cms_page', $params));
         }
 
-        return $currentPage instanceof Response
-            ? $currentPage
-            : $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
-                'pages' => $pages,
-                'page' => $currentPage,
-            ))
-        ;
+        return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
+            'pages' => $pages,
+            'page' => $currentPage,
+        ));
     }
 
     /**

@@ -31,7 +31,7 @@ class CategoryController extends AbstractCmsController
 
         $category = $this->getFinalTreeElement($slugsArray, $categories);
 
-        $validOrderFields = array('createdAt', 'updatedAt', 'title', 'content');
+        $validOrderFields = array('createdAt', 'title', 'content');
 
         $limit = $request->query->get('limit', 10);
         $page = $request->query->get('page', 1);

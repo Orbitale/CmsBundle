@@ -11,48 +11,33 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
+use Behat\Transliterator\Transliterator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository")
- * @ORM\Table(name="orbitale_cms_categories")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("slug")
  * @ORM\HasLifecycleCallbacks()
+ * @ORM\MappedSuperclass(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository")
  */
-class Category
+abstract class Category
 {
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
-
     /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @return int
      */
-    protected $id;
+    abstract public function getId();
 
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=255)
-     * @Assert\NotBlank()
      */
     protected $name;
 
     /**
      * @var string
-     * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
-     * @Assert\Length(max=255)
      */
     protected $slug;
 
@@ -69,15 +54,19 @@ class Category
     protected $enabled = false;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
      * @var Category
-     * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $parent;
 
     /**
      * @var Category[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category", mappedBy="parent")
      */
     protected $children;
 
@@ -88,15 +77,8 @@ class Category
 
     public function __construct()
     {
+        $this->createdAt = new \DateTime();
         $this->children = new ArrayCollection();
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -206,6 +188,25 @@ class Category
     }
 
     /**
+     * @param  \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @return Category[]|ArrayCollection
      */
     public function getChildren()
@@ -256,6 +257,17 @@ class Category
     }
 
     /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateSlug()
+    {
+        if (!$this->slug) {
+            $this->slug = Transliterator::transliterate($this->title);
+        }
+    }
+
+    /**
      * @ORM\PreRemove()
      *
      * @param LifecycleEventArgs $event
@@ -271,7 +283,7 @@ class Category
         }
         $this->enabled = false;
         $this->parent = null;
-        $this->name .= '-'.$this->id.'-deleted';
-        $this->slug .= '-'.$this->id.'-deleted';
+        $this->name .= '-'.$this->getId().'-deleted';
+        $this->slug .= '-'.$this->getId().'-deleted';
     }
 }

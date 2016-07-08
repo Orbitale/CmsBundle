@@ -11,48 +11,33 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
+use Behat\Transliterator\Transliterator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
- * @ORM\Table(name="orbitale_cms_pages")
- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false)
  * @UniqueEntity("slug")
  * @ORM\HasLifecycleCallbacks()
+ * @ORM\MappedSuperclass(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
  */
-class Page
+abstract class Page
 {
-    use SoftDeleteableEntity;
-    use TimestampableEntity;
-
     /**
-     * @var int
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @return int
      */
-    protected $id;
+    abstract public function getId();
 
     /**
      * @var string
      * @ORM\Column(name="title", type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Length(max=255)
      */
     protected $title;
 
     /**
      * @var string
-     * @Gedmo\Slug(fields={"title"})
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
-     * @Assert\Length(max=255)
      */
     protected $slug;
 
@@ -65,14 +50,12 @@ class Page
     /**
      * @var string
      * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
     protected $metaDescription;
 
     /**
      * @var string
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
-     * @Assert\Length(max=255)
      */
     protected $metaTitle;
 
@@ -84,8 +67,6 @@ class Page
 
     /**
      * @var Category
-     * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Category")
-     * @ORM\JoinColumn(name="category_id", nullable=true)
      */
     protected $category;
 
@@ -100,6 +81,13 @@ class Page
      * @ORM\Column(name="js", type="text", nullable=true)
      */
     protected $js;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     */
+    protected $createdAt;
 
     /**
      * @var bool
@@ -127,25 +115,23 @@ class Page
 
     /**
      * @var Page
-     * @ORM\ManyToOne(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Page", inversedBy="children", fetch="EAGER")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="cascade")
      */
     protected $parent;
 
     /**
      * @var Page[]|ArrayCollection
-     * @ORM\OneToMany(targetEntity="Orbitale\Bundle\CmsBundle\Entity\Page", mappedBy="parent")
      */
     protected $children;
-
-    public function __construct()
-    {
-        $this->children = new ArrayCollection();
-    }
 
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -329,6 +315,25 @@ class Page
     }
 
     /**
+     * @param  \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @return bool
      */
     public function isEnabled()
@@ -372,14 +377,6 @@ class Page
         $this->parent = $parent;
 
         return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -493,6 +490,17 @@ class Page
     }
 
     /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function updateSlug()
+    {
+        if (!$this->slug) {
+            $this->slug = Transliterator::transliterate($this->title);
+        }
+    }
+
+    /**
      * @ORM\PreRemove()
      *
      * @param LifecycleEventArgs $event
@@ -508,7 +516,7 @@ class Page
         }
         $this->enabled = false;
         $this->parent = null;
-        $this->title .= '-'.$this->id.'-deleted';
-        $this->slug .= '-'.$this->id.'-deleted';
+        $this->title .= '-'.$this->getId().'-deleted';
+        $this->slug .= '-'.$this->getId().'-deleted';
     }
 }

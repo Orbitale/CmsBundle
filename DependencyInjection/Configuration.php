@@ -13,6 +13,7 @@ namespace Orbitale\Bundle\CmsBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -31,6 +32,42 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->scalarNode('page_class')
+                    ->isRequired()
+                    ->validate()
+                        ->always()
+                        ->then(function ($value) {
+                            if (!$value) {
+                                return null;
+                            }
+                            if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Page', true)) {
+                                throw new InvalidConfigurationException(sprintf(
+                                    'Page class must be a valid class extending %s. "%s" given.',
+                                    'Orbitale\Bundle\CmsBundle\Entity\Page', $value
+                                ));
+                            }
+                            return $value;
+                        })
+                    ->end()
+                ->end()
+                ->scalarNode('category_class')
+                    ->isRequired()
+                    ->validate()
+                        ->always()
+                        ->then(function ($value) {
+                            if (!$value) {
+                                return null;
+                            }
+                            if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Category', true)) {
+                                throw new InvalidConfigurationException(sprintf(
+                                    'Category class must be a valid class extending %s. "%s" given.',
+                                    'Orbitale\Bundle\CmsBundle\Entity\Category', $value
+                                ));
+                            }
+                            return $value;
+                        })
+                    ->end()
+                ->end()
                 ->arrayNode('layouts')
                     ->defaultValue(array(
                         'front' => array(

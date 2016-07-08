@@ -58,6 +58,9 @@ class OrbitaleCmsExtension extends Extension
             }
         });
 
+        $container->setParameter('orbitale_cms.page_class', $config['page_class']);
+        $container->setParameter('orbitale_cms.category_class', $config['category_class']);
+
         $container->setParameter('orbitale_cms.config', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

@@ -59,7 +59,7 @@ public function registerBundles()
 
 ```
 
-Import the necessary routing files.
+### Import the necessary routing files.
 
 *Warning:*
  Both `Page` and `Category` controllers have to be "alone" in their routing path,
@@ -88,6 +88,88 @@ orbitale_cms_page:
     type:     annotation
     prefix:   /page/
 ```
+
+### Create your entities
+
+This bundle supports Doctrine ORM only.
+
+In order to use it, you must create your own entities and configure the bundle with them.
+
+Update your config:
+
+```yml
+# app/config/config.yml
+orbitale_cms:
+    page_class: AppBundle\Entity\Page
+    category_class: AppBundle\Entity\Category
+```
+
+#### Create the `Page` entity and add it to your config
+
+```php
+<?php
+
+namespace AppBundle\Entity;
+
+use Orbitale\Bundle\CmsBundle\Entity\Page as BasePage;
+
+/**
+ * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
+ */
+class Page extends BasePage
+{
+    /**
+     * @var int
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+```
+
+#### Create the `Category` entity and add it to your config
+
+```php
+<?php
+
+namespace AppBundle\Entity;
+
+use Orbitale\Bundle\CmsBundle\Entity\Category as BaseCategory;
+
+/**
+ * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository")
+ */
+class Category extends BaseCategory
+{
+    /**
+     * @var int
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+}
+
+```
+
+### Update your db schema
 
 Update your database by executing this command from your Symfony root directory:
 
@@ -289,7 +371,7 @@ If you want to cache your cms results, just activate it via the config:
         ttl: 300
 ```
 
-It uses Doctrine Result Cache so you need to activate it to:
+It uses Doctrine Result Cache so you need to activate it:
 
 ```yml
     doctrine:
@@ -312,20 +394,22 @@ After you installed it, you can add this configuration to inject your new classe
 easy_admin:
     entities:
         Pages:
-            label: "Cms Pages"
+            label: admin.cms.pages
             class: Orbitale\Bundle\CmsBundle\Entity\Page
             show:
-                fields: [ id, parent, title, slug, tree, content, metaDescription, metaTitle, metaKeywords, css, js, category, host, locale, homepage, enabled ]
+                fields: [ id, parent, title, slug, tree, content, metaDescription, metaTitle, category, host, locale, homepage, enabled ]
             list:
-                fields: [ id, parent, title, slug, tree, content, category, homepage, host, locale, enabled ]
+                fields: [ id, parent, title, slug, tree, host, locale, { property: homepage, type: boolean }, { property: enabled, type: boolean } ]
             form:
-                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, host, locale, homepage, enabled ]
+                fields: [ title, slug, content, metaDescription, metaTitle, metaKeywords, css, js, category, parent, host, homepage, enabled ]
 
         Categories:
             label: "Cms Categories"
             class: Orbitale\Bundle\CmsBundle\Entity\Category
+            show:
+                fields: [ id, parent, title, slug, tree, content, host, locale, homepage, enabled ]
             list:
-                fields: [ id, name, slug, description, parent, enabled ]
+                fields: [ id, parent, name, slug, description, { property: enabled, type: boolean } ]
             form:
                 fields: [ name, slug, description, parent, enabled ]
 ```
@@ -335,15 +419,17 @@ easy_admin:
 ```yml
 # app/config/config.yml
 orbitale_cms:
+    page_class: ~              # Required, must extend Orbitale Page class
+    category_class: ~          # Required, must extend Orbitale Category class
     layouts:
         # Prototype
         name:
-            name:       ~  # Optional, it's automatically set from the key
-            resource:   ~  # Required, must be a valid twig template
-            assets_css: [] # Used with the `asset()` twig function
-            assets_js:  [] # Used with the `asset()` twig function
-            pattern:    ~  # Regexp
-            host:       ~  # Exact value
+            name:       ~      # Optional, it's automatically set from the key if it's a string
+            resource:   ~      # Required, must be a valid twig template
+            assets_css: []     # Injected with the `asset()` twig function
+            assets_js:  []     # Injected with the `asset()` twig function
+            pattern:    ~      # Regexp
+            host:       ~      # Exact value
     design:
         breadcrumbs_class:           "breadcrumb"  # The default value automatically suits to Bootstrap
         breadcrumbs_link_class:      ""

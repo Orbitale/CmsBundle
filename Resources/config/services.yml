@@ -12,3 +12,12 @@ services:
         arguments:
             - '%orbitale_cms.config%'
         tags: [ { name: twig.extension } ]
+
+    orbitale_cms.doctrine_mapping_listener:
+        class: Orbitale\Bundle\CmsBundle\EventListener\DoctrineMappingListener
+        public: false
+        arguments:
+            - "%orbitale_cms.page_class%"
+            - "%orbitale_cms.category_class%"
+        tags:
+            - { name: doctrine.event_subscriber }

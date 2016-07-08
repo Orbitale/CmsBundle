@@ -4,7 +4,7 @@ services:
         factory_service: doctrine.orm.entity_manager
         factory_method: getRepository
         arguments:
-            - Orbitale\Bundle\CmsBundle\Entity\Page
+            - "%orbitale_cms.page_class%"
         calls:
             - [ 'setConfig', ['%orbitale_cms.config%'] ]
 
@@ -13,6 +13,6 @@ services:
         factory_service: doctrine.orm.entity_manager
         factory_method: getRepository
         arguments:
-            - Orbitale\Bundle\CmsBundle\Entity\Category
+            - "%orbitale_cms.category_class%"
         calls:
             - [ 'setConfig', ['%orbitale_cms.config%'] ]

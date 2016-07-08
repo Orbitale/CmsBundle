@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
+            new Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\TestBundle(),
         );
     }
 

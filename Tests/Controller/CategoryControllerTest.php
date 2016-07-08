@@ -12,9 +12,9 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
 use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Entity\Category;
-use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class CategoryControllerTest extends AbstractTestCase
 {
@@ -22,7 +22,7 @@ class CategoryControllerTest extends AbstractTestCase
     {
         $client = static::createClient();
         $client->request('GET', '/category/inexistent-slug');
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+        static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
     public function testSingleCategory()
@@ -45,12 +45,12 @@ class CategoryControllerTest extends AbstractTestCase
         // Repeat with the homepage directly in the url
         // First, check that any right trimming "/" will redirect
         $client->request('GET', '/category/default/');
-        $this->assertTrue($client->getResponse()->isRedirect('/category/default'));
+        static::assertTrue($client->getResponse()->isRedirect('/category/default'));
 
         $crawler = $client->followRedirect();
-        $this->assertEquals($category->getName(), trim($crawler->filter('title')->html()));
-        $this->assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
-        $this->assertContains($category->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertEquals($category->getName(), trim($crawler->filter('title')->html()));
+        static::assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
+        static::assertContains($category->getDescription(), trim($crawler->filter('article')->first()->html()));
     }
 
     public function testTree()
@@ -95,13 +95,13 @@ class CategoryControllerTest extends AbstractTestCase
 
         // Repeat with the homepage directly in the url
         $crawler = $client->request('GET', '/category/'.$childOne->getTree());
-        $this->assertEquals($childOne->getName(), trim($crawler->filter('title')->html()));
-        $this->assertEquals($childOne->getName(), trim($crawler->filter('article > h1')->html()));
-        $this->assertContains($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertEquals($childOne->getName(), trim($crawler->filter('title')->html()));
+        static::assertEquals($childOne->getName(), trim($crawler->filter('article > h1')->html()));
+        static::assertContains($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/category/root/second-level');
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
+        static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
     public function testWithPages()
@@ -148,11 +148,11 @@ class CategoryControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/category/'.$category->getTree());
 
         $section1 = $crawler->filter('section')->eq(0);
-        $this->assertEquals($page1->getTitle(), trim($section1->filter('article > h2 > a')->html()));
-        $this->assertContains($page1->getContent(), trim($section1->filter('article')->html()));
+        static::assertEquals($page1->getTitle(), trim($section1->filter('article > h2 > a')->html()));
+        static::assertContains($page1->getContent(), trim($section1->filter('article')->html()));
 
         $section2 = $crawler->filter('section')->eq(1);
-        $this->assertEquals($page2->getTitle(), trim($section2->filter('article > h2 > a')->html()));
-        $this->assertContains($page2->getContent(), trim($section2->filter('article')->html()));
+        static::assertEquals($page2->getTitle(), trim($section2->filter('article > h2 > a')->html()));
+        static::assertContains($page2->getContent(), trim($section2->filter('article')->html()));
     }
 }

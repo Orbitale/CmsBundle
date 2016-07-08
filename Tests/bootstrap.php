@@ -12,9 +12,10 @@
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
+use Symfony\Component\Filesystem\Filesystem;
 
 $file = __DIR__.'/../vendor/autoload.php';
 if (!file_exists($file)) {
@@ -22,16 +23,16 @@ if (!file_exists($file)) {
 }
 $autoload = require $file;
 
+$fs = new Filesystem();
+
+// Remove build dir files
 if (is_dir(__DIR__.'/../build')) {
     echo "Removing files in the build directory.\n".__DIR__."\n";
-    $files = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator(__DIR__.'/../build/', RecursiveDirectoryIterator::SKIP_DOTS),
-        RecursiveIteratorIterator::CHILD_FIRST
-    );
-
-    foreach ($files as $fileinfo) {
-        $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
-        $todo($fileinfo->getRealPath());
+    try {
+        $fs->remove(__DIR__.'/../build');
+    } catch (Exception $e) {
+        fwrite(STDERR, $e->getMessage());
+        system('rm -rf '.__DIR__.'/../build');
     }
 }
 
@@ -49,20 +50,20 @@ $kernel->boot();
 $databaseFile = $kernel->getContainer()->getParameter('database_path');
 $application = new Application($kernel);
 
-if (file_exists($databaseFile)) {
-    unlink($databaseFile);
+if ($fs->exists($databaseFile)) {
+    $fs->remove($databaseFile);
 }
 
 // Create database
 $command = new CreateDatabaseDoctrineCommand();
 $application->add($command);
 $input = new ArrayInput(array('command' => 'doctrine:database:create'));
-$command->run($input, new NullOutput());
+$command->run($input, new ConsoleOutput());
 
 // Create database schema
 $command = new CreateSchemaDoctrineCommand();
 $application->add($command);
 $input = new ArrayInput(array('command' => 'doctrine:schema:create'));
-$command->run($input, new NullOutput());
+$command->run($input, new ConsoleOutput());
 
 $kernel->shutdown();

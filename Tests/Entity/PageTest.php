@@ -12,8 +12,8 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 
 use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class PageTest extends AbstractTestCase
 {
@@ -44,15 +44,14 @@ class PageTest extends AbstractTestCase
         /** @var Page $homepage */
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
-        $this->assertEquals($homepage->getTitle(), (string) $homepage);
+        static::assertEquals($homepage->getTitle(), (string) $homepage);
 
-        $this->assertFalse($homepage->isEnabled()); // Base value in entity
-        $this->assertFalse($homepage->isDeleted());
-        $this->assertTrue($homepage->isHomepage());
-        $this->assertEquals('localhost', $homepage->getHost());
+        static::assertFalse($homepage->isEnabled()); // Base value in entity
+        static::assertTrue($homepage->isHomepage());
+        static::assertEquals('localhost', $homepage->getHost());
 
         $homepage->setParent($homepage);
-        $this->assertNull($homepage->getParent());
+        static::assertNull($homepage->getParent());
     }
 
     public function testLifecycleCallbacks()
@@ -72,12 +71,12 @@ class PageTest extends AbstractTestCase
         $em->persist($child);
         $em->flush();
 
-        $this->assertEquals(array($child), $homepage->getChildren()->toArray());
+        static::assertEquals(array($child), $homepage->getChildren()->toArray());
 
         /** @var Page $homepage */
         $homepage = $em->getRepository(get_class($homepage))->findOneBy(array('id' => $homepage->getId()));
 
-        $this->assertNotNull($homepage);
+        static::assertNotNull($homepage);
 
         if (null !== $homepage) {
             $em->remove($homepage);
@@ -86,8 +85,8 @@ class PageTest extends AbstractTestCase
 
         $homepage = $em->getRepository(get_class($homepage))->findOneBy(array('id' => $homepage->getId()));
 
-        $this->assertNull($homepage);
-        $this->assertNull($child->getParent());
+        static::assertNull($homepage);
+        static::assertNull($child->getParent());
     }
 
     public function testRemoval()
@@ -121,7 +120,7 @@ class PageTest extends AbstractTestCase
         $children = $page->getChildren();
         /** @var Page $first */
         $first = $children[0];
-        $this->assertEquals($child->getId(), $first->getId());
+        static::assertEquals($child->getId(), $first->getId());
 
         $page->removeChild($child);
         $child->setParent(null);
@@ -131,6 +130,6 @@ class PageTest extends AbstractTestCase
 
         $child = $em->getRepository(get_class($child))->find($child->getId());
 
-        $this->assertNull($child->getParent());
+        static::assertNull($child->getParent());
     }
 }

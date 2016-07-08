@@ -12,9 +12,9 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 
 use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Entity\Category;
-use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class CategoryTest extends AbstractTestCase
 {
@@ -49,9 +49,9 @@ class CategoryTest extends AbstractTestCase
         /** @var Page $homepage */
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
-        $this->assertEquals($homepage->getCategory(), $category);
-        $this->assertEquals($category->getName(), (string) $category);
-        $this->assertFalse($category->isEnabled()); // Base value
+        static::assertEquals($homepage->getCategory(), $category);
+        static::assertEquals($category->getName(), (string) $category);
+        static::assertFalse($category->isEnabled()); // Base value
     }
 
     public function testIdenticalParent()
@@ -63,7 +63,7 @@ class CategoryTest extends AbstractTestCase
             ->setEnabled(true)
         ;
         $category->setParent($category);
-        $this->assertNull($category->getParent());
+        static::assertNull($category->getParent());
     }
 
     public function testLifecycleCallbacks()
@@ -89,12 +89,12 @@ class CategoryTest extends AbstractTestCase
         $em->persist($child);
         $em->flush();
 
-        $this->assertEquals(array($child), $category->getChildren()->toArray());
+        static::assertEquals(array($child), $category->getChildren()->toArray());
 
         /** @var Category $category */
         $category = $em->getRepository(get_class($category))->findOneBy(array('id' => $category->getId()));
 
-        $this->assertNotNull($category);
+        static::assertNotNull($category);
 
         if (null !== $category) {
             $em->remove($category);
@@ -103,8 +103,8 @@ class CategoryTest extends AbstractTestCase
 
         $category = $em->getRepository(get_class($category))->findOneBy(array('id' => $category->getId()));
 
-        $this->assertNull($category);
-        $this->assertNull($child->getParent());
+        static::assertNull($category);
+        static::assertNull($child->getParent());
     }
 
     public function testRemoval()
@@ -133,11 +133,12 @@ class CategoryTest extends AbstractTestCase
         $em->persist($child);
         $em->flush();
 
+        /** @var Category $category */
         $category = $em->getRepository(get_class($category))->find($category->getId());
 
         $children = $category->getChildren();
         $first = $children[0];
-        $this->assertEquals($child->getId(), $first->getId());
+        static::assertEquals($child->getId(), $first->getId());
 
         $category->removeChild($child);
         $child->setParent(null);
@@ -147,6 +148,6 @@ class CategoryTest extends AbstractTestCase
 
         $child = $em->getRepository(get_class($child))->find($child->getId());
 
-        $this->assertNull($child->getParent());
+        static::assertNull($child->getParent());
     }
 }

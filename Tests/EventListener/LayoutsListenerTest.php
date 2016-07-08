@@ -12,8 +12,8 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class LayoutsListenerTest extends AbstractTestCase
 {
@@ -23,8 +23,8 @@ class LayoutsListenerTest extends AbstractTestCase
 
         $crawler = $client->request('GET', '/page/');
 
-        $this->assertEquals(1, $crawler->filter('#test_layout_wrapper')->count());
-        $this->assertRegExp('~^One change of the layout is this special hardcoded title\. ~', $crawler->filter('title')->html());
+        static::assertEquals(1, $crawler->filter('#test_layout_wrapper')->count());
+        static::assertRegExp('~^One change of the layout is this special hardcoded title\. ~', $crawler->filter('title')->html());
     }
 
     public function testHostLayout()
@@ -33,7 +33,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
         $crawler = $client->request('GET', '/page/');
 
-        $this->assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
+        static::assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
     }
 
     /**

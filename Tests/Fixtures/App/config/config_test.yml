@@ -20,7 +20,16 @@ doctrine:
         path:     %database_path%
     orm:
         auto_generate_proxy_classes: true
-        auto_mapping: true
+        auto_mapping: false
+        mappings:
+            TestBundle:
+                type: annotation
+                dir: '%kernel.root_dir%/../TestBundle/Entity'
+                prefix: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity
+            OrbitaleCmsBundle:
+                type: annotation
+                dir: '%kernel.root_dir%/../../../Entity'
+                prefix: Orbitale\Bundle\CmsBundle\Entity
 
 security:
     firewalls:
@@ -30,3 +39,7 @@ security:
     providers:
         in_memory:
              memory: ~
+
+orbitale_cms:
+    page_class: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page
+    category_class: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category

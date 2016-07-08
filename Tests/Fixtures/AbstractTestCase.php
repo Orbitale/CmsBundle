@@ -11,10 +11,11 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 
-use Orbitale\Bundle\CmsBundle\Entity\Page;
+use Doctrine\DBAL\Connection;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 /**
  * Class AbstractTestCase.
@@ -28,6 +29,7 @@ class AbstractTestCase extends WebTestCase
 
     public function setUp()
     {
+        /** @var Connection $c */
         $c = static::getKernel()->getContainer()->get('doctrine')->getConnection();
         $c->query('delete from orbitale_cms_pages where 1');
         $c->query('delete from orbitale_cms_categories where 1');
@@ -55,7 +57,7 @@ class AbstractTestCase extends WebTestCase
      *
      * @return KernelInterface
      */
-    protected function getKernel(array $options = array())
+    protected static function getKernel(array $options = array())
     {
         static::bootKernel($options);
 
@@ -71,7 +73,7 @@ class AbstractTestCase extends WebTestCase
     {
         $page = new Page();
         foreach ($values as $key => $value) {
-            $page->{'set'.ucFirst($key)}($value);
+            $page->{'set'.ucfirst($key)}($value);
         }
 
         return $page;

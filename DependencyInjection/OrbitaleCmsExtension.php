@@ -58,6 +58,7 @@ class OrbitaleCmsExtension extends Extension
             }
         });
 
+        $container->setParameter('orbitale_cms.connection', $config['connection']);
         $container->setParameter('orbitale_cms.config', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

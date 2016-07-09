@@ -188,17 +188,6 @@ abstract class Category
     }
 
     /**
-     * @param  \DateTime $createdAt
-     * @return $this
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -263,7 +252,7 @@ abstract class Category
     public function updateSlug()
     {
         if (!$this->slug) {
-            $this->slug = Transliterator::transliterate($this->title);
+            $this->slug = Transliterator::transliterate($this->name);
         }
     }
 

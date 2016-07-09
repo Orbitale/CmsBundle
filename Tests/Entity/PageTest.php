@@ -49,6 +49,7 @@ class PageTest extends AbstractTestCase
         static::assertFalse($homepage->isEnabled()); // Base value in entity
         static::assertTrue($homepage->isHomepage());
         static::assertEquals('localhost', $homepage->getHost());
+        static::assertInstanceOf('DateTime', $homepage->getCreatedAt());
 
         $homepage->setParent($homepage);
         static::assertNull($homepage->getParent());
@@ -131,5 +132,15 @@ class PageTest extends AbstractTestCase
         $child = $em->getRepository(get_class($child))->find($child->getId());
 
         static::assertNull($child->getParent());
+    }
+
+    public function testPageSlugIsTransliterated()
+    {
+        $page = new Page();
+        $page->setTitle('Default page');
+
+        $page->updateSlug();
+
+        static::assertEquals('default-page', $page->getSlug());
     }
 }

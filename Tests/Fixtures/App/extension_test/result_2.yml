@@ -4,16 +4,16 @@ orbitale_cms:
     layouts:
         second:
             name: second
-            assets_css: ~
-            assets_js: ~
+            assets_css: []
+            assets_js: []
             host: localhost
-            pattern: ~
+            pattern: ""
             resource: test_only
         first:
             name: first
-            assets_css: ~
-            assets_js: ~
-            host: ~
+            assets_css: []
+            assets_js: []
+            host: ""
             pattern: "^/"
             resource: test_only
     design:

@@ -150,4 +150,14 @@ class CategoryTest extends AbstractTestCase
 
         static::assertNull($child->getParent());
     }
+
+    public function testCategorySlugIsTransliterated()
+    {
+        $category = new Category();
+        $category->setName('Default category');
+
+        $category->updateSlug();
+
+        static::assertEquals('default-category', $category->getSlug());
+    }
 }

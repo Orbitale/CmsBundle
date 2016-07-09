@@ -3,6 +3,9 @@
 [![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=master)](https://travis-ci.org/Orbitale/CmsBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/?branch=master)
 
+:warning: You're looking at the 2.x branch documentation.<br>
+If you need information about 1.x, go [here](https://github.com/Orbitale/CmsBundle/tree/1.x)
+
 ##### Index
 
 * [Requirements](#requirements)
@@ -28,13 +31,11 @@ This bundle is a simple helper to create a very simple CMS based on a classic sy
 
 ## Requirements
 
-* PHP 5.4+ (because we are using Traits)
-* Symfony 2.3+
+* PHP 5.4+
+* Symfony 2.3+ or 3.0+
 * Doctrine ORM
 
 ## Install
-
-*Warning:* This bundle uses PHP Traits, so you must have PHP 5.4+
 
 Require the bundle by using [Composer](https://getcomposer.org/):
 

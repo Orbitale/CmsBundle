@@ -335,6 +335,7 @@ easy_admin:
 ```yml
 # app/config/config.yml
 orbitale_cms:
+    connection: default    # Optional, used for Gedmo doctrine extensions.
     layouts:
         # Prototype
         name:

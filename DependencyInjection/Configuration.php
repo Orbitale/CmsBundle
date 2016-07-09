@@ -31,7 +31,10 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('connection')->defaultValue('default')->end()
+                ->scalarNode('connection')
+                    ->treatNullLike('default')
+                    ->defaultValue('default')
+                ->end()
                 ->arrayNode('layouts')
                     ->defaultValue(array(
                         'front' => array(

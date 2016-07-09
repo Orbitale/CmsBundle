@@ -1,4 +1,5 @@
 orbitale_cms:
+    connection: default
     layouts:
         second:
             name: second

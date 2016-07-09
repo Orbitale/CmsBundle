@@ -58,7 +58,6 @@ class OrbitaleCmsExtension extends Extension
             }
         });
 
-        $container->setParameter('orbitale_cms.connection', $config['connection']);
         $container->setParameter('orbitale_cms.config', $config);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -68,6 +67,17 @@ class OrbitaleCmsExtension extends Extension
         } else {
             $loader->load('services_v2.yml');
         }
+
+        // Add tags to the different services with dynamic tag parameters.
+        $container
+            ->getDefinition('gedmo.listener.timestampable')
+            ->addTag('doctrine.event_subscriber', ['connection' => $config['connection']])
+        ;
+
+        $container
+            ->getDefinition('gedmo.listener.sluggable')
+            ->addTag('doctrine.event_subscriber', ['connection' => $config['connection']])
+        ;
     }
 
     /**

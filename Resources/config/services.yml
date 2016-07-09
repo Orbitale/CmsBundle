@@ -1,4 +1,5 @@
 services:
+
     orbitale_cms.listeners.layouts:
         class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
         arguments:
@@ -13,16 +14,13 @@ services:
             - '%orbitale_cms.config%'
         tags: [ { name: twig.extension } ]
 
-    # These are the Gedmo services needed to manage Doctrine Extensions
+    # These are the Gedmo services needed to manage Doctrine Extensions.
+    # Tags are added from the DI Extension.
     gedmo.listener.timestampable:
         class: Gedmo\Timestampable\TimestampableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: '%orbitale_cms.connection%' }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
     gedmo.listener.sluggable:
         class: Gedmo\Sluggable\SluggableListener
-        tags:
-            - { name: doctrine.event_subscriber, connection: '%orbitale_cms.connection%' }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]

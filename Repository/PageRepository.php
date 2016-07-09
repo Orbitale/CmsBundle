@@ -15,7 +15,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Orbitale\Bundle\CmsBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
 
-class PageRepository extends AbstractRepository
+class PageRepository extends AbstractCmsRepository
 {
     /**
      * @param Category $category

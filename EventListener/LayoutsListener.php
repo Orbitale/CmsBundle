@@ -21,16 +21,16 @@ class LayoutsListener implements EventSubscriberInterface
     /**
      * @var array
      */
-    private $config;
+    private $layouts;
 
     /**
      * @var TwigEngine
      */
     private $templating;
 
-    public function __construct(array $config, TwigEngine $templating)
+    public function __construct(array $layouts, TwigEngine $templating)
     {
-        $this->config = $config;
+        $this->layouts    = $layouts;
         $this->templating = $templating;
     }
 
@@ -39,9 +39,9 @@ class LayoutsListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => array('setRequestLayout', 1),
-        );
+        return [
+            KernelEvents::REQUEST => ['setRequestLayout', 1],
+        ];
     }
 
     public function setRequestLayout(GetResponseEvent $event)
@@ -52,7 +52,7 @@ class LayoutsListener implements EventSubscriberInterface
         $path = $request->getPathInfo();
         $host = $request->getHost();
 
-        $layouts = $this->config['layouts'];
+        $layouts = $this->layouts;
 
         // As a layout must be set, we force it to be empty if no layout is properly configured.
         // Then this will throw an exception, and the user will be warned of the "no-layout" config problem.
@@ -63,7 +63,7 @@ class LayoutsListener implements EventSubscriberInterface
             if ($layoutConfig['host'] && $host === $layoutConfig['host']) {
                 $match = true;
             }
-            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+            if ($layoutConfig['pattern'] && preg_match('~' . $layoutConfig['pattern'] . '~', $path)) {
                 $match = true;
             }
             if ($match) {

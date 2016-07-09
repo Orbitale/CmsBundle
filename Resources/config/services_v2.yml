@@ -6,7 +6,7 @@ services:
         arguments:
             - "%orbitale_cms.page_class%"
         calls:
-            - [ 'setConfig', ['%orbitale_cms.config%'] ]
+            - [ 'setConfig', ['%orbitale_cms.cache%'] ]
 
     orbitale_cms.category_repository:
         class: Orbitale\Bundle\CmsBundle\Repository\CategoryRepository
@@ -15,4 +15,4 @@ services:
         arguments:
             - "%orbitale_cms.category_class%"
         calls:
-            - [ 'setConfig', ['%orbitale_cms.config%'] ]
+            - [ 'setConfig', ['%orbitale_cms.cache%'] ]

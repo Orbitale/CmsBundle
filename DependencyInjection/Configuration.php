@@ -35,11 +35,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('page_class')
                     ->isRequired()
                     ->validate()
-                        ->always()
+                        ->ifString()
                         ->then(function ($value) {
-                            if (!$value) {
-                                return null;
-                            }
                             if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Page', true)) {
                                 throw new InvalidConfigurationException(sprintf(
                                     'Page class must be a valid class extending %s. "%s" given.',
@@ -53,11 +50,8 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('category_class')
                     ->isRequired()
                     ->validate()
-                        ->always()
+                        ->ifString()
                         ->then(function ($value) {
-                            if (!$value) {
-                                return null;
-                            }
                             if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Category', true)) {
                                 throw new InvalidConfigurationException(sprintf(
                                     'Category class must be a valid class extending %s. "%s" given.',
@@ -101,7 +95,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->booleanNode('enabled')->defaultFalse()->end()
-                        ->scalarNode('ttl')->defaultValue('300')->end()
+                        ->integerNode('ttl')->defaultValue(300)->end()
                     ->end()
                 ->end()
             ->end();

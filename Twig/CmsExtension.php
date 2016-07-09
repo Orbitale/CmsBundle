@@ -16,11 +16,11 @@ class CmsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     /**
      * @var array
      */
-    protected $cmsConfig;
+    protected $designConfig;
 
-    public function __construct(array $cmsConfig)
+    public function __construct(array $designConfig)
     {
-        $this->cmsConfig = $cmsConfig;
+        $this->designConfig = $designConfig;
     }
 
     /**
@@ -34,7 +34,7 @@ class CmsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
     public function getGlobals()
     {
         return array(
-            'orbitale_cms_config' => $this->cmsConfig,
+            'orbitale_cms_design' => $this->designConfig,
         );
     }
 }

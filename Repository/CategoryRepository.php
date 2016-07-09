@@ -13,7 +13,7 @@ namespace Orbitale\Bundle\CmsBundle\Repository;
 
 use Orbitale\Bundle\CmsBundle\Entity\Category;
 
-class CategoryRepository extends AbstractRepository
+class CategoryRepository extends AbstractCmsRepository
 {
     /**
      * @param array $slugs

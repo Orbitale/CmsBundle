@@ -2,7 +2,7 @@ services:
     orbitale_cms.listeners.layouts:
         class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
         arguments:
-            config: '%orbitale_cms.config%'
+            config: '%orbitale_cms.layouts%'
             templating: "@templating"
         tags:
           - { name: kernel.event_subscriber }
@@ -10,7 +10,7 @@ services:
     orbitale_cms.twig.extension:
         class: Orbitale\Bundle\CmsBundle\Twig\CmsExtension
         arguments:
-            - '%orbitale_cms.config%'
+            - '%orbitale_cms.design%'
         tags: [ { name: twig.extension } ]
 
     orbitale_cms.doctrine_mapping_listener:

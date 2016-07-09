@@ -1,8 +1,6 @@
 {% set layout = app.request.attributes.get('_orbitale_cms_layout') -%}
 {% extends layout.resource %}
 
-{% set _design_options = orbitale_cms_config.design %}
-
 {% block stylesheets %}
     {{ parent() }}
     {% for asset_css in layout.assets_css %}
@@ -24,22 +22,22 @@
 {% block title %}{{- page.title -}}{% endblock %}
 
 {% block orbitale_cms_breadcrumbs %}
-    <div id="breadcrumbs" class="{{ _design_options.breadcrumbs_class }}">
+    <div id="breadcrumbs" class="{{ orbitale_cms_design.breadcrumbs_class }}">
         {% set slugsArray = [] %}
         {% if page.homepage %}
-            <span class="{{ _design_options.breadcrumbs_current_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }} - {{ page.title }}</span>
+            <span class="{{ orbitale_cms_design.breadcrumbs_current_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }} - {{ page.title }}</span>
         {% else %}
-            <a href="{{ path('orbitale_cms_page') }}" class="{{ _design_options.breadcrumbs_link_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a>
+            <a href="{{ path('orbitale_cms_page') }}" class="{{ orbitale_cms_design.breadcrumbs_link_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a>
             {% for key, breadcrumbPage in pages|reverse %}
 
-                <span class="{{ _design_options.breadcrumbs_separator_class }}">{{ _design_options.breadcrumbs_separator }}</span>
+                <span class="{{ orbitale_cms_design.breadcrumbs_separator_class }}">{{ orbitale_cms_design.breadcrumbs_separator }}</span>
 
                 {% set slugsArray = slugsArray | merge({ (key): breadcrumbPage.slug }) %}
 
                 {% if breadcrumbPage.id == page.id %}
-                    <span class="{{ _design_options.breadcrumbs_current_class }}" >{{ breadcrumbPage.title }}</span>
+                    <span class="{{ orbitale_cms_design.breadcrumbs_current_class }}" >{{ breadcrumbPage.title }}</span>
                 {% else %}
-                    <a href="{{ path('orbitale_cms_page', {slugs: slugsArray|join('/')}) }}" class="{{ _design_options.breadcrumbs_link_class }}">
+                    <a href="{{ path('orbitale_cms_page', {slugs: slugsArray|join('/')}) }}" class="{{ orbitale_cms_design.breadcrumbs_link_class }}">
                         {{ breadcrumbPage.title }}
                     </a>
                 {% endif %}

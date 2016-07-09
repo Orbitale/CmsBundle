@@ -35,8 +35,8 @@ class OrbitaleCmsExtension extends Extension
         foreach ($config['layouts'] as $name => $layout) {
             $config['layouts'][$name] = array_merge(array(
                 'name' => $name,
-                'assets_css' => '',
-                'assets_js' => '',
+                'assets_css' => [],
+                'assets_js' => [],
                 'host' => '',
                 'pattern' => '',
             ), $layout);
@@ -58,10 +58,9 @@ class OrbitaleCmsExtension extends Extension
             }
         });
 
-        $container->setParameter('orbitale_cms.page_class', $config['page_class']);
-        $container->setParameter('orbitale_cms.category_class', $config['category_class']);
-
-        $container->setParameter('orbitale_cms.config', $config);
+        foreach ($config as $key => $value) {
+            $container->setParameter('orbitale_cms.'.$key, $value);
+        }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

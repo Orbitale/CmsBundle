@@ -68,7 +68,7 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
         $ext->load($config, $builder);
 
         foreach ($expected['orbitale_cms'] as $key => $value) {
-            static::assertSame($value, $builder->getParameter('orbitale_cms.' . $key));
+            static::assertSame($value, $builder->getParameter('orbitale_cms.'.$key));
         }
     }
 
@@ -87,16 +87,16 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
         $ext->load($config, $builder);
 
         foreach ($expected['orbitale_cms'] as $key => $value) {
-            static::assertSame($value, $builder->getParameter('orbitale_cms.' . $key));
+            static::assertSame($value, $builder->getParameter('orbitale_cms.'.$key));
         }
     }
 
     public function provideConfiguration()
     {
-        $dir = __DIR__ . '/../Fixtures/App/extension_test/';
+        $dir = __DIR__.'/../Fixtures/App/extension_test/';
 
-        $configFiles = glob($dir . 'config_*.yml');
-        $resultFiles = glob($dir . 'result_*.yml');
+        $configFiles = glob($dir.'config_*.yml');
+        $resultFiles = glob($dir.'result_*.yml');
 
         sort($configFiles);
         sort($resultFiles);

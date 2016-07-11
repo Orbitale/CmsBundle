@@ -44,7 +44,7 @@ class PageTest extends AbstractTestCase
         /** @var Page $homepage */
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
-        static::assertEquals($homepage->getTitle(), (string)$homepage);
+        static::assertEquals($homepage->getTitle(), (string) $homepage);
 
         static::assertFalse($homepage->isEnabled()); // Base value in entity
         static::assertTrue($homepage->isHomepage());

@@ -13,8 +13,8 @@ namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Behat\Transliterator\Transliterator;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -78,7 +78,7 @@ abstract class Category
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->children = new ArrayCollection();
+        $this->children  = new ArrayCollection();
     }
 
     /**
@@ -238,7 +238,7 @@ abstract class Category
 
         $current = $this;
         do {
-            $tree = $current->getSlug().$separator.$tree;
+            $tree    = $current->getSlug().$separator.$tree;
             $current = $current->getParent();
         } while ($current);
 
@@ -271,7 +271,7 @@ abstract class Category
             }
         }
         $this->enabled = false;
-        $this->parent = null;
+        $this->parent  = null;
         $this->name .= '-'.$this->getId().'-deleted';
         $this->slug .= '-'.$this->getId().'-deleted';
     }

@@ -33,7 +33,7 @@ abstract class AbstractCmsController extends Controller
     {
         // Will check that slugs and elements match
         $slugsElements = array_keys($elements);
-        $sortedSlugs = $slugs;
+        $sortedSlugs   = $slugs;
         sort($sortedSlugs);
         sort($slugsElements);
 
@@ -48,17 +48,22 @@ abstract class AbstractCmsController extends Controller
 
         foreach ($slugs as $slug) {
             $element = isset($elements[$slug]) ? $elements[$slug] : null;
-            $match = false;
+            $match   = false;
             if ($element) {
                 // Only for the first iteration
                 $match = $previousElement
-                    ? $element->getParent() && $previousElement->getSlug()=== $element->getParent()->getSlug()
+                    ? $element->getParent() && $previousElement->getSlug() === $element->getParent()->getSlug()
                     : true;
 
                 $previousElement = $element;
             }
             if (!$match) {
-                throw $this->createNotFoundException(($element instanceof Page ? 'Page' : ($element instanceof Category ? 'Category' : 'Elements')).' hierarchy not found.');
+                throw $this->createNotFoundException(($element instanceof Page
+                        ? 'Page'
+                        : ($element
+                           instanceof
+                           Category ? 'Category' : 'Elements'))
+                                                     .' hierarchy not found.');
             }
         }
 

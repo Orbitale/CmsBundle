@@ -28,7 +28,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('orbitale_cms');
+        $rootNode    = $treeBuilder->root('orbitale_cms');
 
         $rootNode
             ->addDefaultsIfNotSet()
@@ -37,13 +37,14 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->validate()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(function($value) {
                             if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Page', true)) {
                                 throw new InvalidConfigurationException(sprintf(
                                     'Page class must be a valid class extending %s. "%s" given.',
                                     'Orbitale\Bundle\CmsBundle\Entity\Page', $value
                                 ));
                             }
+
                             return $value;
                         })
                     ->end()
@@ -52,13 +53,14 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->validate()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(function($value) {
                             if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Category', true)) {
                                 throw new InvalidConfigurationException(sprintf(
                                     'Category class must be a valid class extending %s. "%s" given.',
                                     'Orbitale\Bundle\CmsBundle\Entity\Category', $value
                                 ));
                             }
+
                             return $value;
                         })
                     ->end()

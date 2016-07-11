@@ -44,10 +44,10 @@ class OrbitaleCmsExtension extends Extension
         }
 
         foreach ($config as $key => $value) {
-            $container->setParameter('orbitale_cms.' . $key, $value);
+            $container->setParameter('orbitale_cms.'.$key, $value);
         }
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         if ($this->isSymfony3()) {
             $loader->load('services_v3.yml');

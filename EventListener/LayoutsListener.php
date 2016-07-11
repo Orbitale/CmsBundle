@@ -65,7 +65,7 @@ class LayoutsListener implements EventSubscriberInterface
             }
 
             // Check pattern
-            if ($layoutConfig['pattern'] && preg_match('~' . $layoutConfig['pattern'] . '~', $path)) {
+            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
                 $match = true;
             }
 

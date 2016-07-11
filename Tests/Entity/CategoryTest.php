@@ -50,7 +50,7 @@ class CategoryTest extends AbstractTestCase
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
         static::assertEquals($homepage->getCategory(), $category);
-        static::assertEquals($category->getName(), (string)$category);
+        static::assertEquals($category->getName(), (string) $category);
         static::assertFalse($category->isEnabled()); // Base value
     }
 

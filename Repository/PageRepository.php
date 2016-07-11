@@ -32,7 +32,7 @@ class PageRepository extends AbstractCmsRepository
             ->where('page.category = :category')
             ->orderBy('page.'.$orderBy, $order)
             ->setMaxResults($limit)
-            ->setFirstResult($limit * ($page - 1))
+            ->setFirstResult($limit*($page-1))
             ->setParameter('category', $category)
         ;
 
@@ -62,7 +62,7 @@ class PageRepository extends AbstractCmsRepository
         // Will search differently if we're looking for homepage.
         $searchForHomepage = 0 === count($slugs);
 
-        if ($searchForHomepage) {
+        if (true === $searchForHomepage) {
             // If we are looking for homepage, let's get only the first one.
             $qb
                 ->andWhere('page.homepage = :homepage')
@@ -105,7 +105,7 @@ class PageRepository extends AbstractCmsRepository
         ;
 
         // If we're looking for a homepage, only get the last result (matching more properties).
-        if ($results && $searchForHomepage) {
+        if (true === $searchForHomepage && count($results) > 0) {
             reset($results);
             $results = [$results[0]];
         }

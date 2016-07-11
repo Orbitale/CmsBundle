@@ -32,7 +32,7 @@ class PageRepository extends AbstractCmsRepository
             ->where('page.category = :category')
             ->orderBy('page.'.$orderBy, $order)
             ->setMaxResults($limit)
-            ->setFirstResult($limit*($page-1))
+            ->setFirstResult($limit * ($page-1))
             ->setParameter('category', $category)
         ;
 

@@ -58,12 +58,7 @@ abstract class AbstractCmsController extends Controller
                 $previousElement = $element;
             }
             if (!$match) {
-                throw $this->createNotFoundException(($element instanceof Page
-                        ? 'Page'
-                        : ($element
-                           instanceof
-                           Category ? 'Category' : 'Elements'))
-                                                     .' hierarchy not found.');
+                throw $this->createNotFoundException((new \ReflectionClass($element))->getShortName().' hierarchy not found.');
             }
         }
 

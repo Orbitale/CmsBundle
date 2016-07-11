@@ -13,16 +13,22 @@ namespace Orbitale\Bundle\CmsBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends AbstractCmsController
 {
     /**
      * @Route("/{slugs}", name="orbitale_cms_category", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)+"})
+     *
+     * @param string  $slugs
+     * @param Request $request
+     *
+     * @return Response
      */
     public function indexAction($slugs = '', Request $request)
     {
         if (preg_match('#/$#', $slugs)) {
-            return $this->redirect($this->generateUrl('orbitale_cms_category', array('slugs' => rtrim($slugs, '/'))));
+            return $this->redirect($this->generateUrl('orbitale_cms_category', ['slugs' => rtrim($slugs, '/')]));
         }
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
@@ -31,12 +37,12 @@ class CategoryController extends AbstractCmsController
 
         $category = $this->getFinalTreeElement($slugsArray, $categories);
 
-        $validOrderFields = array('createdAt', 'title', 'content');
+        $validOrderFields = ['createdAt', 'title', 'content'];
 
-        $limit = $request->query->get('limit', 10);
-        $page = $request->query->get('page', 1);
+        $limit   = $request->query->get('limit', 10);
+        $page    = $request->query->get('page', 1);
         $orderBy = $request->query->get('order_by', current($validOrderFields));
-        $order = $request->query->get('order', 'asc');
+        $order   = $request->query->get('order', 'asc');
 
         $pages = $this->get('orbitale_cms.page_repository')->findByCategory(
             $category,
@@ -44,19 +50,20 @@ class CategoryController extends AbstractCmsController
             $orderBy,
             $page,
             $limit
-        );
+        )
+        ;
 
-        return $this->render('OrbitaleCmsBundle:Front:category.html.twig', array(
-            'category' => $category,
+        return $this->render('OrbitaleCmsBundle:Front:category.html.twig', [
+            'category'   => $category,
             'categories' => $categories,
-            'pages' => $pages,
+            'pages'      => $pages,
             'pagesCount' => count($pages),
-            'filters' => array(
-                'page' => $page,
-                'limit' => $limit,
+            'filters'    => [
+                'page'    => $page,
+                'limit'   => $limit,
                 'orderBy' => $orderBy,
-                'order' => $order,
-            ),
-        ));
+                'order'   => $order,
+            ],
+        ]);
     }
 }

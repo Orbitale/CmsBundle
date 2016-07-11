@@ -3,18 +3,18 @@ orbitale_cms:
     category_class: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category
     layouts:
         first:
-            name: first
             assets_css: []
             assets_js: []
             host: localhost
+            name: first
             pattern: ""
             resource: test_only
         second:
-            name: second
             assets_css: []
             assets_js: []
             host: ""
-            pattern: "^/"
+            name: second
+            pattern: ""
             resource: test_only
     design:
         breadcrumbs_class: "breadcrumb"

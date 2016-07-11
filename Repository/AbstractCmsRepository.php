@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityRepository;
 
 /**
  * This class is used to allow all CmsBundle's repositories to use Doctrine cache.
+ *
  * @author Sandor Farkas <farkas.berlin@gmail.com>
  */
 class AbstractCmsRepository extends EntityRepository
@@ -35,6 +36,6 @@ class AbstractCmsRepository extends EntityRepository
     public function setConfig(array $cacheConfig)
     {
         $this->cacheEnabled = $cacheConfig['enabled'];
-        $this->cacheTtl = $cacheConfig['ttl'];
+        $this->cacheTtl     = $cacheConfig['ttl'];
     }
 }

@@ -12,10 +12,9 @@
 namespace Orbitale\Bundle\CmsBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Event\LoadClassMetadataEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * This class adds automatically the ManyToOne and OneToMany relations in Page and Category entities,
@@ -55,7 +54,7 @@ class DoctrineMappingListener implements EventSubscriber
         $classMetadata = $eventArgs->getClassMetadata();
 
 
-        if (is_a($classMetadata->getName(), $this->pageClass, true) && !$classMetadata->hasAssociation('parent')) {
+        if (!$classMetadata->hasAssociation('parent') && is_a($classMetadata->getName(), $this->pageClass, true)) {
             // Declare mapping for category
             $classMetadata->mapManyToOne([
                 'fieldName'    => 'category',
@@ -76,7 +75,7 @@ class DoctrineMappingListener implements EventSubscriber
             ]);
         }
 
-        if (is_a($classMetadata->getName(), $this->categoryClass, true) && !$classMetadata->hasAssociation('parent')) {
+        if (!$classMetadata->hasAssociation('parent') && is_a($classMetadata->getName(), $this->categoryClass, true)) {
             // Declare self-bidirectionnal mapping for parent/children
             $classMetadata->mapManyToOne([
                 'fieldName'    => 'parent',

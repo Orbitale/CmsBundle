@@ -50,7 +50,7 @@ class CategoryTest extends AbstractTestCase
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
         static::assertEquals($homepage->getCategory(), $category);
-        static::assertEquals($category->getName(), (string) $category);
+        static::assertEquals($category->getName(), (string)$category);
         static::assertFalse($category->isEnabled()); // Base value
     }
 
@@ -89,10 +89,10 @@ class CategoryTest extends AbstractTestCase
         $em->persist($child);
         $em->flush();
 
-        static::assertEquals(array($child), $category->getChildren()->toArray());
+        static::assertEquals([$child], $category->getChildren()->toArray());
 
         /** @var Category $category */
-        $category = $em->getRepository(get_class($category))->findOneBy(array('id' => $category->getId()));
+        $category = $em->getRepository(get_class($category))->findOneBy(['id' => $category->getId()]);
 
         static::assertNotNull($category);
 
@@ -101,7 +101,7 @@ class CategoryTest extends AbstractTestCase
             $em->flush();
         }
 
-        $category = $em->getRepository(get_class($category))->findOneBy(array('id' => $category->getId()));
+        $category = $em->getRepository(get_class($category))->findOneBy(['id' => $category->getId()]);
 
         static::assertNull($category);
         static::assertNull($child->getParent());
@@ -137,7 +137,7 @@ class CategoryTest extends AbstractTestCase
         $category = $em->getRepository(get_class($category))->find($category->getId());
 
         $children = $category->getChildren();
-        $first = $children[0];
+        $first    = $children[0];
         static::assertEquals($child->getId(), $first->getId());
 
         $category->removeChild($child);

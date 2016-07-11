@@ -19,8 +19,8 @@ class PageControllerTest extends AbstractTestCase
 {
     public function testNoHomepage()
     {
-        $error = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
-        $client = static::createClient();
+        $error   = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
+        $client  = static::createClient();
         $crawler = $client->request('GET', '/page/');
         static::assertEquals($error, trim($crawler->filter('title')->html()));
         static::assertEquals(404, $client->getResponse()->getStatusCode());
@@ -37,14 +37,14 @@ class PageControllerTest extends AbstractTestCase
     {
         $client = static::createClient();
 
-        $homepage = $this->createPage(array(
+        $homepage = $this->createPage([
             'homepage' => true,
-            'enabled' => true,
-            'slug' => 'home',
-            'title' => 'My homepage',
-            'host' => 'localhost',
-            'content' => 'Hello world!',
-        ));
+            'enabled'  => true,
+            'slug'     => 'home',
+            'title'    => 'My homepage',
+            'host'     => 'localhost',
+            'content'  => 'Hello world!',
+        ]);
 
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
@@ -76,15 +76,15 @@ class PageControllerTest extends AbstractTestCase
     {
         $client = static::createClient();
 
-        $homepage = $this->createPage(array(
+        $homepage = $this->createPage([
             'homepage' => true,
-            'enabled' => true,
-            'locale' => 'en',
-            'slug' => 'home',
-            'title' => 'My homepage',
-            'host' => 'localhost',
-            'content' => 'Hello world!',
-        ));
+            'enabled'  => true,
+            'locale'   => 'en',
+            'slug'     => 'home',
+            'title'    => 'My homepage',
+            'host'     => 'localhost',
+            'content'  => 'Hello world!',
+        ]);
 
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
@@ -120,33 +120,33 @@ class PageControllerTest extends AbstractTestCase
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
-        $parent = $this->createPage(array(
+        $parent = $this->createPage([
             'homepage' => true,
-            'enabled' => true,
-            'slug' => 'root',
-            'title' => 'Root',
-            'content' => 'The root page',
-        ));
+            'enabled'  => true,
+            'slug'     => 'root',
+            'title'    => 'Root',
+            'content'  => 'The root page',
+        ]);
         $em->persist($parent);
         $em->flush();
 
-        $childOne = $this->createPage(array(
+        $childOne = $this->createPage([
             'enabled' => true,
-            'slug' => 'first-level',
-            'title' => 'First level',
+            'slug'    => 'first-level',
+            'title'   => 'First level',
             'content' => 'This page is only available in the first level',
-            'parent' => $em->find(get_class($parent), $parent),
-        ));
+            'parent'  => $em->find(get_class($parent), $parent),
+        ]);
         $em->persist($childOne);
         $em->flush();
 
-        $childTwoDisabled = $this->createPage(array(
+        $childTwoDisabled = $this->createPage([
             'enabled' => false,
-            'slug' => 'second-level',
-            'title' => 'Disabled Page',
+            'slug'    => 'second-level',
+            'title'   => 'Disabled Page',
             'content' => 'This page should render a 404 error',
-            'parent' => $em->find(get_class($parent), $parent),
-        ));
+            'parent'  => $em->find(get_class($parent), $parent),
+        ]);
         $em->persist($childTwoDisabled);
         $em->flush();
 
@@ -168,17 +168,17 @@ class PageControllerTest extends AbstractTestCase
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
-        $page = $this->createPage(array(
-            'homepage' => true,
-            'enabled' => true,
-            'title' => 'Root',
-            'content' => 'The root page',
-            'css' => '#home{color:red;}',
-            'js' => 'alert("ok");',
+        $page = $this->createPage([
+            'homepage'        => true,
+            'enabled'         => true,
+            'title'           => 'Root',
+            'content'         => 'The root page',
+            'css'             => '#home{color:red;}',
+            'js'              => 'alert("ok");',
             'metaDescription' => 'meta description',
-            'metaKeywords' => 'this is a meta keyword list',
-            'metaTitle' => 'this title is only in the metas',
-        ));
+            'metaKeywords'    => 'this is a meta keyword list',
+            'metaTitle'       => 'this title is only in the metas',
+        ]);
         $em->persist($page);
         $em->flush();
 
@@ -189,8 +189,10 @@ class PageControllerTest extends AbstractTestCase
 
         static::assertEquals($page->getCss(), trim($crawler->filter('#orbitale_cms_css')->html()));
         static::assertEquals($page->getJs(), trim($crawler->filter('#orbitale_cms_js')->html()));
-        static::assertEquals($page->getMetaDescription(), trim($crawler->filter('meta[name="description"]')->attr('content')));
-        static::assertEquals($page->getMetaKeywords(), trim($crawler->filter('meta[name="keywords"]')->attr('content')));
+        static::assertEquals($page->getMetaDescription(), trim($crawler->filter('meta[name="description"]')
+            ->attr('content')));
+        static::assertEquals($page->getMetaKeywords(), trim($crawler->filter('meta[name="keywords"]')
+            ->attr('content')));
         static::assertEquals($page->getMetaTitle(), trim($crawler->filter('meta[name="title"]')->attr('content')));
     }
 
@@ -200,11 +202,23 @@ class PageControllerTest extends AbstractTestCase
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
-        $parent = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host' => 'localhost', 'locale' => 'en'));
+        $parent = $this->createPage([
+            'enabled'  => true,
+            'homepage' => true,
+            'title'    => 'Locale+host',
+            'host'     => 'localhost',
+            'locale'   => 'en',
+        ]);
         $em->persist($parent);
         $em->flush();
 
-        $child = $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only', 'host' => 'localhost', 'parent' => $parent));
+        $child = $this->createPage([
+            'enabled'  => true,
+            'homepage' => true,
+            'title'    => 'Host only',
+            'host'     => 'localhost',
+            'parent'   => $parent,
+        ]);
         $em->persist($child);
         $em->flush();
 
@@ -229,16 +243,39 @@ class PageControllerTest extends AbstractTestCase
 
         // First, create the pages
         /** @var Page[] $pages */
-        $pages = array(
-            'both' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale+host', 'host' => 'localhost', 'locale' => 'en')),
-            'host' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Host only', 'host' => 'localhost')),
-            'locale' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'Locale only', 'locale' => 'en')),
-            'none' => $this->createPage(array('enabled' => true, 'homepage' => true, 'title' => 'No match')),
-        );
+        $pages = [
+            'both'   => $this->createPage([
+                'enabled'  => true,
+                'homepage' => true,
+                'title'    => 'Locale+host',
+                'host'     => 'localhost',
+                'locale'   => 'en',
+            ]),
+            'host'   => $this->createPage([
+                'enabled'  => true,
+                'homepage' => true,
+                'title'    => 'Host only',
+                'host'     => 'localhost',
+            ]),
+            'locale' => $this->createPage([
+                'enabled'  => true,
+                'homepage' => true,
+                'title'    => 'Locale only',
+                'locale'   => 'en',
+            ]),
+            'none'   => $this->createPage([
+                'enabled'  => true,
+                'homepage' => true,
+                'title'    => 'No match',
+            ]),
+        ];
         foreach ($pages as $page) {
             $em->persist($page);
         }
         $em->flush();
+
+        // First page considered as homepage is the last one inserted.
+        $pages = array_reverse($pages);
 
         // Loop the pages because the "$pages" array respects precedence,
         // So disabling the pages on each loop should make all assertions work.
@@ -253,15 +290,20 @@ class PageControllerTest extends AbstractTestCase
 
     public function testBreadcrumbsDesign()
     {
-        $client = static::createClient(array('environment' => 'design_breadcrumbs'));
+        $client = static::createClient(['environment' => 'design_breadcrumbs']);
 
         /** @var EntityManager $em */
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
-        $page = $this->createPage(array('enabled' => true, 'slug' => 'parent', 'title' => 'Parent page'));
+        $page = $this->createPage(['enabled' => true, 'slug' => 'parent', 'title' => 'Parent page']);
         $em->persist($page);
         $em->flush();
-        $pageChild = $this->createPage(array('enabled' => true, 'slug' => 'child', 'title' => 'Child page', 'parent' => $page));
+        $pageChild = $this->createPage([
+            'enabled' => true,
+            'slug'    => 'child',
+            'title'   => 'Child page',
+            'parent'  => $page,
+        ]);
         $em->persist($pageChild);
         $em->flush();
 
@@ -273,7 +315,7 @@ class PageControllerTest extends AbstractTestCase
         $nodes = $crawler->filter('#breadcrumbs *');
 
         /** @var \DOMElement[] $nodesArray */
-        $nodesArray = array();
+        $nodesArray = [];
         foreach ($nodes as $k => $node) {
             // This is a trick for SF2.3 and the lack of "getNode" method.
             $nodesArray[$k] = $node;

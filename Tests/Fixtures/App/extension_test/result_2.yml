@@ -2,19 +2,19 @@ orbitale_cms:
     page_class: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page
     category_class: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category
     layouts:
-        second:
-            name: second
-            assets_css: []
-            assets_js: []
-            host: localhost
-            pattern: ""
-            resource: test_only
         first:
-            name: first
             assets_css: []
             assets_js: []
             host: ""
-            pattern: "^/"
+            name: first
+            pattern: ""
+            resource: test_only
+        second:
+            assets_css: []
+            assets_js: []
+            host: localhost
+            name: second
+            pattern: ""
             resource: test_only
     design:
         breadcrumbs_class: "breadcrumb"

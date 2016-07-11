@@ -50,16 +50,15 @@ abstract class AbstractCmsController extends Controller
             $element = isset($elements[$slug]) ? $elements[$slug] : null;
             $match = false;
             if ($element) {
-                if ($previousElement) {
-                    $match = $element->getParent() && $previousElement->getSlug() === $element->getParent()->getSlug();
-                } else {
-                    // Only for the first iteration
-                    $match = true;
-                }
+                // Only for the first iteration
+                $match = $previousElement
+                    ? $element->getParent() && $previousElement->getSlug()=== $element->getParent()->getSlug()
+                    : true;
+
                 $previousElement = $element;
             }
             if (!$match) {
-                throw $this->createNotFoundException(($element instanceof Page ? 'Page' : ($element instanceof Category ? 'Cateogry' : 'Elements')).' hierarchy not found.');
+                throw $this->createNotFoundException(($element instanceof Page ? 'Page' : ($element instanceof Category ? 'Category' : 'Elements')).' hierarchy not found.');
             }
         }
 

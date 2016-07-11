@@ -35,7 +35,7 @@ class PageController extends AbstractCmsController
     public function indexAction(Request $request, $slugs = '', $_locale = null)
     {
         if (preg_match('~/$~', $slugs)) {
-            return $this->redirect($this->generateUrl('orbitale_cms_page', array('slugs' => rtrim($slugs, '/'))));
+            return $this->redirect($this->generateUrl('orbitale_cms_page', ['slugs' => rtrim($slugs, '/')]));
         }
 
         $this->request = $request;
@@ -47,19 +47,23 @@ class PageController extends AbstractCmsController
 
         $currentPage = $this->getCurrentPage($pages, $slugsArray);
 
-        if ($currentPage->isHomepage() && strlen($slugs)) {
-            $params = array('slugs' => '');
+        // If we have slugs and the current page is homepage,
+        //  we redirect to homepage for "better" url and SEO management.
+        // Example: if "/home" is a homepage, "/home" url is redirected to "/".
+        if ($slugs && $currentPage->isHomepage()) {
+            $params = ['slugs' => ''];
             if ($currentPage->getLocale()) {
                 // Force locale if the Page has one
                 $params['_locale'] = $currentPage->getLocale();
             }
+
             return $this->redirect($this->generateUrl('orbitale_cms_page', $params));
         }
 
-        return $this->render('OrbitaleCmsBundle:Front:index.html.twig', array(
+        return $this->render('OrbitaleCmsBundle:Front:index.html.twig', [
             'pages' => $pages,
-            'page' => $currentPage,
-        ));
+            'page'  => $currentPage,
+        ]);
     }
 
     /**
@@ -70,7 +74,7 @@ class PageController extends AbstractCmsController
      *
      * @return Page[]
      */
-    protected function getPages(array $slugsArray = array())
+    protected function getPages(array $slugsArray = [])
     {
         /** @var Page[] $pages */
         $pages = $this->get('orbitale_cms.page_repository')
@@ -78,12 +82,9 @@ class PageController extends AbstractCmsController
         ;
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
-            if (count($slugsArray)) {
-                $msg = 'Page not found';
-            } else {
-                $msg = 'No homepage has been configured. Please check your existing pages or create a homepage in your application.';
-            }
-            throw $this->createNotFoundException($msg);
+            throw $this->createNotFoundException(count($slugsArray)
+                ? 'Page not found'
+                : 'No homepage has been configured. Please check your existing pages or create a homepage in your application.');
         }
 
         return $pages;

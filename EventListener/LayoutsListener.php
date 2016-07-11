@@ -52,24 +52,38 @@ class LayoutsListener implements EventSubscriberInterface
         $path = $request->getPathInfo();
         $host = $request->getHost();
 
-        $layouts = $this->layouts;
-
         // As a layout must be set, we force it to be empty if no layout is properly configured.
         // Then this will throw an exception, and the user will be warned of the "no-layout" config problem.
         $finalLayout = null;
 
-        foreach ($layouts as $layoutConfig) {
+        foreach ($this->layouts as $layoutConfig) {
             $match = false;
+
+            // First check host
             if ($layoutConfig['host'] && $host === $layoutConfig['host']) {
                 $match = true;
             }
-            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+
+            // Check pattern
+            if ($layoutConfig['pattern'] && preg_match('~' . $layoutConfig['pattern'] . '~', $path)) {
                 $match = true;
             }
+
             if ($match) {
                 $finalLayout = $layoutConfig;
                 break;
             }
+        }
+
+        // If nothing matches, we take the first layout that has no "host" or "pattern" configuration.
+        if (null === $finalLayout) {
+            $layouts = $this->layouts;
+            do {
+                $finalLayout = array_shift($layouts);
+                if ($finalLayout['host'] || $finalLayout['pattern']) {
+                    $finalLayout = null;
+                }
+            } while (null === $finalLayout && count($layouts));
         }
 
         if (null === $finalLayout || !$this->templating->exists($finalLayout['resource'])) {

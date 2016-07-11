@@ -32,8 +32,9 @@ class PageRepository extends AbstractCmsRepository
             ->where('page.category = :category')
             ->orderBy('page.'.$orderBy, $order)
             ->setMaxResults($limit)
-            ->setFirstResult($limit * ($page-1))
-            ->setParameter('category', $category);
+            ->setFirstResult($limit * ($page - 1))
+            ->setParameter('category', $category)
+        ;
 
         return new Paginator($qb->getQuery()->useResultCache($this->cacheEnabled, $this->cacheTtl));
     }
@@ -47,9 +48,9 @@ class PageRepository extends AbstractCmsRepository
      * @param string|null $host
      * @param string|null $locale
      *
-     * @return Page
+     * @return Page[]
      */
-    public function findFrontPages(array $slugs = array(), $host = null, $locale = null)
+    public function findFrontPages(array $slugs = [], $host = null, $locale = null)
     {
         $qb = $this->createQueryBuilder('page')
             ->where('page.enabled = :enabled')
@@ -59,12 +60,14 @@ class PageRepository extends AbstractCmsRepository
         ;
 
         // Will search differently if we're looking for homepage.
-        $searchForHomepage = count($slugs) === 0;
+        $searchForHomepage = 0 === count($slugs);
 
         if ($searchForHomepage) {
+            // If we are looking for homepage, let's get only the first one.
             $qb
                 ->andWhere('page.homepage = :homepage')
                 ->setParameter('homepage', true)
+                ->setMaxResults(1)
             ;
         } else {
             $qb
@@ -77,6 +80,7 @@ class PageRepository extends AbstractCmsRepository
         if (null !== $host) {
             $hostWhere .= ' OR page.host = :host';
             $qb->setParameter('host', $host);
+            $qb->addOrderBy('page.host', 'asc');
         }
         $qb->andWhere($hostWhere);
 
@@ -84,38 +88,29 @@ class PageRepository extends AbstractCmsRepository
         if (null !== $locale) {
             $localeWhere .= ' OR page.locale = :locale';
             $qb->setParameter('locale', $locale);
+            $qb->addOrderBy('page.locale', 'asc');
         }
         $qb->andWhere($localeWhere);
 
-        // This will allow getting first the pages that match both criteria
+        // Then the last page will automatically be one that has both properties.
         $qb
-            ->orderBy('page.host', 'DESC')
-            ->addOrderBy('page.locale', 'DESC')
+            ->orderBy('page.host', 'asc')
+            ->addOrderBy('page.locale', 'asc')
         ;
 
         /** @var Page[] $results */
         $results = $qb->getQuery()
             ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+            ->getResult()
+        ;
 
-        if ($searchForHomepage) {
-            $homepage = null;
-
-            foreach ($results as $page) {
-                if (
-                    ($page->getLocale() && $page->getHost())
-                    || $page->getHost() || $page->getLocale()
-                    || !$page->getLocale() || !$page->getHost()
-                ) {
-                    $homepage = $page;
-                    break;
-                }
-            }
-
-            $results = $homepage ? array($homepage) : array();
+        // If we're looking for a homepage, only get the last result (matching more properties).
+        if ($results && $searchForHomepage) {
+            reset($results);
+            $results = [$results[0]];
         }
 
-        $resultsSortedBySlug = array();
+        $resultsSortedBySlug = [];
 
         foreach ($results as $page) {
             $resultsSortedBySlug[$page->getSlug()] = $page;

@@ -33,8 +33,8 @@ class CmsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
 
     public function getGlobals()
     {
-        return array(
+        return [
             'orbitale_cms_design' => $this->designConfig,
-        );
+        ];
     }
 }

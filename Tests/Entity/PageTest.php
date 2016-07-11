@@ -27,7 +27,7 @@ class PageTest extends AbstractTestCase
             ->setTitle('My homepage')
             ->setHost('localhost')
             ->setContent('Hello world!')
-        ;
+            ;
     }
 
     public function testOneHomepage()
@@ -44,7 +44,7 @@ class PageTest extends AbstractTestCase
         /** @var Page $homepage */
         $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
 
-        static::assertEquals($homepage->getTitle(), (string) $homepage);
+        static::assertEquals($homepage->getTitle(), (string)$homepage);
 
         static::assertFalse($homepage->isEnabled()); // Base value in entity
         static::assertTrue($homepage->isHomepage());
@@ -72,10 +72,10 @@ class PageTest extends AbstractTestCase
         $em->persist($child);
         $em->flush();
 
-        static::assertEquals(array($child), $homepage->getChildren()->toArray());
+        static::assertEquals([$child], $homepage->getChildren()->toArray());
 
         /** @var Page $homepage */
-        $homepage = $em->getRepository(get_class($homepage))->findOneBy(array('id' => $homepage->getId()));
+        $homepage = $em->getRepository(get_class($homepage))->findOneBy(['id' => $homepage->getId()]);
 
         static::assertNotNull($homepage);
 
@@ -84,7 +84,7 @@ class PageTest extends AbstractTestCase
             $em->flush();
         }
 
-        $homepage = $em->getRepository(get_class($homepage))->findOneBy(array('id' => $homepage->getId()));
+        $homepage = $em->getRepository(get_class($homepage))->findOneBy(['id' => $homepage->getId()]);
 
         static::assertNull($homepage);
         static::assertNull($child->getParent());

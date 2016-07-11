@@ -33,9 +33,10 @@ class CategoryRepository extends AbstractCmsRepository
         $results = $qb
             ->getQuery()
             ->useResultCache($this->cacheEnabled, $this->cacheTtl)
-            ->getResult();
+            ->getResult()
+        ;
 
-        $resultsSortedBySlug = array();
+        $resultsSortedBySlug = [];
 
         foreach ($results as $category) {
             $resultsSortedBySlug[$category->getSlug()] = $category;

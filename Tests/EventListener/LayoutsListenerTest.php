@@ -19,7 +19,11 @@ class LayoutsListenerTest extends AbstractTestCase
 {
     public function testDifferentLayout()
     {
-        $client = static::createClient(array('environment' => 'layout'));
+        $client = static::createClient(['environment' => 'layout']);
+
+        /** @var \Twig_Environment $twig */
+        $twig = $client->getContainer()->get('twig');
+        $twig->resolveTemplate('::test_layout.html.twig');
 
         $crawler = $client->request('GET', '/page/');
 
@@ -29,7 +33,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
     public function testHostLayout()
     {
-        $client = static::createClient(array('environment' => 'layout'), array('HTTP_HOST' => 'local.host'));
+        $client = static::createClient(['environment' => 'layout'], ['HTTP_HOST' => 'local.host']);
 
         $crawler = $client->request('GET', '/page/');
 
@@ -42,13 +46,13 @@ class LayoutsListenerTest extends AbstractTestCase
      */
     public function testLayoutWrong()
     {
-        static::createClient(array('environment' => 'layout_wrong'))->request('GET', '/page/');
+        static::createClient(['environment' => 'layout_wrong'])->request('GET', '/page/');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected static function createClient(array $options = array(), array $server = array())
+    protected static function createClient(array $options = [], array $server = [])
     {
         $client = parent::createClient($options, $server);
 

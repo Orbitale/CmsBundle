@@ -12,10 +12,10 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 
 use Doctrine\DBAL\Connection;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 /**
  * Class AbstractTestCase.
@@ -38,7 +38,7 @@ class AbstractTestCase extends WebTestCase
     /**
      * @param array $options
      */
-    protected static function bootKernel(array $options = array())
+    protected static function bootKernel(array $options = [])
     {
         if (method_exists('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase', 'bootKernel')) {
             parent::bootKernel($options);
@@ -57,7 +57,7 @@ class AbstractTestCase extends WebTestCase
      *
      * @return KernelInterface
      */
-    protected static function getKernel(array $options = array())
+    protected static function getKernel(array $options = [])
     {
         static::bootKernel($options);
 
@@ -69,7 +69,7 @@ class AbstractTestCase extends WebTestCase
      *
      * @return Page
      */
-    protected function createPage(array $values = array())
+    protected function createPage(array $values = [])
     {
         $page = new Page();
         foreach ($values as $key => $value) {

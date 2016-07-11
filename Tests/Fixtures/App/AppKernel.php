@@ -9,15 +9,15 @@
 * file that was distributed with this source code.
 */
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
 
 class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        return array(
+        return [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
@@ -26,7 +26,7 @@ class AppKernel extends Kernel
 
             new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
             new Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\TestBundle(),
-        );
+        ];
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
@@ -34,10 +34,10 @@ class AppKernel extends Kernel
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
 
         if ($this->isSymfony3()) {
-            $loader->load(function(ContainerBuilder $container) {
-                $container->loadFromExtension('framework', array(
+            $loader->load(function (ContainerBuilder $container) {
+                $container->loadFromExtension('framework', [
                     'assets' => null,
-                ));
+                ]);
             });
         }
     }

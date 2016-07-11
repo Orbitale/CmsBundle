@@ -3,17 +3,17 @@ orbitale_cms:
     category_class: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category
     layouts:
         first:
-            name: first
             assets_css: []
             assets_js: []
             host: a-first-host
+            name: first
             pattern: ""
             resource: test_only
         second:
-            name: second
             assets_css: []
             assets_js: []
             host: b-second-host
+            name: second
             pattern: "^/only_this_one"
             resource: test_only
     design:

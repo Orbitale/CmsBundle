@@ -52,10 +52,10 @@ Register the necessary bundles in your Kernel:
 // app/AppKernel.php
 public function registerBundles()
 {
-    $bundles = array(
+    $bundles = [
         // ...
         new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
-    );
+    ];
 }
 
 ```
@@ -245,7 +245,7 @@ Or in a controller:
 
 ```php
     // Page : "Team"
-    $url = $this->generateUrl('orbitale_cms_page', array('slugs' => $page->getTree()));
+    $url = $this->generateUrl('orbitale_cms_page', ['slugs' => $page->getTree()]);
     // $url === /welcome/our-company/team
 ```
 
@@ -335,6 +335,10 @@ Prototype of a layout configuration:
 
 Take another look on the [config reference](#configuration-reference) if you
 need to get the prototype defaults.
+
+:warning: **Warning!** The **first matching** layout will be used, as well as
+ routing would do, so be sure to configure them in the right order!<br>
+Empty values won't be taken in account.
 
 ### <a name="breadcrumbs"></a>Changing the "breadcrumbs" look
 

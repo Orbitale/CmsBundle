@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('orbitale_cms');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
                 ->scalarNode('page_class')
                     ->isRequired()
@@ -63,21 +64,22 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('layouts')
-                    ->defaultValue(array(
-                        'front' => array(
+                    ->defaultValue([
+                        'front' => [
                             'resource' => 'OrbitaleCmsBundle::default_layout.html.twig',
-                            'pattern' => '^/',
-                        ),
-                    ))
+                            'pattern' => '',
+                        ],
+                    ])
                     ->useAttributeAsKey('name')
                     ->prototype('array')
+                        ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('name')->end()
                             ->scalarNode('resource')->isRequired()->end()
-                            ->arrayNode('assets_css')->end()
-                            ->arrayNode('assets_js')->end()
-                            ->scalarNode('pattern')->end()
-                            ->scalarNode('host')->end()
+                            ->arrayNode('assets_css')->prototype('scalar')->end()->end()
+                            ->arrayNode('assets_js')->prototype('scalar')->end()->end()
+                            ->scalarNode('pattern')->defaultValue('')->end()
+                            ->scalarNode('host')->defaultValue('')->end()
                         ->end()
                     ->end()
                 ->end()

@@ -53,41 +53,86 @@ class DoctrineMappingListener implements EventSubscriber
         /** @var ClassMetadata $classMetadata */
         $classMetadata = $eventArgs->getClassMetadata();
 
+        $isPage     = is_a($classMetadata->getName(), $this->pageClass, true);
+        $isCategory = is_a($classMetadata->getName(), $this->categoryClass, true);
 
-        if (!$classMetadata->hasAssociation('parent') && is_a($classMetadata->getName(), $this->pageClass, true)) {
-            // Declare mapping for category
+        if ($isPage) {
+            $this->processPageMetadata($classMetadata);
+            $this->processParent($classMetadata, $this->pageClass);
+            $this->processChildren($classMetadata, $this->pageClass);
+        }
+
+        if ($isCategory) {
+            $this->processCategoryMetadata($classMetadata);
+            $this->processParent($classMetadata, $this->categoryClass);
+            $this->processChildren($classMetadata, $this->categoryClass);
+        }
+    }
+
+    /**
+     * Declare mapping for Page entity.
+     *
+     * @param ClassMetadata $classMetadata
+     */
+    private function processPageMetadata(ClassMetadata $classMetadata)
+    {
+        if (!$classMetadata->hasAssociation('category')) {
             $classMetadata->mapManyToOne([
                 'fieldName'    => 'category',
                 'targetEntity' => $this->categoryClass,
                 'inversedBy'   => 'pages',
             ]);
+        }
+    }
 
-            // Declare self-bidirectionnal mapping for parent/children
-            $classMetadata->mapManyToOne([
-                'fieldName'    => 'parent',
-                'targetEntity' => $this->pageClass,
-                'inversedBy'   => 'children',
-            ]);
+    /**
+     * Declare mapping for Category entity.
+     *
+     * @param ClassMetadata $classMetadata
+     */
+    private function processCategoryMetadata(ClassMetadata $classMetadata)
+    {
+        if (!$classMetadata->hasAssociation('pages')) {
             $classMetadata->mapOneToMany([
-                'fieldName'    => 'children',
+                'fieldName'    => 'pages',
                 'targetEntity' => $this->pageClass,
-                'mappedBy'     => 'parent',
+                'mappedBy'     => 'category',
             ]);
         }
 
-        if (!$classMetadata->hasAssociation('parent') && is_a($classMetadata->getName(), $this->categoryClass, true)) {
-            // Declare self-bidirectionnal mapping for parent/children
+    }
+
+    /**
+     * Declare self-bidirectionnal mapping for parent.
+     *
+     * @param ClassMetadata $classMetadata
+     * @param string        $class
+     */
+    private function processParent(ClassMetadata $classMetadata, $class)
+    {
+        if (!$classMetadata->hasAssociation('parent')) {
             $classMetadata->mapManyToOne([
                 'fieldName'    => 'parent',
-                'targetEntity' => $this->categoryClass,
+                'targetEntity' => $class,
                 'inversedBy'   => 'children',
             ]);
+        }
+    }
+
+    /**
+     * Declare self-bidirectionnal mapping for children
+     *
+     * @param ClassMetadata $classMetadata
+     * @param string        $class
+     */
+    private function processChildren(ClassMetadata $classMetadata, $class)
+    {
+        if (!$classMetadata->hasAssociation('children')) {
             $classMetadata->mapOneToMany([
                 'fieldName'    => 'children',
-                'targetEntity' => $this->categoryClass,
+                'targetEntity' => $class,
                 'mappedBy'     => 'parent',
             ]);
-
         }
     }
 }

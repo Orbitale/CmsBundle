@@ -358,15 +358,22 @@ abstract class Page
     public function setParent(Page $parent = null)
     {
         if ($parent === $this) {
-            // Refuse the page to have itself as parent
+            // Refuse the category to have itself as parent.
             $this->parent = null;
 
             return $this;
         }
+
         $this->parent = $parent;
+
+        // Ensure bidirectional relation is respected.
+        if ($parent && false === $parent->getChildren()->indexOf($this)) {
+            $parent->addChild($this);
+        }
 
         return $this;
     }
+
 
     /**
      * @return Page[]|ArrayCollection
@@ -384,6 +391,10 @@ abstract class Page
     public function addChild(Page $page)
     {
         $this->children->add($page);
+
+        if ($page->getParent() !== $this) {
+            $page->setParent($this);
+        }
 
         return $this;
     }
@@ -497,7 +508,7 @@ abstract class Page
     public function onRemove(LifecycleEventArgs $event)
     {
         $em = $event->getEntityManager();
-        if ($this->children) {
+        if (count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);
                 $em->persist($child);

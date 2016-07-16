@@ -70,6 +70,11 @@ abstract class Category
      */
     protected $children;
 
+    /**
+     * @var Page[]|ArrayCollection
+     */
+    protected $pages;
+
     public function __toString()
     {
         return $this->name;
@@ -79,6 +84,7 @@ abstract class Category
     {
         $this->createdAt = new \DateTime();
         $this->children  = new ArrayCollection();
+        $this->pages     = new ArrayCollection();
     }
 
     /**
@@ -122,7 +128,7 @@ abstract class Category
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getSlug()
     {
@@ -130,7 +136,7 @@ abstract class Category
     }
 
     /**
-     * @param mixed $slug
+     * @param string $slug
      *
      * @return Category
      */
@@ -170,19 +176,25 @@ abstract class Category
     }
 
     /**
-     * @param mixed $parent
+     * @param Category|null $parent
      *
      * @return Category
      */
     public function setParent(Category $parent = null)
     {
         if ($parent === $this) {
-            // Refuse the category to have itself as parent
+            // Refuse the category to have itself as parent.
             $this->parent = null;
 
             return $this;
         }
+
         $this->parent = $parent;
+
+        // Ensure bidirectional relation is respected.
+        if ($parent && false === $parent->getChildren()->indexOf($this)) {
+            $parent->addChild($this);
+        }
 
         return $this;
     }
@@ -204,13 +216,17 @@ abstract class Category
     }
 
     /**
-     * @param Category $child
+     * @param Category $category
      *
-     * @return Category[]
+     * @return Category
      */
-    public function addChild(Category $child)
+    public function addChild(Category $category)
     {
-        $this->children->add($child);
+        $this->children->add($category);
+
+        if ($category->getParent() !== $this) {
+            $category->setParent($this);
+        }
 
         return $this;
     }
@@ -218,7 +234,7 @@ abstract class Category
     /**
      * @param Category $child
      *
-     * @return Category[]
+     * @return Category
      */
     public function removeChild(Category $child)
     {
@@ -264,7 +280,7 @@ abstract class Category
     public function onRemove(LifecycleEventArgs $event)
     {
         $em = $event->getEntityManager();
-        if ($this->children) {
+        if (count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);
                 $em->persist($child);

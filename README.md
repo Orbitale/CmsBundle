@@ -113,9 +113,11 @@ orbitale_cms:
 namespace AppBundle\Entity;
 
 use Orbitale\Bundle\CmsBundle\Entity\Page as BasePage;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
+ * @ORM\Table(name="orbitale_cms_pages")
  */
 class Page extends BasePage
 {
@@ -145,9 +147,11 @@ class Page extends BasePage
 namespace AppBundle\Entity;
 
 use Orbitale\Bundle\CmsBundle\Entity\Category as BaseCategory;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository")
+ * @ORM\Table(name="orbitale_cms_categories")
  */
 class Category extends BaseCategory
 {

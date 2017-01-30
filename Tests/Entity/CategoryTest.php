@@ -160,4 +160,26 @@ class CategoryTest extends AbstractTestCase
 
         static::assertEquals('default-category', $category->getSlug());
     }
+
+    /**
+     * @dataProvider provideFalseLikeNames
+     */
+    public function testCategorySlugIsNotTransliteratedIfFalseLike($name)
+    {
+        $category = new Category();
+        $category->setName($name);
+
+        $category->updateSlug();
+
+        static::assertEquals(null, $category->getSlug());
+    }
+
+    public function provideFalseLikeNames()
+    {
+        return [
+            [null],
+            [false],
+            [''],
+        ];
+    }
 }

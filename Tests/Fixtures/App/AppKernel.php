@@ -33,13 +33,20 @@ class AppKernel extends Kernel
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
 
-        if ($this->isSymfony3()) {
-            $loader->load(function(ContainerBuilder $container) {
-                $container->loadFromExtension('framework', [
-                    'assets' => null,
-                ]);
-            });
-        }
+        $isSymfony3 = $this->isSymfony3();
+
+        $loader->load(function(ContainerBuilder $container) use ($isSymfony3) {
+
+            $frameworkParams = [
+                'translator' => ['fallbacks' => ['fr']],
+            ];
+
+            if ($isSymfony3) {
+                $frameworkParams['assets'] = null;
+            }
+
+            $container->loadFromExtension('framework', $frameworkParams);
+        });
     }
 
     /**

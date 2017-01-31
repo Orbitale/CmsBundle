@@ -43,7 +43,6 @@ matrix:
     - php: 5.4
       env:
         - SYMFONY_VERSION="2.3.*"
-        - COMPOSER_FLAGS="--prefer-lowest"
   allow_failures:
     - php: nightly
     # code coverage is very slow; allow a failure to get the Travis result early
@@ -64,7 +63,7 @@ before_install:
     - if [[ "$TWIG_VERSION" != "" ]]; then composer require "twig/twig:${TWIG_VERSION}" --no-update; fi;
 
 install:
-    - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+    - composer update --prefer-dist --no-interaction
     - if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then composer require --dev satooshi/php-coveralls; fi
 
 script:

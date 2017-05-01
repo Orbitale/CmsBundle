@@ -16,7 +16,6 @@ env:
     - deps="no"
     - SYMFONY_VERSION=""
     - CHECK_PHP_SYNTAX="no"
-    - SYMFONY_DEPRECATIONS_HELPER="weak"
     - ENABLE_CODE_COVERAGE="false"
 
 matrix:
@@ -24,40 +23,27 @@ matrix:
   include:
     # jobs are ordered in a specific way to get Travis results faster (first
     # execute the fastest jobs, then the slowest and finally the jobs that can fail)
-    - php: 7.0
-      env: CHECK_PHP_SYNTAX="yes"
-      env: SYMFONY_VERSION="3.0.*"
-    - php: 5.6
-      env: SYMFONY_VERSION="2.3.*"
-    - php: 5.6
-      env: SYMFONY_VERSION="2.7.*"
-    - php: 5.6
-      env: SYMFONY_VERSION="2.8.*"
-    - php: 5.4
-      env: COMPOSER_FLAGS="--prefer-lowest"
-      env: SYMFONY_VERSION="2.8.*"
-    - php: hhvm
-      env: SYMFONY_VERSION="2.8.*"
-    - php: 7.0
-      env: SYMFONY_VERSION="3.0.*"
-      env: ENABLE_CODE_COVERAGE="true"
-    - php: 5.6
-      env: TWIG_VERSION="2.0.x-dev"
+    - { php: 7.0,     env: 'SYMFONY_VERSION="3.2.*" CHECK_PHP_SYNTAX="yes"' }
+    - { php: 5.6,     env: 'SYMFONY_VERSION="2.3.*"' }
+    - { php: 5.6,     env: 'SYMFONY_VERSION="2.8.*" TWIG_VERSION="^1.0"' }
+    - { php: 7.0,     env: 'SYMFONY_VERSION="2.8.*" TWIG_VERSION="^2.0"' }
+    - { php: 7.0,     env: 'SYMFONY_VERSION="3.2.*" TWIG_VERSION="^2.0"' }
+    - { php: 7.0,     env: 'SYMFONY_VERSION="3.2.*" ENABLE_CODE_COVERAGE="true"' }
+    - { php: 7.0,     env: 'SYMFONY_VERSION="dev-master" ENABLE_CODE_COVERAGE="true"' }
+    - { php: nightly, env: 'SYMFONY_VERSION="2.8.*"' }
   allow_failures:
-    - php: hhvm
-    - env: TWIG_VERSION="2.0.x-dev"
-    - env: ENABLE_CODE_COVERAGE="true"
+    - php: nightly
+    - env:
+        - SYMFONY_VERSION="dev-master"
 
 before_install:
-  - if [[ "SYMFONY_VERSION" == "2.8.*" || "SYMFONY_VERSION" == "3.0.*" ]]; then export SYMFONY_DEPRECATIONS_HELPER="strict"; fi;
-  - composer selfupdate
   - if [[ "$SYMFONY_VERSION" != "" ]]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
   - if [[ "$TWIG_VERSION" != "" ]]; then composer require "twig/twig:${TWIG_VERSION}" --no-update; fi;
   - if [[ "$ENABLE_CODE_COVERAGE" != "true" && "$TRAVIS_PHP_VERSION" != hhvm ]]; then phpenv config-rm xdebug.ini; fi;
 
 install:
   - if [[ "$CHECK_PHP_SYNTAX" == "yes" ]]; then curl http://get.sensiolabs.org/php-cs-fixer.phar -o php-cs-fixer; fi;
-  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+  - composer update --prefer-dist --no-interaction
   - if [[ "$ENABLE_CODE_COVERAGE" == "true" ]]; then composer require --dev satooshi/php-coveralls; fi
 
 script:

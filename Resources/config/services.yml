@@ -2,8 +2,8 @@ services:
     orbitale_cms.listeners.layouts:
         class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
         arguments:
-            config: '%orbitale_cms.layouts%'
-            templating: "@templating"
+            - '%orbitale_cms.layouts%'
+            - "@templating"
         tags:
           - { name: kernel.event_subscriber }
 

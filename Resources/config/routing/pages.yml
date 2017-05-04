@@ -1,0 +1,7 @@
+orbitale_cms_page:
+    path: /{slugs}
+    requirements:
+        slugs: "([a-zA-Z0-9_-]+\/?)*"
+    defaults:
+        _controller: OrbitaleBundle:Page:index
+        slugs: ''

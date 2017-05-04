@@ -12,7 +12,6 @@
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
 use Orbitale\Bundle\CmsBundle\Entity\Page;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -24,8 +23,6 @@ class PageController extends AbstractCmsController
     protected $request;
 
     /**
-     * @Route("/{slugs}", name="orbitale_cms_page", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)*"}, defaults={"slugs": ""})
-     *
      * @param Request     $request
      * @param string      $slugs
      * @param string|null $_locale

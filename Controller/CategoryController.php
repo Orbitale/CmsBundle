@@ -11,15 +11,12 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends AbstractCmsController
 {
     /**
-     * @Route("/{slugs}", name="orbitale_cms_category", requirements={"slugs": "([a-zA-Z0-9_-]+\/?)+"})
-     *
      * @param string  $slugs
      * @param Request $request
      *

@@ -39,5 +39,10 @@
             "email": "alex@orbitale.io",
             "homepage": "http://www.orbitale.io/"
         }
-    ]
+    ],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
+    }
 }

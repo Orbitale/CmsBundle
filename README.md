@@ -4,7 +4,8 @@
 [![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=master)](https://travis-ci.org/Orbitale/CmsBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/?branch=master)
 
-:warning: You're looking at the 2.x branch documentation.<br>
+:warning: You're looking at the 3.x branch documentation.<br>
+If you need information about 2.x, go [here](https://github.com/Orbitale/CmsBundle/tree/2.x)
 If you need information about 1.x, go [here](https://github.com/Orbitale/CmsBundle/tree/1.x)
 
 ##### Index
@@ -32,8 +33,8 @@ This bundle is a simple helper to create a very simple CMS based on a classic sy
 
 ## Requirements
 
-* PHP 5.4+
-* Symfony 2.3+ or 3.0+
+* PHP 7.0+
+* Symfony 3.0+
 * Doctrine ORM
 
 ## Install
@@ -81,13 +82,11 @@ Example:
 ```yml
 # app/config/routing.yml
 orbitale_cms_category:
-    resource: "@OrbitaleCmsBundle/Controller/CategoryController.php"
-    type:     annotation
+    resource: "@OrbitaleCmsBundle/Resources/config/routing/categories.yaml"
     prefix:   /category/
-
+    
 orbitale_cms_page:
-    resource: "@OrbitaleCmsBundle/Controller/PageController.php"
-    type:     annotation
+    resource: "@OrbitaleCmsBundle/Resources/config/routing/pages.yaml"
     prefix:   /page/
 ```
 
@@ -386,7 +385,7 @@ It uses Doctrine Result Cache so you need to activate it:
 ```yml
     doctrine:
         orm:
-            result_cache_driver: apc
+            result_cache_driver: apcu
 ```
 
 You can read more about DoctrineCache <a href="http://symfony.com/doc/current/reference/configuration/doctrine.html#caching-drivers">here</a>.

@@ -36,28 +36,11 @@ class AbstractTestCase extends WebTestCase
     }
 
     /**
-     * @param array $options
-     */
-    protected static function bootKernel(array $options = [])
-    {
-        if (method_exists('Symfony\Bundle\FrameworkBundle\Test\KernelTestCase', 'bootKernel')) {
-            parent::bootKernel($options);
-        } else {
-            if (null !== static::$kernel) {
-                static::$kernel->shutdown();
-            }
-            static::$kernel = static::createKernel($options);
-            static::$kernel->boot();
-            static::$kernel;
-        }
-    }
-
-    /**
      * @param array $options An array of options to pass to the createKernel class
      *
      * @return KernelInterface
      */
-    protected static function getKernel(array $options = [])
+    protected static function getKernel(array $options = []): KernelInterface
     {
         static::bootKernel($options);
 
@@ -69,9 +52,10 @@ class AbstractTestCase extends WebTestCase
      *
      * @return Page
      */
-    protected function createPage(array $values = [])
+    protected function createPage(array $values = []): Page
     {
         $page = new Page();
+
         foreach ($values as $key => $value) {
             $page->{'set'.ucfirst($key)}($value);
         }

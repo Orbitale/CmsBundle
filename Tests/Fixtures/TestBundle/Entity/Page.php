@@ -29,7 +29,7 @@ class Page extends BasePage
     protected $id;
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getId()
     {

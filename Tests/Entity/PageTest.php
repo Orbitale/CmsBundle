@@ -17,17 +17,19 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class PageTest extends AbstractTestCase
 {
-    public function getDummyPage()
+    public function getDummyPage(): Page
     {
         $page = new Page();
 
-        return $page
+        $page
             ->setHomepage(true)
             ->setSlug('home')
             ->setTitle('My homepage')
             ->setHost('localhost')
             ->setContent('Hello world!')
-            ;
+        ;
+
+        return $page;
     }
 
     public function testOneHomepage()

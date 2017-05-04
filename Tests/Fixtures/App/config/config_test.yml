@@ -2,12 +2,13 @@ parameters:
     database_path: '%kernel.root_dir%/../../../build/test.db'
 
 framework:
-    secret:          secret
-    test:            ~
-    router:          { resource: "%kernel.root_dir%/config/routing.yml" }
-    templating:      { engines: ['twig'] }
+    test:       ~
+    assets:     ~
+    translator: { fallbacks:['fr'] }
+    router:     { resource: "%kernel.root_dir%/config/routing.yml" }
+    templating: { engines: ['twig'] }
     session:
-        storage_id: session.storage.filesystem
+        storage_id: session.storage.mock_file
 
 doctrine:
     dbal:

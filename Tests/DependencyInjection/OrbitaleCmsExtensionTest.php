@@ -11,11 +11,14 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\DependencyInjection;
 
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\App\Stub\OrbitaleCmsExtensionStub;
+use Orbitale\Bundle\CmsBundle\DependencyInjection\OrbitaleCmsExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Yaml;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
-class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
+class OrbitaleCmsExtensionTest extends TestCase
 {
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
@@ -25,12 +28,12 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
 
-        $ext = new OrbitaleCmsExtensionStub(true);
+        $ext = new OrbitaleCmsExtension();
 
         $ext->load([
             'orbitale_cms' => [
                 'page_class'     => 'inexistent_page_class',
-                'category_class' => 'Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category',
+                'category_class' => Category::class,
             ],
         ], $builder);
     }
@@ -43,11 +46,11 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
 
-        $ext = new OrbitaleCmsExtensionStub(true);
+        $ext = new OrbitaleCmsExtension();
 
         $ext->load([
             'orbitale_cms' => [
-                'page_class'     => 'Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page',
+                'page_class'     => Page::class,
                 'category_class' => 'inexistent_category_class',
             ],
         ], $builder);
@@ -63,35 +66,18 @@ class OrbitaleCmsExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $builder = new ContainerBuilder();
 
-        $ext = new OrbitaleCmsExtensionStub(true);
+        $ext = new OrbitaleCmsExtension();
 
         $ext->load($config, $builder);
+
+        static::assertArrayHasKey('orbitale_cms', $expected);
 
         foreach ($expected['orbitale_cms'] as $key => $expectedValue) {
             static::assertEquals($expectedValue, $builder->getParameter('orbitale_cms.'.$key));
         }
     }
 
-    /**
-     * @dataProvider provideYamlConfiguration
-     *
-     * @param $config
-     * @param $expected
-     */
-    public function testYamlConfigurationSymfony2($config, $expected)
-    {
-        $builder = new ContainerBuilder();
-
-        $ext = new OrbitaleCmsExtensionStub(false);
-
-        $ext->load($config, $builder);
-
-        foreach ($expected['orbitale_cms'] as $key => $expectedValue) {
-            static::assertSame($expectedValue, $builder->getParameter('orbitale_cms.'.$key));
-        }
-    }
-
-    public function provideYamlConfiguration()
+    public function provideYamlConfiguration(): array
     {
         $dir = __DIR__.'/../Fixtures/App/extension_test/';
 

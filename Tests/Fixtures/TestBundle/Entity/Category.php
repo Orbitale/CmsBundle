@@ -29,7 +29,7 @@ class Category extends BaseCategory
     protected $id;
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getId()
     {

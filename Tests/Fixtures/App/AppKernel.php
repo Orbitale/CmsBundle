@@ -19,10 +19,8 @@ class AppKernel extends Kernel
     {
         return [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
             new Orbitale\Bundle\CmsBundle\OrbitaleCmsBundle(),
             new Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\TestBundle(),

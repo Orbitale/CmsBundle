@@ -4,6 +4,7 @@ parameters:
 framework:
     test:       ~
     assets:     ~
+    secret:     secret
     translator: { fallbacks:['fr'] }
     router:     { resource: "%kernel.root_dir%/config/routing.yml" }
     templating: { engines: ['twig'] }

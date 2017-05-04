@@ -3,5 +3,5 @@ orbitale_cms_page:
     requirements:
         slugs: "([a-zA-Z0-9_-]+\/?)*"
     defaults:
-        _controller: OrbitaleBundle:Page:index
+        _controller: OrbitaleCmsBundle:Page:index
         slugs: ''

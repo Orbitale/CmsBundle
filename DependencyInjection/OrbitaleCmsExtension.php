@@ -49,18 +49,5 @@ class OrbitaleCmsExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        if ($this->isSymfony3()) {
-            $loader->load('services_v3.yml');
-        } else {
-            $loader->load('services_v2.yml');
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isSymfony3()
-    {
-        return 3 === Kernel::MAJOR_VERSION;
     }
 }

@@ -21,3 +21,19 @@ services:
             - "%orbitale_cms.category_class%"
         tags:
             - { name: doctrine.event_subscriber }
+
+    orbitale_cms.page_repository:
+        class: Orbitale\Bundle\CmsBundle\Repository\PageRepository
+        factory: ['@doctrine.orm.entity_manager', 'getRepository']
+        arguments:
+            - "%orbitale_cms.page_class%"
+        calls:
+            - [ 'setConfig', ['%orbitale_cms.cache%'] ]
+
+    orbitale_cms.category_repository:
+        class: Orbitale\Bundle\CmsBundle\Repository\CategoryRepository
+        factory: ['@doctrine.orm.entity_manager', 'getRepository']
+        arguments:
+            - "%orbitale_cms.category_class%"
+        calls:
+            - [ 'setConfig', ['%orbitale_cms.cache%'] ]

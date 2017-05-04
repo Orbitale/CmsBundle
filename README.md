@@ -1,10 +1,11 @@
 
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/dcb6d7ad-83c6-458d-acd6-8dde8b8020bc/mini.png)](https://insight.sensiolabs.com/projects/dcb6d7ad-83c6-458d-acd6-8dde8b8020bc)
-[![Coverage Status](https://coveralls.io/repos/Orbitale/CmsBundle/badge.svg?branch=master)](https://coveralls.io/r/Orbitale/CmsBundle?branch=master)
-[![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=master)](https://travis-ci.org/Orbitale/CmsBundle)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/Orbitale/CmsBundle/badge.svg?branch=2.x)](https://coveralls.io/r/Orbitale/CmsBundle?branch=2.x)
+[![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=2.x)](https://travis-ci.org/Orbitale/CmsBundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/badges/quality-score.png?b=2.x)](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/?branch=2.x)
 
 :warning: You're looking at the 2.x branch documentation.<br>
+If you need information about 3.x, go [here](https://github.com/Orbitale/CmsBundle/tree/master)
 If you need information about 1.x, go [here](https://github.com/Orbitale/CmsBundle/tree/1.x)
 
 ##### Index

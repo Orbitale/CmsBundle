@@ -1,8 +1,0 @@
-
-orbitale_cms_page:
-    resource: "@OrbitaleCmsBundle/Resources/config/routing/pages.yml"
-    prefix:   /page/
-
-orbitale_cms_category:
-    resource: "@OrbitaleCmsBundle/Resources/config/routing/categories.yml"
-    prefix:   /category/

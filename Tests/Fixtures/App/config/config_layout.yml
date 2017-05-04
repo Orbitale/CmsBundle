@@ -1,7 +1,0 @@
-imports:
-    - { resource: config_test.yml }
-
-orbitale_cms:
-    layouts:
-        front: { resource: "::test_layout.html.twig" }
-        hostSpecific: { resource: "::test_layout_host.html.twig", host: "local.host" }

@@ -23,7 +23,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
         /** @var \Twig_Environment $twig */
         $twig = $client->getContainer()->get('twig');
-        $twig->resolveTemplate('::test_layout.html.twig');
+        $twig->resolveTemplate('test_layout.html.twig');
 
         $crawler = $client->request('GET', '/page/');
 
@@ -42,7 +42,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
     /**
      * @expectedException \Twig_Error_Loader
-     * @expectedExceptionMessage Unable to find template ::this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout.
+     * @expectedExceptionMessage Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout.
      */
     public function testLayoutWrong()
     {

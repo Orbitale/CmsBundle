@@ -1,6 +1,0 @@
-imports:
-    - { resource: config_test.yml }
-
-orbitale_cms:
-    layouts:
-        front: { resource: "::this_layout_does_not_exist.html.twig" }

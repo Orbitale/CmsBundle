@@ -81,8 +81,8 @@ class OrbitaleCmsExtensionTest extends TestCase
     {
         $dir = __DIR__.'/../Fixtures/App/extension_test/';
 
-        $configFiles = glob($dir.'config_*.yml');
-        $resultFiles = glob($dir.'result_*.yml');
+        $configFiles = glob($dir.'config_*.yaml');
+        $resultFiles = glob($dir.'result_*.yaml');
 
         sort($configFiles);
         sort($resultFiles);

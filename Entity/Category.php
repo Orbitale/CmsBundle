@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 abstract class Category
 {
     /**
-     * @return int
+     * @return int|string
      */
     abstract public function getId();
 
@@ -100,7 +100,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function setName($name)
+    public function setName(string $name): Category
     {
         $this->name = $name;
 
@@ -120,7 +120,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function setDescription($description)
+    public function setDescription(string $description = null): Category
     {
         $this->description = $description;
 
@@ -140,7 +140,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug = null): Category
     {
         $this->slug = $slug;
 
@@ -160,7 +160,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled = null): Category
     {
         $this->enabled = $enabled;
 
@@ -180,7 +180,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function setParent(Category $parent = null)
+    public function setParent(Category $parent = null): Category
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
@@ -202,7 +202,7 @@ abstract class Category
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -220,7 +220,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function addChild(Category $category)
+    public function addChild(Category $category): Category
     {
         $this->children->add($category);
 
@@ -236,7 +236,7 @@ abstract class Category
      *
      * @return Category
      */
-    public function removeChild(Category $child)
+    public function removeChild(Category $child): Category
     {
         $this->children->removeElement($child);
 
@@ -248,7 +248,7 @@ abstract class Category
      *
      * @return string
      */
-    public function getTree($separator = '/')
+    public function getTree(string $separator = '/'): string
     {
         $tree = '';
 

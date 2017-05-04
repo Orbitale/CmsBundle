@@ -47,7 +47,7 @@ abstract class AbstractCmsController extends Controller
         $previousElement = null;
 
         foreach ($slugs as $slug) {
-            $element = isset($elements[$slug]) ? $elements[$slug] : null;
+            $element = $elements[$slug] ?? null;
             $match   = false;
             if ($element) {
                 // Only for the first iteration

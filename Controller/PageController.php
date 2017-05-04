@@ -29,7 +29,7 @@ class PageController extends AbstractCmsController
      *
      * @return Response
      */
-    public function indexAction(Request $request, $slugs = '', $_locale = null)
+    public function indexAction(Request $request, string $slugs = '', string $_locale = null): Response
     {
         if (preg_match('~/$~', $slugs)) {
             return $this->redirect($this->generateUrl('orbitale_cms_page', ['slugs' => rtrim($slugs, '/')]));
@@ -57,7 +57,7 @@ class PageController extends AbstractCmsController
             return $this->redirect($this->generateUrl('orbitale_cms_page', $params));
         }
 
-        return $this->render('OrbitaleCmsBundle:Front:index.html.twig', [
+        return $this->render('@OrbitaleCms/Front/index.html.twig', [
             'pages' => $pages,
             'page'  => $currentPage,
         ]);
@@ -95,7 +95,7 @@ class PageController extends AbstractCmsController
      *
      * @return Page
      */
-    protected function getCurrentPage(array $pages, array $slugsArray)
+    protected function getCurrentPage(array $pages, array $slugsArray): Page
     {
         if (count($pages) === count($slugsArray)) {
             $currentPage = $this->getFinalTreeElement($slugsArray, $pages);

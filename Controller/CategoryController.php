@@ -22,7 +22,7 @@ class CategoryController extends AbstractCmsController
      *
      * @return Response
      */
-    public function indexAction($slugs = '', Request $request)
+    public function indexAction(string $slugs = '', Request $request): Response
     {
         if (preg_match('#/$#', $slugs)) {
             return $this->redirect($this->generateUrl('orbitale_cms_category', ['slugs' => rtrim($slugs, '/')]));
@@ -50,7 +50,7 @@ class CategoryController extends AbstractCmsController
         )
         ;
 
-        return $this->render('OrbitaleCmsBundle:Front:category.html.twig', [
+        return $this->render('@OrbitaleCms/Front/category.html.twig', [
             'category'   => $category,
             'categories' => $categories,
             'pages'      => $pages,

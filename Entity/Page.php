@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 abstract class Page
 {
     /**
-     * @return int
+     * @return int|string
      */
     abstract public function getId();
 
@@ -147,7 +147,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setTitle($title)
+    public function setTitle(string $title): Page
     {
         $this->title = $title;
 
@@ -167,7 +167,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug): Page
     {
         $this->slug = $slug;
 
@@ -187,7 +187,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setContent($content)
+    public function setContent(string $content = null): Page
     {
         $this->content = $content;
 
@@ -207,7 +207,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setMetaDescription($metaDescription)
+    public function setMetaDescription(string $metaDescription = null): Page
     {
         $this->metaDescription = $metaDescription;
 
@@ -227,7 +227,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setMetaTitle($metaTitle)
+    public function setMetaTitle(string $metaTitle = null): Page
     {
         $this->metaTitle = $metaTitle;
 
@@ -247,7 +247,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setMetaKeywords($metaKeywords)
+    public function setMetaKeywords(string $metaKeywords = null): Page
     {
         $this->metaKeywords = $metaKeywords;
 
@@ -267,7 +267,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setCategory($category)
+    public function setCategory(Category $category = null): Page
     {
         $this->category = $category;
 
@@ -287,7 +287,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setCss($css)
+    public function setCss(string $css = null): Page
     {
         $this->css = $css;
 
@@ -307,7 +307,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setJs($js)
+    public function setJs(string $js = null): Page
     {
         $this->js = $js;
 
@@ -317,7 +317,7 @@ abstract class Page
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -325,7 +325,7 @@ abstract class Page
     /**
      * @return bool
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -335,7 +335,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setEnabled($enabled)
+    public function setEnabled(bool $enabled): Page
     {
         $this->enabled = $enabled;
 
@@ -355,7 +355,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setParent(Page $parent = null)
+    public function setParent(Page $parent = null): Page
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
@@ -388,7 +388,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function addChild(Page $page)
+    public function addChild(Page $page): Page
     {
         $this->children->add($page);
 
@@ -404,7 +404,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function removeChild(Page $page)
+    public function removeChild(Page $page): Page
     {
         $this->children->removeElement($page);
 
@@ -414,7 +414,7 @@ abstract class Page
     /**
      * @return bool
      */
-    public function isHomepage()
+    public function isHomepage(): bool
     {
         return $this->homepage;
     }
@@ -424,7 +424,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setHomepage($homepage)
+    public function setHomepage(bool $homepage): Page
     {
         $this->homepage = $homepage;
 
@@ -444,7 +444,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setHost($host)
+    public function setHost(string $host = null): Page
     {
         $this->host = $host;
 
@@ -464,7 +464,7 @@ abstract class Page
      *
      * @return Page
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale = null): Page
     {
         $this->locale = $locale;
 
@@ -476,7 +476,7 @@ abstract class Page
      *
      * @return string
      */
-    public function getTree($separator = '/')
+    public function getTree(string $separator = '/')
     {
         $tree = '';
 

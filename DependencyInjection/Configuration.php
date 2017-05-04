@@ -14,6 +14,8 @@ namespace Orbitale\Bundle\CmsBundle\DependencyInjection;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Orbitale\Bundle\CmsBundle\Entity\Page;
+use Orbitale\Bundle\CmsBundle\Entity\Category;
 
 /**
  * This is the class that validates and merges configuration from your app/config files.
@@ -38,10 +40,10 @@ class Configuration implements ConfigurationInterface
                     ->validate()
                         ->ifString()
                         ->then(function($value) {
-                            if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Page', true)) {
+                            if (!class_exists($value) || !is_a($value, Page::class, true)) {
                                 throw new InvalidConfigurationException(sprintf(
                                     'Page class must be a valid class extending %s. "%s" given.',
-                                    'Orbitale\Bundle\CmsBundle\Entity\Page', $value
+                                    Page::class, $value
                                 ));
                             }
 
@@ -54,10 +56,10 @@ class Configuration implements ConfigurationInterface
                     ->validate()
                         ->ifString()
                         ->then(function($value) {
-                            if (!class_exists($value) || !is_a($value, 'Orbitale\Bundle\CmsBundle\Entity\Category', true)) {
+                            if (!class_exists($value) || !is_a($value, Category::class, true)) {
                                 throw new InvalidConfigurationException(sprintf(
                                     'Category class must be a valid class extending %s. "%s" given.',
-                                    'Orbitale\Bundle\CmsBundle\Entity\Category', $value
+                                    Category::class, $value
                                 ));
                             }
 
@@ -68,7 +70,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('layouts')
                     ->defaultValue([
                         'front' => [
-                            'resource' => 'OrbitaleCmsBundle::default_layout.html.twig',
+                            'resource' => '@OrbitaleCms/default_layout.html.twig',
                             'pattern' => '',
                         ],
                     ])

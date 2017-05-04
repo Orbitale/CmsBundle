@@ -26,7 +26,7 @@ class PageRepository extends AbstractCmsRepository
      *
      * @return Paginator
      */
-    public function findByCategory(Category $category, $order, $orderBy, $page, $limit)
+    public function findByCategory(Category $category, $order, $orderBy, $page, $limit): Paginator
     {
         $qb = $this->createQueryBuilder('page')
             ->where('page.category = :category')

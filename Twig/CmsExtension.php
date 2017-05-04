@@ -23,14 +23,6 @@ class CmsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInt
         $this->designConfig = $designConfig;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
-    {
-        return 'orbitale_cms_twig_extension';
-    }
-
     public function getGlobals()
     {
         return [

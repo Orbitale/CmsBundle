@@ -28,7 +28,7 @@
             <span class="{{ orbitale_cms_design.breadcrumbs_current_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }} - {{ page.title }}</span>
         {% else %}
             <a href="{{ path('orbitale_cms_page') }}" class="{{ orbitale_cms_design.breadcrumbs_link_class }}">{{ 'home' | trans({}, 'OrbitaleCms') }}</a>
-            {% for key, breadcrumbPage in pages|reverse %}
+            {% for key, breadcrumbPage in pages %}
 
                 <span class="{{ orbitale_cms_design.breadcrumbs_separator_class }}">{{ orbitale_cms_design.breadcrumbs_separator }}</span>
 

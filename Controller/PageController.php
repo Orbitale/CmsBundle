@@ -73,16 +73,10 @@ class PageController extends AbstractCmsController
      */
     protected function getPages(array $slugsArray = [])
     {
-        /** @var Page[] $p */
-        $p = $this->get('orbitale_cms.page_repository')
+        /** @var Page[] $pages */
+        $pages = $this->get('orbitale_cms.page_repository')
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
         ;
-
-        // re-order pages by $slugsArray
-        $pages = [];
-        foreach ($slugsArray as $key => $value) {
-            $pages[$value] = $p[$value];
-        }
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
             throw $this->createNotFoundException(count($slugsArray)

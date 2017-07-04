@@ -111,11 +111,15 @@ class PageRepository extends AbstractCmsRepository
         }
 
         $resultsSortedBySlug = [];
-
         foreach ($results as $page) {
             $resultsSortedBySlug[$page->getSlug()] = $page;
         }
 
-        return $resultsSortedBySlug;
+        $pages = [];
+        foreach ($slugs as $key => $value) {
+            $pages[$value] = $resultsSortedBySlug[$value];
+        }
+
+        return array_reverse($pages);
     }
 }

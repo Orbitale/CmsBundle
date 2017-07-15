@@ -30,10 +30,12 @@ class PageRepository extends AbstractCmsRepository
     {
         $qb = $this->createQueryBuilder('page')
             ->where('page.category = :category')
+            ->andWhere('page.enabled = :enabled')
             ->orderBy('page.'.$orderBy, $order)
             ->setMaxResults($limit)
             ->setFirstResult($limit * ($page-1))
             ->setParameter('category', $category)
+            ->setParameter('enabled', true)
         ;
 
         return new Paginator($qb->getQuery()->useResultCache($this->cacheEnabled, $this->cacheTtl));

@@ -34,12 +34,15 @@ class CategoryController extends AbstractCmsController
 
         $category = $this->getFinalTreeElement($slugsArray, $categories);
 
-        $validOrderFields = ['createdAt', 'title', 'content'];
+        $validOrderFields = ['createdAt', 'id', 'title', 'content'];
 
         $limit   = $request->query->get('limit', 10);
         $page    = $request->query->get('page', 1);
-        $orderBy = $request->query->get('order_by', current($validOrderFields));
         $order   = $request->query->get('order', 'asc');
+        $orderBy = $request->query->get('order_by', current($validOrderFields));
+        if (!in_array($orderBy, $validOrderFields, true)) {
+            $orderBy = current($validOrderFields);
+        }
 
         $pages = $this->get('orbitale_cms.page_repository')->findByCategory(
             $category,
@@ -47,8 +50,7 @@ class CategoryController extends AbstractCmsController
             $orderBy,
             $page,
             $limit
-        )
-        ;
+        );
 
         return $this->render('@OrbitaleCms/Front/category.html.twig', [
             'category'   => $category,

@@ -120,14 +120,14 @@ class PageControllerTest extends AbstractTestCase
         $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
-        $parent = $this->createPage([
+        $root = $this->createPage([
             'homepage' => true,
             'enabled'  => true,
             'slug'     => 'root',
             'title'    => 'Root',
             'content'  => 'The root page',
         ]);
-        $em->persist($parent);
+        $em->persist($root);
         $em->flush();
 
         $childOne = $this->createPage([
@@ -135,7 +135,7 @@ class PageControllerTest extends AbstractTestCase
             'slug'    => 'first-level',
             'title'   => 'First level',
             'content' => 'This page is only available in the first level',
-            'parent'  => $em->find(get_class($parent), $parent),
+            'parent'  => $root,
         ]);
         $em->persist($childOne);
         $em->flush();
@@ -145,13 +145,13 @@ class PageControllerTest extends AbstractTestCase
             'slug'    => 'second-level',
             'title'   => 'Disabled Page',
             'content' => 'This page should render a 404 error',
-            'parent'  => $em->find(get_class($parent), $parent),
+            'parent'  => $root,
         ]);
         $em->persist($childTwoDisabled);
         $em->flush();
 
         // Repeat with the homepage directly in the url
-        $crawler = $client->request('GET', '/page/'.$childOne->getTree());
+        $crawler = $client->request('GET', '/page/root/first-level');
         static::assertEquals($childOne->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($childOne->getTitle(), trim($crawler->filter('article > h1')->html()));
         static::assertContains($childOne->getContent(), trim($crawler->filter('article')->html()));

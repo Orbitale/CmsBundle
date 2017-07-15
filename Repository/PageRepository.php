@@ -71,6 +71,12 @@ class PageRepository extends AbstractCmsRepository
                 ->setParameter('homepage', true)
                 ->setMaxResults(1)
             ;
+        } elseif (1 === count($slugs)) {
+            $qb
+                ->andWhere('page.slug = :slug')
+                ->setParameter('slug', reset($slugs))
+                ->setMaxResults(1)
+            ;
         } else {
             $qb
                 ->andWhere('page.slug IN ( :slugs )')
@@ -106,7 +112,11 @@ class PageRepository extends AbstractCmsRepository
             ->getResult()
         ;
 
-        // If we're looking for a homepage, only get the last result (matching more properties).
+        if (0 === count($results)) {
+            return $results;
+        }
+
+        // If we're looking for a homepage, only get the first result (matching more properties).
         if (true === $searchForHomepage && count($results) > 0) {
             reset($results);
             $results = [$results[0]];
@@ -117,11 +127,20 @@ class PageRepository extends AbstractCmsRepository
             $resultsSortedBySlug[$page->getSlug()] = $page;
         }
 
-        $pages = [];
-        foreach ($slugs as $key => $value) {
-            $pages[$value] = $resultsSortedBySlug[$value];
+        $pages = $resultsSortedBySlug;
+
+        if (count($slugs) > 0) {
+            $pages = [];
+            foreach ($slugs as $value) {
+                if (!array_key_exists($value, $resultsSortedBySlug)) {
+                    // Means at least one page in the tree is not enabled
+                    return [];
+                }
+
+                $pages[$value] = $resultsSortedBySlug[$value];
+            }
         }
 
-        return array_reverse($pages);
+        return $pages;
     }
 }

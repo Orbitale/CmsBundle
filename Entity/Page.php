@@ -386,7 +386,6 @@ abstract class Page
         return $this;
     }
 
-
     /**
      * @return Page[]|ArrayCollection
      */

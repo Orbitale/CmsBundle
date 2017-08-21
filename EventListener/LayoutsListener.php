@@ -11,7 +11,7 @@
 
 namespace Orbitale\Bundle\CmsBundle\EventListener;
 
-use Symfony\Bridge\Twig\TwigEngine;
+use Symfony\Bundle\TwigBundle\TwigEngine;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -26,12 +26,12 @@ class LayoutsListener implements EventSubscriberInterface
     /**
      * @var TwigEngine
      */
-    private $templating;
+    private $twigEngine;
 
-    public function __construct(array $layouts, TwigEngine $templating)
+    public function __construct(array $layouts, TwigEngine $twigEngine)
     {
         $this->layouts    = $layouts;
-        $this->templating = $templating;
+        $this->twigEngine = $twigEngine;
     }
 
     /**
@@ -86,7 +86,7 @@ class LayoutsListener implements EventSubscriberInterface
             } while (null === $finalLayout && count($layouts));
         }
 
-        if (null === $finalLayout || !$this->templating->exists($finalLayout['resource'])) {
+        if (null === $finalLayout || !$this->twigEngine->exists($finalLayout['resource'])) {
             throw new \Twig_Error_Loader(sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
                 $finalLayout['resource'], $finalLayout['name']

@@ -323,6 +323,18 @@ abstract class Page
     }
 
     /**
+     * @param \DateTime $date
+     *
+     * @return Page
+     */
+    public function setCreatedAt(\DateTime $date): Page
+    {
+        $this->createdAt = $date;
+
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isEnabled(): bool

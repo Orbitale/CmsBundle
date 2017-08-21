@@ -208,6 +208,18 @@ abstract class Category
     }
 
     /**
+     * @param \DateTime $date
+     *
+     * @return Category
+     */
+    public function setCreatedAt(\DateTime $date): Category
+    {
+        $this->createdAt = $date;
+
+        return $this;
+    }
+
+    /**
      * @return Category[]|ArrayCollection
      */
     public function getChildren()
@@ -239,6 +251,44 @@ abstract class Category
     public function removeChild(Category $child): Category
     {
         $this->children->removeElement($child);
+
+        return $this;
+    }
+
+    /**
+     * @return Category[]|ArrayCollection
+     */
+    public function getPages()
+    {
+        return $this->pages;
+    }
+
+    /**
+     * @param Page $page
+     *
+     * @return Category
+     */
+    public function addPage(Page $page): Category
+    {
+        $this->children->add($page);
+
+        if ($page->getCategory() !== $this) {
+            $page->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Page $page
+     *
+     * @return Category
+     */
+    public function removePage(Page $page): Category
+    {
+        $this->children->removeElement($page);
+
+        $page->setCategory(null);
 
         return $this;
     }

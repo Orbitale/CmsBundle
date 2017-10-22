@@ -3,7 +3,7 @@ services:
         class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
         arguments:
             - '%orbitale_cms.layouts%'
-            - "@templating"
+            - '@twig'
         tags:
           - { name: kernel.event_subscriber }
 
@@ -17,8 +17,8 @@ services:
         class: Orbitale\Bundle\CmsBundle\EventListener\DoctrineMappingListener
         public: false
         arguments:
-            - "%orbitale_cms.page_class%"
-            - "%orbitale_cms.category_class%"
+            - '%orbitale_cms.page_class%'
+            - '%orbitale_cms.category_class%'
         tags:
             - { name: doctrine.event_subscriber }
 
@@ -26,7 +26,7 @@ services:
         class: Orbitale\Bundle\CmsBundle\Repository\PageRepository
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
-            - "%orbitale_cms.page_class%"
+            - '%orbitale_cms.page_class%'
         calls:
             - [ 'setConfig', ['%orbitale_cms.cache%'] ]
 
@@ -34,6 +34,6 @@ services:
         class: Orbitale\Bundle\CmsBundle\Repository\CategoryRepository
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
-            - "%orbitale_cms.category_class%"
+            - '%orbitale_cms.category_class%'
         calls:
             - [ 'setConfig', ['%orbitale_cms.cache%'] ]

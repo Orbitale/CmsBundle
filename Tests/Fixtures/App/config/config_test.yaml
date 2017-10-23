@@ -7,7 +7,6 @@ framework:
     secret:     secret
     translator: { fallbacks:['fr'] }
     router:     { resource: "%kernel.root_dir%/config/routing.yaml" }
-    templating: { engines: ['twig'] }
     session:
         storage_id: session.storage.mock_file
 

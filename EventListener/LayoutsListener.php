@@ -86,7 +86,7 @@ class LayoutsListener implements EventSubscriberInterface
             } while (null === $finalLayout && count($layouts));
         }
 
-        if (null === $finalLayout || !$this->twig->exists($finalLayout['resource'])) {
+        if (null === $finalLayout || !$this->twig->getLoader()->exists($finalLayout['resource'])) {
             throw new \Twig_Error_Loader(sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
                 $finalLayout['resource'], $finalLayout['name']

@@ -9,7 +9,7 @@
         "php": "^7.0",
         "behat/transliterator": "^1.0",
         "doctrine/doctrine-bundle": "^1.5",
-        "doctrine/orm": "^2.4",
+        "doctrine/orm": "^2.4.6",
         "symfony/asset": "^3.2|^4.0",
         "symfony/config": "^3.2|^4.0",
         "symfony/framework-bundle": "^3.2.5|^4.0",

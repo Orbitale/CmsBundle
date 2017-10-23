@@ -67,3 +67,5 @@ $input = new ArrayInput(['command' => 'doctrine:schema:create']);
 $command->run($input, new ConsoleOutput());
 
 $kernel->shutdown();
+
+unset($kernel, $application, $input, $command, $databaseFile, $fs, $file);

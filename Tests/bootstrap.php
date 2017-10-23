@@ -42,7 +42,6 @@ AnnotationRegistry::registerLoader(function($class) use ($autoload) {
     return class_exists($class, false);
 });
 
-
 include __DIR__.'/Fixtures/App/AppKernel.php';
 
 $kernel = new AppKernel('test', true);

@@ -33,6 +33,11 @@
             "Orbitale\\Bundle\\CmsBundle\\": ""
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Orbitale\\Bundle\\CmsBundle\\Tests\\": "Tests"
+        }
+    },
     "authors": [
         {
             "name" : "Alexandre \"Orbitale\" Ancelet",

@@ -18,7 +18,7 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Sandor Farkas <farkas.berlin@gmail.com>
  */
-abstract class AbstractCmsRepository extends EntityRepository
+class AbstractCmsRepository extends EntityRepository
 {
     /**
      * @var bool

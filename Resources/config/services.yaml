@@ -24,6 +24,7 @@ services:
 
     orbitale_cms.page_repository:
         class: Orbitale\Bundle\CmsBundle\Repository\PageRepository
+        public: true
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - '%orbitale_cms.page_class%'
@@ -32,6 +33,7 @@ services:
 
     orbitale_cms.category_repository:
         class: Orbitale\Bundle\CmsBundle\Repository\CategoryRepository
+        public: true
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - '%orbitale_cms.category_class%'

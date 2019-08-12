@@ -11,7 +11,10 @@
 
 namespace Orbitale\Bundle\CmsBundle\Twig;
 
-class CmsExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
+
+class CmsExtension extends AbstractExtension implements GlobalsInterface
 {
     /**
      * @var array

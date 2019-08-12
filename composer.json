@@ -18,7 +18,7 @@
         "symfony/twig-bundle": "^3.2|^4.0",
         "symfony/validator": "^3.2|^4.0",
         "symfony/yaml": "^3.2|^4.0",
-        "twig/twig": "^1.34|^2.0"
+        "twig/twig": "^2.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.0",

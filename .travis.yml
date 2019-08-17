@@ -9,30 +9,21 @@ cache:
 
 env:
   global:
-    - deps="no"
     - COMPOSER_FLAGS=""
-    - TWIG_VERSION=""
     - ENABLE_CODE_COVERAGE="false"
 
 matrix:
   fast_finish: true
   include:
-    - { php: '7.0' }
     - { php: '7.1' }
     - { php: '7.2' }
-    - { php: '7.0', env: 'COMPOSER_FLAGS="--prefer-lowest"' }
+    - { php: '7.3' }
     - { php: '7.1', env: 'COMPOSER_FLAGS="--prefer-lowest"' }
     - { php: '7.2', env: 'COMPOSER_FLAGS="--prefer-lowest"' }
-    - { php: '7.0', env: 'TWIG_VERSION="^1.38" COMPOSER_FLAGS="--prefer-lowest"' }
-    - { php: '7.1', env: 'TWIG_VERSION="^1.38" COMPOSER_FLAGS="--prefer-lowest"' }
-    - { php: '7.2', env: 'TWIG_VERSION="^1.38" COMPOSER_FLAGS="--prefer-lowest"' }
-    - { php: '7.0', env: 'TWIG_VERSION="^1.38"' }
-    - { php: '7.1', env: 'TWIG_VERSION="^1.38"' }
-    - { php: '7.2', env: 'TWIG_VERSION="^1.38"' }
-    - { php: '7.2', env: 'ENABLE_CODE_COVERAGE="true"' }
+    - { php: '7.3', env: 'COMPOSER_FLAGS="--prefer-lowest"' }
+    - { php: '7.3', env: 'ENABLE_CODE_COVERAGE="true"' }
 
 before_install:
-  - if [[ "$TWIG_VERSION" != "" ]]; then composer require "twig/twig:${TWIG_VERSION}" --no-update; fi;
   - if [[ "$ENABLE_CODE_COVERAGE" != "true" ]]; then phpenv config-rm xdebug.ini; fi;
 
 install:

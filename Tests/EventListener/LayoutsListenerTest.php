@@ -42,7 +42,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
     /**
      * @expectedException \Twig_Error_Loader
-     * @expectedExceptionMessage Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout.
+     * @expectedExceptionMessage Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout in "this_layout_does_not_exist.html.twig".
      */
     public function testLayoutWrong()
     {

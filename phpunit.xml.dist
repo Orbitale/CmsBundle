@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- http://phpunit.de/manual/5.4/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.4/phpunit.xsd"
-         backupGlobals="false"
-         backupStaticAttributes="false"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
-         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
          colors="true"
-         verbose="true"
          bootstrap="./Tests/bootstrap.php"
-         beStrictAboutTestsThatDoNotTestAnything="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          beStrictAboutResourceUsageDuringSmallTests="true"
@@ -20,7 +11,7 @@
 
     <testsuites>
         <testsuite name="OrbitaleCmsBundle test suite">
-            <directory suffix="Test.php">Tests</directory>
+            <directory>Tests</directory>
         </testsuite>
     </testsuites>
 
@@ -52,10 +43,5 @@
                 <directory>./vendor</directory>
             </exclude>
         </whitelist>
-        <blacklist>
-            <directory>./vendor</directory>
-            <directory>./Tests</directory>
-            <directory>./build</directory>
-        </blacklist>
     </filter>
 </phpunit>

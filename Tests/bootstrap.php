@@ -11,7 +11,6 @@
 
 use Doctrine\Bundle\DoctrineBundle\Command\CreateDatabaseDoctrineCommand;
 use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -36,12 +35,6 @@ if (is_dir(__DIR__.'/../build')) {
         system('rm -rf '.__DIR__.'/../build');
     }
 }
-
-AnnotationRegistry::registerLoader(function($class) use ($autoload) {
-    $autoload->loadClass($class);
-
-    return class_exists($class, false);
-});
 
 include __DIR__.'/Fixtures/App/AppKernel.php';
 

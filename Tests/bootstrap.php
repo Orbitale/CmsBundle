@@ -32,7 +32,6 @@ if (is_dir(__DIR__.'/../build')) {
         $fs->remove(__DIR__.'/../build');
     } catch (Exception $e) {
         fwrite(STDERR, $e->getMessage());
-        system('rm -rf '.__DIR__.'/../build');
     }
 }
 

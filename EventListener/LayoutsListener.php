@@ -15,6 +15,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
+use Twig\Error\LoaderError;
 
 class LayoutsListener implements EventSubscriberInterface
 {
@@ -87,7 +88,7 @@ class LayoutsListener implements EventSubscriberInterface
         }
 
         if (null === $finalLayout || !$this->twig->getLoader()->exists($finalLayout['resource'])) {
-            throw new \Twig_Error_Loader(sprintf(
+            throw new LoaderError(sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
                 $finalLayout['resource'], $finalLayout['name']
             ), 0, $finalLayout['resource']);

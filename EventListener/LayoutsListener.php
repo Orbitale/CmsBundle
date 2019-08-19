@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 use Twig\Error\LoaderError;
+use Twig\Source;
 
 class LayoutsListener implements EventSubscriberInterface
 {
@@ -88,10 +89,12 @@ class LayoutsListener implements EventSubscriberInterface
         }
 
         if (null === $finalLayout || !$this->twig->getLoader()->exists($finalLayout['resource'])) {
+            $source = new Source('', $finalLayout['resource']);
+
             throw new LoaderError(sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
                 $finalLayout['resource'], $finalLayout['name']
-            ), 0, $finalLayout['resource']);
+            ), 0, $source);
         }
 
         $event->getRequest()->attributes->set('_orbitale_cms_layout', $finalLayout);

@@ -4,7 +4,8 @@
 [![Build Status](https://travis-ci.org/Orbitale/CmsBundle.svg?branch=master)](https://travis-ci.org/Orbitale/CmsBundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Orbitale/CmsBundle/?branch=master)
 
-:warning: You're looking at the 3.x branch documentation.<br>
+:warning: You're looking at the 4.x branch documentation.<br>
+If you need information about 3.x, go [here](https://github.com/Orbitale/CmsBundle/tree/3.x)
 If you need information about 2.x, go [here](https://github.com/Orbitale/CmsBundle/tree/2.x)
 If you need information about 1.x, go [here](https://github.com/Orbitale/CmsBundle/tree/1.x)
 

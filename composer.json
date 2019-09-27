@@ -1,6 +1,6 @@
 {
     "name": "orbitale/cms-bundle",
-    "description": "A simple CMS bundle for Symfony",
+    "description": "A simple lightweight CMS bundle for Symfony",
     "type": "symfony-bundle",
     "keywords": ["symfony", "cms", "bundle"],
     "homepage": "https://github.com/Orbitale/CmsBundle",
@@ -49,7 +49,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "3.x-dev"
+            "dev-master": "4.x-dev"
         }
     }
 }

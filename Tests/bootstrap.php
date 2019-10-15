@@ -48,7 +48,7 @@ if ($fs->exists($databaseFile)) {
 }
 
 // Create database
-$command = new CreateDatabaseDoctrineCommand();
+$command = new CreateDatabaseDoctrineCommand($kernel->getContainer()->get('doctrine'));
 $application->add($command);
 $input = new ArrayInput(['command' => 'doctrine:database:create']);
 $command->run($input, new ConsoleOutput());

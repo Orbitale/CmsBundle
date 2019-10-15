@@ -42,23 +42,15 @@ require_once __DIR__.'/Fixtures/App/AppKernel.php';
     $kernel->boot();
 
     $databaseFile = $kernel->getContainer()->getParameter('database_path');
-    $application  = new Application($kernel);
 
     if ($fs->exists($databaseFile)) {
         $fs->remove($databaseFile);
     }
 
-    // Create database
-    $command = new CreateDatabaseDoctrineCommand();
-    $application->add($command);
-    $input = new ArrayInput(['command' => 'doctrine:database:create']);
-    $command->run($input, new NullOutput());
-
-    // Create database schema
-    $command = new CreateSchemaDoctrineCommand();
-    $application->add($command);
-    $input = new ArrayInput(['command' => 'doctrine:schema:create']);
-    $command->run($input, new NullOutput());
+    $application = new Application($kernel);
+    $application->setAutoExit(false);
+    $application->run(new ArrayInput(['command' => 'doctrine:database:create']));
+    $application->run(new ArrayInput(['command' => 'doctrine:schema:create']));
 
     $kernel->shutdown();
 })();

@@ -27,7 +27,7 @@ class AbstractTestCase extends WebTestCase
      */
     protected static $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         /** @var Connection $c */
         $c = static::getKernel()->getContainer()->get('doctrine')->getConnection();

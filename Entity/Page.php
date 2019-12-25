@@ -66,7 +66,7 @@ abstract class Page
     protected $metaKeywords;
 
     /**
-     * @var Category
+     * @var null|Category
      */
     protected $category;
 
@@ -114,7 +114,7 @@ abstract class Page
     protected $locale;
 
     /**
-     * @var Page
+     * @var null|Page
      */
     protected $parent;
 
@@ -134,19 +134,11 @@ abstract class Page
         $this->children  = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return Page
-     */
     public function setTitle(string $title): Page
     {
         $this->title = $title;
@@ -154,39 +146,23 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return Page
-     */
-    public function setSlug(string $slug): Page
+    public function setSlug(?string $slug): Page
     {
-        $this->slug = $slug;
+        $this->slug = (string) $slug;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return Page
-     */
     public function setContent(string $content = null): Page
     {
         $this->content = $content;
@@ -194,19 +170,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetaDescription()
+    public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }
 
-    /**
-     * @param string $metaDescription
-     *
-     * @return Page
-     */
     public function setMetaDescription(string $metaDescription = null): Page
     {
         $this->metaDescription = $metaDescription;
@@ -214,19 +182,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetaTitle()
+    public function getMetaTitle(): ?string
     {
         return $this->metaTitle;
     }
 
-    /**
-     * @param string $metaTitle
-     *
-     * @return Page
-     */
     public function setMetaTitle(string $metaTitle = null): Page
     {
         $this->metaTitle = $metaTitle;
@@ -234,19 +194,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
 
-    /**
-     * @param string $metaKeywords
-     *
-     * @return Page
-     */
     public function setMetaKeywords(string $metaKeywords = null): Page
     {
         $this->metaKeywords = $metaKeywords;
@@ -254,19 +206,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return Category
-     */
-    public function getCategory()
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * @param Category $category
-     *
-     * @return Page
-     */
     public function setCategory(Category $category = null): Page
     {
         $this->category = $category;
@@ -274,19 +218,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getCss()
+    public function getCss(): ?string
     {
         return $this->css;
     }
 
-    /**
-     * @param string $css
-     *
-     * @return Page
-     */
     public function setCss(string $css = null): Page
     {
         $this->css = $css;
@@ -294,19 +230,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getJs()
+    public function getJs(): ?string
     {
         return $this->js;
     }
 
-    /**
-     * @param string $js
-     *
-     * @return Page
-     */
     public function setJs(string $js = null): Page
     {
         $this->js = $js;
@@ -314,19 +242,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return Page
-     */
     public function setCreatedAt(\DateTime $date): Page
     {
         $this->createdAt = $date;
@@ -334,39 +254,23 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return Page
-     */
-    public function setEnabled(bool $enabled): Page
+    public function setEnabled(bool $enabled = false): Page
     {
         $this->enabled = $enabled;
 
         return $this;
     }
 
-    /**
-     * @return Page
-     */
-    public function getParent()
+    public function getParent(): ?Page
     {
         return $this->parent;
     }
 
-    /**
-     * @param Page|null $parent
-     *
-     * @return Page
-     */
     public function setParent(Page $parent = null): Page
     {
         if ($parent === $this) {
@@ -394,11 +298,6 @@ abstract class Page
         return $this->children;
     }
 
-    /**
-     * @param Page $page
-     *
-     * @return Page
-     */
     public function addChild(Page $page): Page
     {
         $this->children->add($page);
@@ -410,11 +309,6 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @param Page $page
-     *
-     * @return Page
-     */
     public function removeChild(Page $page): Page
     {
         $this->children->removeElement($page);
@@ -422,19 +316,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isHomepage(): bool
     {
         return $this->homepage;
     }
 
-    /**
-     * @param bool $homepage
-     *
-     * @return Page
-     */
     public function setHomepage(bool $homepage): Page
     {
         $this->homepage = $homepage;
@@ -442,19 +328,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    /**
-     * @param string $host
-     *
-     * @return Page
-     */
     public function setHost(string $host = null): Page
     {
         $this->host = $host;
@@ -462,19 +340,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return Page
-     */
     public function setLocale(string $locale = null): Page
     {
         $this->locale = $locale;
@@ -482,12 +352,7 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @param string $separator
-     *
-     * @return string
-     */
-    public function getTree(string $separator = '/')
+    public function getTree(string $separator = '/'): string
     {
         $tree = '';
 
@@ -504,7 +369,7 @@ abstract class Page
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateSlug()
+    public function updateSlug(): void
     {
         if (!$this->slug) {
             $this->slug = Transliterator::transliterate($this->title);
@@ -513,10 +378,8 @@ abstract class Page
 
     /**
      * @ORM\PreRemove()
-     *
-     * @param LifecycleEventArgs $event
      */
-    public function onRemove(LifecycleEventArgs $event)
+    public function onRemove(LifecycleEventArgs $event): void
     {
         $em = $event->getEntityManager();
         if (count($this->children)) {

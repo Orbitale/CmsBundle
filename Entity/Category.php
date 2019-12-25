@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("slug")
@@ -31,25 +32,39 @@ abstract class Category
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $slug;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $description;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="enabled", type="boolean")
+     *
+     * @Assert\Type("bool")
      */
     protected $enabled = false;
 
@@ -57,11 +72,15 @@ abstract class Category
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     *
+     * @Assert\Type(\DateTime::class)
      */
     protected $createdAt;
 
     /**
      * @var Category
+     *
+     * @Assert\Type(Category::class)
      */
     protected $parent;
 

@@ -16,6 +16,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("slug")
@@ -31,54 +32,82 @@ abstract class Page
 
     /**
      * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $title;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $slug;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="page_content", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $content;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $metaDescription;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $metaTitle;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $metaKeywords;
 
     /**
      * @var null|Category
+     *
+     * @Assert\Type(Category::class)
      */
     protected $category;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="css", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $css;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="js", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $js;
 
@@ -86,35 +115,51 @@ abstract class Page
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     *
+     * @Assert\Type(\DateTime::class)
      */
     protected $createdAt;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="enabled", type="boolean")
+     *
+     * @Assert\Type("bool")
      */
     protected $enabled = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="homepage", type="boolean")
+     *
+     * @Assert\Type("bool")
      */
     protected $homepage = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $host;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="locale", type="string", length=6, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $locale;
 
     /**
      * @var null|Page
+     *
+     * @Assert\Type(Page::class)
      */
     protected $parent;
 

@@ -54,7 +54,7 @@ class PageControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page/');
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
 
@@ -69,7 +69,7 @@ class PageControllerTest extends AbstractTestCase
 
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
     }
 
     public function testOneHomepageWithLocale()
@@ -94,7 +94,7 @@ class PageControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page/');
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
 
@@ -109,7 +109,7 @@ class PageControllerTest extends AbstractTestCase
 
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
     }
 
     public function testTree()
@@ -154,7 +154,7 @@ class PageControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page/root/first-level');
         static::assertEquals($childOne->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($childOne->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($childOne->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($childOne->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/page/root/second-level');
@@ -185,7 +185,7 @@ class PageControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page');
         static::assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($page->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($page->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($page->getContent(), trim($crawler->filter('article')->html()));
 
         static::assertEquals($page->getCss(), trim($crawler->filter('#orbitale_cms_css')->html()));
         static::assertEquals($page->getJs(), trim($crawler->filter('#orbitale_cms_js')->html()));
@@ -283,7 +283,6 @@ class PageControllerTest extends AbstractTestCase
             $crawler = $client->request('GET', '/page/');
             static::assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
             $page->setEnabled(false);
-            $em->merge($page);
             $em->flush();
         }
     }

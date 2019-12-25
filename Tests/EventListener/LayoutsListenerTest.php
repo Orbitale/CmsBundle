@@ -14,6 +14,8 @@ namespace Orbitale\Bundle\CmsBundle\Tests\EventListener;
 use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
+use Twig\Error\LoaderError;
+use Twig_Environment;
 
 class LayoutsListenerTest extends AbstractTestCase
 {
@@ -21,7 +23,7 @@ class LayoutsListenerTest extends AbstractTestCase
     {
         $client = static::createClient(['environment' => 'layout']);
 
-        /** @var \Twig_Environment $twig */
+        /** @var Twig_Environment $twig */
         $twig = $client->getContainer()->get('twig');
         $twig->resolveTemplate('test_layout.html.twig');
 
@@ -40,12 +42,10 @@ class LayoutsListenerTest extends AbstractTestCase
         static::assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
     }
 
-    /**
-     * @expectedException \Twig\Error\LoaderError
-     * @expectedExceptionMessage Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout in "this_layout_does_not_exist.html.twig".
-     */
     public function testLayoutWrong()
     {
+        $this->expectException(LoaderError::class);
+        $this->expectExceptionMessage('Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout in "this_layout_does_not_exist.html.twig".');
         static::createClient(['environment' => 'layout_wrong'])->request('GET', '/page/');
     }
 

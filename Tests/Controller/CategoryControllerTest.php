@@ -50,7 +50,7 @@ class CategoryControllerTest extends AbstractTestCase
         $crawler = $client->followRedirect();
         static::assertEquals($category->getName(), trim($crawler->filter('title')->html()));
         static::assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($category->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertStringContainsString($category->getDescription(), trim($crawler->filter('article')->first()->html()));
     }
 
     public function testTree()
@@ -97,7 +97,7 @@ class CategoryControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/category/'.$childOne->getTree());
         static::assertEquals($childOne->getName(), trim($crawler->filter('title')->html()));
         static::assertEquals($childOne->getName(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertStringContainsString($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/category/root/second-level');
@@ -149,10 +149,10 @@ class CategoryControllerTest extends AbstractTestCase
 
         $section1 = $crawler->filter('section')->eq(0);
         static::assertEquals($page1->getTitle(), trim($section1->filter('article > h2 > a')->html()));
-        static::assertContains($page1->getContent(), trim($section1->filter('article')->html()));
+        static::assertStringContainsString($page1->getContent(), trim($section1->filter('article')->html()));
 
         $section2 = $crawler->filter('section')->eq(1);
         static::assertEquals($page2->getTitle(), trim($section2->filter('article > h2 > a')->html()));
-        static::assertContains($page2->getContent(), trim($section2->filter('article')->html()));
+        static::assertStringContainsString($page2->getContent(), trim($section2->filter('article')->html()));
     }
 }

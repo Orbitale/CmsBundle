@@ -13,9 +13,9 @@ namespace Orbitale\Bundle\CmsBundle\Controller;
 
 use Orbitale\Bundle\CmsBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Entity\Page;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-abstract class AbstractCmsController extends Controller
+abstract class AbstractCmsController extends AbstractController
 {
     /**
      * Slugs HAVE TO be ordered exactly as in the request.

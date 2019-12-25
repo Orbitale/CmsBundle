@@ -85,7 +85,7 @@ Example:
 orbitale_cms_category:
     resource: "@OrbitaleCmsBundle/Resources/config/routing/categories.yaml"
     prefix:   /category/
-    
+
 orbitale_cms_page:
     resource: "@OrbitaleCmsBundle/Resources/config/routing/pages.yaml"
     prefix:   /page/
@@ -405,7 +405,7 @@ easy_admin:
     entities:
         Pages:
             label: admin.cms.pages
-            class: Orbitale\Bundle\CmsBundle\Entity\Page
+            class: App\Entity\Page
             show:
                 fields: [ id, parent, title, slug, tree, content, metaDescription, metaTitle, category, host, locale, homepage, enabled ]
             list:
@@ -415,7 +415,7 @@ easy_admin:
 
         Categories:
             label: "Cms Categories"
-            class: Orbitale\Bundle\CmsBundle\Entity\Category
+            class: App\Entity\Category
             show:
                 fields: [ id, parent, title, slug, tree, content, host, locale, homepage, enabled ]
             list:

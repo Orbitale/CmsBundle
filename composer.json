@@ -7,7 +7,6 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
-        "behat/transliterator": "^1.2",
         "doctrine/annotations": "^1.8",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.5.1",
@@ -20,7 +19,8 @@
         "symfony/translation": "^5.0",
         "symfony/twig-bundle": "^5.0",
         "symfony/validator": "^5.0",
-        "twig/twig": "^2.7|^3.0"
+        "twig/twig": "^2.7|^3.0",
+        "symfony/string": "^5.0"
     },
     "require-dev": {
         "symfony/browser-kit": "^5.0",

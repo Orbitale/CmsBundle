@@ -11,11 +11,11 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
-use Behat\Transliterator\Transliterator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -417,7 +417,7 @@ abstract class Page
     public function updateSlug(): void
     {
         if (!$this->slug) {
-            $this->slug = Transliterator::transliterate($this->title);
+            $this->slug = mb_strtolower((new AsciiSlugger())->slug($this->title)->toString());
         }
     }
 

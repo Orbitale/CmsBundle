@@ -12,6 +12,7 @@
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
 use Orbitale\Bundle\CmsBundle\Entity\Page;
+use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,13 +23,13 @@ class PageController extends AbstractCmsController
      */
     protected $request;
 
-    /**
-     * @param Request     $request
-     * @param string      $slugs
-     * @param string|null $_locale
-     *
-     * @return Response
-     */
+    protected $pageRepository;
+
+    public function __construct(PageRepository $pageRepository)
+    {
+        $this->pageRepository = $pageRepository;
+    }
+
     public function indexAction(Request $request, string $slugs = '', string $_locale = null): Response
     {
         if (preg_match('~/$~', $slugs)) {
@@ -67,14 +68,14 @@ class PageController extends AbstractCmsController
      * Retrieves the page list based on slugs.
      * Also checks the hierarchy of the different pages.
      *
-     * @param array $slugsArray
+     * @param string[] $slugsArray
      *
      * @return Page[]
      */
-    protected function getPages(array $slugsArray = [])
+    protected function getPages(array $slugsArray = []): array
     {
         /** @var Page[] $pages */
-        $pages = $this->get('orbitale_cms.page_repository')
+        $pages = $this->pageRepository
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
         ;
 
@@ -91,7 +92,7 @@ class PageController extends AbstractCmsController
      * Retrieves the current page based on page list and entered slugs.
      *
      * @param Page[] $pages
-     * @param array  $slugsArray
+     * @param string[]  $slugsArray
      *
      * @return Page
      */

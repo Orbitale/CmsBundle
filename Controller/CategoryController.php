@@ -11,11 +11,22 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
+use Orbitale\Bundle\CmsBundle\Repository\CategoryRepository;
+use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends AbstractCmsController
 {
+    private $categoryRepository;
+    private $pageRepository;
+
+    public function __construct(CategoryRepository $categoryRepository, PageRepository $pageRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+        $this->pageRepository = $pageRepository;
+    }
+
     /**
      * @param string  $slugs
      * @param Request $request
@@ -30,7 +41,7 @@ class CategoryController extends AbstractCmsController
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
 
-        $categories = $this->get('orbitale_cms.category_repository')->findFrontCategories($slugsArray);
+        $categories = $this->categoryRepository->findFrontCategories($slugsArray);
 
         $category = $this->getFinalTreeElement($slugsArray, $categories);
 
@@ -44,7 +55,7 @@ class CategoryController extends AbstractCmsController
             $orderBy = current($validOrderFields);
         }
 
-        $pages = $this->get('orbitale_cms.page_repository')->findByCategory(
+        $pages = $this->pageRepository->findByCategory(
             $category,
             $order,
             $orderBy,

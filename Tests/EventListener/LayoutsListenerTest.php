@@ -11,20 +11,20 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\EventListener;
 
-use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
+use Twig\Environment;
 use Twig\Error\LoaderError;
-use Twig_Environment;
 
 class LayoutsListenerTest extends AbstractTestCase
 {
-    public function testDifferentLayout()
+    public function testDifferentLayout(): void
     {
         $client = static::createClient(['environment' => 'layout']);
 
-        /** @var Twig_Environment $twig */
-        $twig = $client->getContainer()->get('twig');
+        /** @var Environment $twig */
+        $twig = static::$container->get(Environment::class);
         $twig->resolveTemplate('test_layout.html.twig');
 
         $crawler = $client->request('GET', '/page/');
@@ -33,7 +33,7 @@ class LayoutsListenerTest extends AbstractTestCase
         static::assertRegExp('~^One change of the layout is this special hardcoded title\. ~', $crawler->filter('title')->html());
     }
 
-    public function testHostLayout()
+    public function testHostLayout(): void
     {
         $client = static::createClient(['environment' => 'layout'], ['HTTP_HOST' => 'local.host']);
 
@@ -42,7 +42,7 @@ class LayoutsListenerTest extends AbstractTestCase
         static::assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
     }
 
-    public function testLayoutWrong()
+    public function testLayoutWrong(): void
     {
         $this->expectException(LoaderError::class);
         $this->expectExceptionMessage('Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout in "this_layout_does_not_exist.html.twig".');
@@ -65,8 +65,8 @@ class LayoutsListenerTest extends AbstractTestCase
             ->setContent('Hello world!')
         ;
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($homepage);
         $em->flush();
 

@@ -39,18 +39,17 @@ class AppKernel extends Kernel
         });
     }
 
-    /**
-     * @return string
-     */
-    public function getCacheDir()
+    public function getProjectDir(): string
+    {
+        return __DIR__;
+    }
+
+    public function getCacheDir(): string
     {
         return __DIR__.'/../../../build/cache/'.$this->getEnvironment();
     }
 
-    /**
-     * @return string
-     */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return __DIR__.'/../../../build/kernel_logs/'.$this->getEnvironment();
     }

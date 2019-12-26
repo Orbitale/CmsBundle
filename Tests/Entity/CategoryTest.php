@@ -12,7 +12,7 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 
 use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 

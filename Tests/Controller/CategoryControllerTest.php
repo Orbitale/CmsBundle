@@ -11,8 +11,8 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
-use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
@@ -37,8 +37,8 @@ class CategoryControllerTest extends AbstractTestCase
             ->setEnabled(true)
         ;
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 
@@ -56,9 +56,8 @@ class CategoryControllerTest extends AbstractTestCase
     public function testTree()
     {
         $client = static::createClient();
-
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Category();
@@ -115,9 +114,8 @@ class CategoryControllerTest extends AbstractTestCase
             ->setDescription('Hello world!')
             ->setEnabled(true)
         ;
-
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 

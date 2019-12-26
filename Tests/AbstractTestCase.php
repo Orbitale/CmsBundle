@@ -9,15 +9,12 @@
 * file that was distributed with this source code.
 */
 
-namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
+namespace Orbitale\Bundle\CmsBundle\Tests;
 
 use Doctrine\DBAL\Connection;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-/**
- * Class AbstractTestCase.
- */
 class AbstractTestCase extends WebTestCase
 {
     public function setUp(): void

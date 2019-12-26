@@ -36,18 +36,6 @@ class AbstractTestCase extends WebTestCase
     }
 
     /**
-     * @param array $options An array of options to pass to the createKernel class
-     *
-     * @return KernelInterface
-     */
-    protected static function getKernel(array $options = []): KernelInterface
-    {
-        static::bootKernel($options);
-
-        return static::$kernel;
-    }
-
-    /**
      * @param array $values
      *
      * @return Page

@@ -14,32 +14,23 @@ namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
 use Doctrine\DBAL\Connection;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class AbstractTestCase.
  */
 class AbstractTestCase extends WebTestCase
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected static $container;
-
     public function setUp(): void
     {
+        static::bootKernel();
+
         /** @var Connection $c */
-        $c = static::getKernel()->getContainer()->get('doctrine')->getConnection();
+        $c = static::$container->get(Connection::class);
         $c->query('delete from orbitale_cms_pages where 1');
         $c->query('delete from orbitale_cms_categories where 1');
+        static::ensureKernelShutdown();
     }
 
-    /**
-     * @param array $values
-     *
-     * @return Page
-     */
     protected function createPage(array $values = []): Page
     {
         $page = new Page();

@@ -6,18 +6,17 @@
     "homepage": "https://github.com/Orbitale/CmsBundle",
     "license": "MIT",
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "behat/transliterator": "^1.2",
         "doctrine/annotations": "^1.8",
-        "doctrine/doctrine-bundle": "^1.8",
+        "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.5.1",
         "symfony/asset": "^5.0",
         "symfony/config": "^5.0",
-        "symfony/cache": "^5.0",
         "symfony/dependency-injection": "^5.0",
         "symfony/framework-bundle": "^5.0",
         "symfony/http-foundation": "^5.0",
-        "symfony/finder": "^5.0",
+        "symfony/http-kernel": "^5.0.1",
         "symfony/translation": "^5.0",
         "symfony/twig-bundle": "^5.0",
         "symfony/validator": "^5.0",
@@ -31,7 +30,7 @@
         "symfony/yaml": "^5.0"
     },
     "suggest": {
-        "javiereguiluz/easyadmin-bundle": "To manage your pages directly inside your CMS (view documentation)"
+        "javiereguiluz/easyadmin-bundle": "To manage your pages directly inside your CMS (view documentation)."
     },
     "autoload": {
         "psr-4": {

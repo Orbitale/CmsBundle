@@ -1,0 +1,13 @@
+orbitale_cms_post:
+  path: /{year}/{month}/{day}/{slugs}
+  requirements:
+    slugs: "([a-zA-Z0-9_-]+\/?)*"
+    year: "([12][0-9]{3})"
+    month: "(0[1-9]|1[012])"
+    day: "(0[1-9]|[12][0-9]|3[01])"
+  defaults:
+    _controller: Orbitale\Bundle\CmsBundle\Controller\PostController::indexAction
+    slugs: ''
+    year: ''
+    month: ''
+    day: ''

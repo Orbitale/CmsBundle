@@ -32,23 +32,18 @@ class DoctrineMappingListener implements EventSubscriber
      */
     private $categoryClass;
 
-    public function __construct($pageClass, $categoryClass)
+    public function __construct(string $pageClass, string $categoryClass)
     {
-        $this->pageClass     = $pageClass;
+        $this->pageClass = $pageClass;
         $this->categoryClass = $categoryClass;
     }
 
-    /**
-     * Returns an array of events this subscriber wants to listen to.
-     *
-     * @return array
-     */
     public function getSubscribedEvents()
     {
         return [Events::loadClassMetadata];
     }
 
-    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs)
+    public function loadClassMetadata(LoadClassMetadataEventArgs $eventArgs): void
     {
         /** @var ClassMetadata $classMetadata */
         $classMetadata = $eventArgs->getClassMetadata();
@@ -69,34 +64,24 @@ class DoctrineMappingListener implements EventSubscriber
         }
     }
 
-    /**
-     * Declare mapping for Page entity.
-     *
-     * @param ClassMetadata $classMetadata
-     */
-    private function processPageMetadata(ClassMetadata $classMetadata)
+    private function processPageMetadata(ClassMetadata $classMetadata): void
     {
         if (!$classMetadata->hasAssociation('category')) {
             $classMetadata->mapManyToOne([
-                'fieldName'    => 'category',
+                'fieldName' => 'category',
                 'targetEntity' => $this->categoryClass,
-                'inversedBy'   => 'pages',
+                'inversedBy' => 'pages',
             ]);
         }
     }
 
-    /**
-     * Declare mapping for Category entity.
-     *
-     * @param ClassMetadata $classMetadata
-     */
-    private function processCategoryMetadata(ClassMetadata $classMetadata)
+    private function processCategoryMetadata(ClassMetadata $classMetadata): void
     {
         if (!$classMetadata->hasAssociation('pages')) {
             $classMetadata->mapOneToMany([
-                'fieldName'    => 'pages',
+                'fieldName' => 'pages',
                 'targetEntity' => $this->pageClass,
-                'mappedBy'     => 'category',
+                'mappedBy' => 'category',
             ]);
         }
 
@@ -104,34 +89,28 @@ class DoctrineMappingListener implements EventSubscriber
 
     /**
      * Declare self-bidirectionnal mapping for parent.
-     *
-     * @param ClassMetadata $classMetadata
-     * @param string        $class
      */
-    private function processParent(ClassMetadata $classMetadata, $class)
+    private function processParent(ClassMetadata $classMetadata, string $class): void
     {
         if (!$classMetadata->hasAssociation('parent')) {
             $classMetadata->mapManyToOne([
-                'fieldName'    => 'parent',
+                'fieldName' => 'parent',
                 'targetEntity' => $class,
-                'inversedBy'   => 'children',
+                'inversedBy' => 'children',
             ]);
         }
     }
 
     /**
      * Declare self-bidirectionnal mapping for children
-     *
-     * @param ClassMetadata $classMetadata
-     * @param string        $class
      */
-    private function processChildren(ClassMetadata $classMetadata, $class)
+    private function processChildren(ClassMetadata $classMetadata, string $class): void
     {
         if (!$classMetadata->hasAssociation('children')) {
             $classMetadata->mapOneToMany([
-                'fieldName'    => 'children',
+                'fieldName' => 'children',
                 'targetEntity' => $class,
-                'mappedBy'     => 'parent',
+                'mappedBy' => 'parent',
             ]);
         }
     }

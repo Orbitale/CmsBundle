@@ -11,13 +11,13 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
-use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class PageControllerTest extends AbstractTestCase
 {
-    public function testNoHomepage()
+    public function testNoHomepage(): void
     {
         $error   = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
         $client  = static::createClient();
@@ -26,14 +26,14 @@ class PageControllerTest extends AbstractTestCase
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function testNoPageWithSlug()
+    public function testNoPageWithSlug(): void
     {
         $client = static::createClient();
         $client->request('GET', '/page/inexistent-slug');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function testOneHomepage()
+    public function testOneHomepage(): void
     {
         $client = static::createClient();
 
@@ -46,15 +46,15 @@ class PageControllerTest extends AbstractTestCase
             'content'  => 'Hello world!',
         ]);
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($homepage);
         $em->flush();
 
         $crawler = $client->request('GET', '/page/');
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
 
@@ -69,10 +69,10 @@ class PageControllerTest extends AbstractTestCase
 
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
     }
 
-    public function testOneHomepageWithLocale()
+    public function testOneHomepageWithLocale(): void
     {
         $client = static::createClient();
 
@@ -86,15 +86,15 @@ class PageControllerTest extends AbstractTestCase
             'content'  => 'Hello world!',
         ]);
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($homepage);
         $em->flush();
 
         $crawler = $client->request('GET', '/page/');
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
 
@@ -109,15 +109,15 @@ class PageControllerTest extends AbstractTestCase
 
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
     }
 
-    public function testTree()
+    public function testTree(): void
     {
         $client = static::createClient();
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $root = $this->createPage([
@@ -154,19 +154,19 @@ class PageControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page/root/first-level');
         static::assertEquals($childOne->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($childOne->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($childOne->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($childOne->getContent(), trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/page/root/second-level');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function testMetas()
+    public function testMetas(): void
     {
         $client = static::createClient();
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         $page = $this->createPage([
             'homepage'        => true,
@@ -185,7 +185,7 @@ class PageControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page');
         static::assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
         static::assertEquals($page->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($page->getContent(), trim($crawler->filter('article')->html()));
+        static::assertStringContainsString($page->getContent(), trim($crawler->filter('article')->html()));
 
         static::assertEquals($page->getCss(), trim($crawler->filter('#orbitale_cms_css')->html()));
         static::assertEquals($page->getJs(), trim($crawler->filter('#orbitale_cms_js')->html()));
@@ -196,11 +196,11 @@ class PageControllerTest extends AbstractTestCase
         static::assertEquals($page->getMetaTitle(), trim($crawler->filter('meta[name="title"]')->attr('content')));
     }
 
-    public function testParentAndChildrenDontReverse()
+    public function testParentAndChildrenDontReverse(): void
     {
         $client = static::createClient();
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         $parent = $this->createPage([
             'enabled'  => true,
@@ -234,12 +234,12 @@ class PageControllerTest extends AbstractTestCase
      * - No matching criteria
      * If there are multiple pages that match any "matching criteria", the behavior is unexpected, so we should not handle this naturally.
      */
-    public function testAllTypesOfPagesForHomepage()
+    public function testAllTypesOfPagesForHomepage(): void
     {
         $client = static::createClient();
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         // First, create the pages
         /** @var Page[] $pages */
@@ -282,18 +282,18 @@ class PageControllerTest extends AbstractTestCase
         foreach ($pages as $key => $page) {
             $crawler = $client->request('GET', '/page/');
             static::assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
+            $page = $em->find(Page::class, $page->getId());
             $page->setEnabled(false);
-            $em->merge($page);
             $em->flush();
         }
     }
 
-    public function testBreadcrumbsDesign()
+    public function testBreadcrumbsDesign(): void
     {
         $client = static::createClient(['environment' => 'design_breadcrumbs']);
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         $page = $this->createPage(['enabled' => true, 'slug' => 'parent', 'title' => 'Parent page']);
         $em->persist($page);

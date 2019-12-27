@@ -13,6 +13,7 @@ namespace Orbitale\Bundle\CmsBundle\Tests\DependencyInjection;
 
 use Orbitale\Bundle\CmsBundle\DependencyInjection\OrbitaleCmsExtension;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Yaml;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
@@ -20,17 +21,14 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class OrbitaleCmsExtensionTest extends TestCase
 {
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Page class must be a valid class extending Orbitale\Bundle\CmsBundle\Entity\Page. "inexistent_page_class" given.
-     */
     public function testInexistentPageClass()
     {
         $builder = new ContainerBuilder();
 
-        $ext = new OrbitaleCmsExtension();
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Page class must be a valid class extending Orbitale\Bundle\CmsBundle\Entity\Page. "inexistent_page_class" given.');
 
-        $ext->load([
+        (new OrbitaleCmsExtension())->load([
             'orbitale_cms' => [
                 'page_class'     => 'inexistent_page_class',
                 'category_class' => Category::class,
@@ -38,17 +36,14 @@ class OrbitaleCmsExtensionTest extends TestCase
         ], $builder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Category class must be a valid class extending Orbitale\Bundle\CmsBundle\Entity\Category. "inexistent_category_class" given.
-     */
     public function testInexistentCategoryClass()
     {
         $builder = new ContainerBuilder();
 
-        $ext = new OrbitaleCmsExtension();
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Category class must be a valid class extending Orbitale\Bundle\CmsBundle\Entity\Category. "inexistent_category_class" given.');
 
-        $ext->load([
+        (new OrbitaleCmsExtension())->load([
             'orbitale_cms' => [
                 'page_class'     => Page::class,
                 'category_class' => 'inexistent_category_class',

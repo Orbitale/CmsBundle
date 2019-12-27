@@ -1,39 +1,51 @@
 services:
-    orbitale_cms.listeners.layouts:
-        class: Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener
+    Orbitale\Bundle\CmsBundle\Controller\PageController:
+        public: true
+        autowire: true
+        arguments:
+            - '@Orbitale\Bundle\CmsBundle\Repository\PageRepository'
+        tags:
+            - controller.service_arguments
+            - container.service_subscriber
+
+    Orbitale\Bundle\CmsBundle\Controller\CategoryController:
+        public: true
+        autowire: true
+        arguments:
+            - '@Orbitale\Bundle\CmsBundle\Repository\CategoryRepository'
+            - '@Orbitale\Bundle\CmsBundle\Repository\PageRepository'
+        tags:
+            - controller.service_arguments
+            - container.service_subscriber
+
+    Orbitale\Bundle\CmsBundle\EventListener\LayoutsListener:
         arguments:
             - '%orbitale_cms.layouts%'
             - '@twig'
         tags:
-          - { name: kernel.event_subscriber }
+          - kernel.event_subscriber
 
-    orbitale_cms.twig.extension:
-        class: Orbitale\Bundle\CmsBundle\Twig\CmsExtension
+    Orbitale\Bundle\CmsBundle\Twig\CmsExtension:
         arguments:
             - '%orbitale_cms.design%'
-        tags: [ { name: twig.extension } ]
+        tags:
+            - twig.extension
 
-    orbitale_cms.doctrine_mapping_listener:
-        class: Orbitale\Bundle\CmsBundle\EventListener\DoctrineMappingListener
-        public: false
+    Orbitale\Bundle\CmsBundle\EventListener\DoctrineMappingListener:
         arguments:
             - '%orbitale_cms.page_class%'
             - '%orbitale_cms.category_class%'
         tags:
-            - { name: doctrine.event_subscriber }
+            - doctrine.event_subscriber
 
-    orbitale_cms.page_repository:
-        class: Orbitale\Bundle\CmsBundle\Repository\PageRepository
-        public: true
+    Orbitale\Bundle\CmsBundle\Repository\PageRepository:
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - '%orbitale_cms.page_class%'
         calls:
             - [ 'setConfig', ['%orbitale_cms.cache%'] ]
 
-    orbitale_cms.category_repository:
-        class: Orbitale\Bundle\CmsBundle\Repository\CategoryRepository
-        public: true
+    Orbitale\Bundle\CmsBundle\Repository\CategoryRepository:
         factory: ['@doctrine.orm.entity_manager', 'getRepository']
         arguments:
             - '%orbitale_cms.category_class%'

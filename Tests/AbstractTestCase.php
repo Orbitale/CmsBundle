@@ -9,49 +9,25 @@
 * file that was distributed with this source code.
 */
 
-namespace Orbitale\Bundle\CmsBundle\Tests\Fixtures;
+namespace Orbitale\Bundle\CmsBundle\Tests;
 
 use Doctrine\DBAL\Connection;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
 
-/**
- * Class AbstractTestCase.
- */
 class AbstractTestCase extends WebTestCase
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected static $container;
-
-    public function setUp()
+    public function setUp(): void
     {
+        static::bootKernel();
+
         /** @var Connection $c */
-        $c = static::getKernel()->getContainer()->get('doctrine')->getConnection();
+        $c = static::$container->get(Connection::class);
         $c->query('delete from orbitale_cms_pages where 1');
         $c->query('delete from orbitale_cms_categories where 1');
+        static::ensureKernelShutdown();
     }
 
-    /**
-     * @param array $options An array of options to pass to the createKernel class
-     *
-     * @return KernelInterface
-     */
-    protected static function getKernel(array $options = []): KernelInterface
-    {
-        static::bootKernel($options);
-
-        return static::$kernel;
-    }
-
-    /**
-     * @param array $values
-     *
-     * @return Page
-     */
     protected function createPage(array $values = []): Page
     {
         $page = new Page();

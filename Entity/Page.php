@@ -11,11 +11,12 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
-use Behat\Transliterator\Transliterator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("slug")
@@ -31,54 +32,82 @@ abstract class Page
 
     /**
      * @var string
+     *
      * @ORM\Column(name="title", type="string", length=255)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $title;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $slug;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="page_content", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $content;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $metaDescription;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $metaTitle;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $metaKeywords;
 
     /**
-     * @var Category
+     * @var null|Category
+     *
+     * @Assert\Type(Category::class)
      */
     protected $category;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="css", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $css;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="js", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $js;
 
@@ -86,35 +115,51 @@ abstract class Page
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     *
+     * @Assert\Type(\DateTime::class)
      */
     protected $createdAt;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="enabled", type="boolean")
+     *
+     * @Assert\Type("bool")
      */
     protected $enabled = false;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="homepage", type="boolean")
+     *
+     * @Assert\Type("bool")
      */
     protected $homepage = false;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $host;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="locale", type="string", length=6, nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $locale;
 
     /**
-     * @var Page
+     * @var null|Page
+     *
+     * @Assert\Type(Page::class)
      */
     protected $parent;
 
@@ -134,19 +179,11 @@ abstract class Page
         $this->children  = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     *
-     * @return Page
-     */
     public function setTitle(string $title): Page
     {
         $this->title = $title;
@@ -154,39 +191,23 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return Page
-     */
-    public function setSlug(string $slug): Page
+    public function setSlug(?string $slug): Page
     {
-        $this->slug = $slug;
+        $this->slug = (string) $slug;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
 
-    /**
-     * @param string $content
-     *
-     * @return Page
-     */
     public function setContent(string $content = null): Page
     {
         $this->content = $content;
@@ -194,19 +215,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetaDescription()
+    public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }
 
-    /**
-     * @param string $metaDescription
-     *
-     * @return Page
-     */
     public function setMetaDescription(string $metaDescription = null): Page
     {
         $this->metaDescription = $metaDescription;
@@ -214,19 +227,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetaTitle()
+    public function getMetaTitle(): ?string
     {
         return $this->metaTitle;
     }
 
-    /**
-     * @param string $metaTitle
-     *
-     * @return Page
-     */
     public function setMetaTitle(string $metaTitle = null): Page
     {
         $this->metaTitle = $metaTitle;
@@ -234,19 +239,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getMetaKeywords()
+    public function getMetaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
 
-    /**
-     * @param string $metaKeywords
-     *
-     * @return Page
-     */
     public function setMetaKeywords(string $metaKeywords = null): Page
     {
         $this->metaKeywords = $metaKeywords;
@@ -254,19 +251,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return Category
-     */
-    public function getCategory()
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * @param Category $category
-     *
-     * @return Page
-     */
     public function setCategory(Category $category = null): Page
     {
         $this->category = $category;
@@ -274,19 +263,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getCss()
+    public function getCss(): ?string
     {
         return $this->css;
     }
 
-    /**
-     * @param string $css
-     *
-     * @return Page
-     */
     public function setCss(string $css = null): Page
     {
         $this->css = $css;
@@ -294,19 +275,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getJs()
+    public function getJs(): ?string
     {
         return $this->js;
     }
 
-    /**
-     * @param string $js
-     *
-     * @return Page
-     */
     public function setJs(string $js = null): Page
     {
         $this->js = $js;
@@ -314,19 +287,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return Page
-     */
     public function setCreatedAt(\DateTime $date): Page
     {
         $this->createdAt = $date;
@@ -334,39 +299,23 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return Page
-     */
-    public function setEnabled(bool $enabled): Page
+    public function setEnabled(bool $enabled = false): Page
     {
         $this->enabled = $enabled;
 
         return $this;
     }
 
-    /**
-     * @return Page
-     */
-    public function getParent()
+    public function getParent(): ?Page
     {
         return $this->parent;
     }
 
-    /**
-     * @param Page|null $parent
-     *
-     * @return Page
-     */
     public function setParent(Page $parent = null): Page
     {
         if ($parent === $this) {
@@ -394,11 +343,6 @@ abstract class Page
         return $this->children;
     }
 
-    /**
-     * @param Page $page
-     *
-     * @return Page
-     */
     public function addChild(Page $page): Page
     {
         $this->children->add($page);
@@ -410,11 +354,6 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @param Page $page
-     *
-     * @return Page
-     */
     public function removeChild(Page $page): Page
     {
         $this->children->removeElement($page);
@@ -422,19 +361,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isHomepage(): bool
     {
         return $this->homepage;
     }
 
-    /**
-     * @param bool $homepage
-     *
-     * @return Page
-     */
     public function setHomepage(bool $homepage): Page
     {
         $this->homepage = $homepage;
@@ -442,19 +373,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    /**
-     * @param string $host
-     *
-     * @return Page
-     */
     public function setHost(string $host = null): Page
     {
         $this->host = $host;
@@ -462,19 +385,11 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return Page
-     */
     public function setLocale(string $locale = null): Page
     {
         $this->locale = $locale;
@@ -482,12 +397,7 @@ abstract class Page
         return $this;
     }
 
-    /**
-     * @param string $separator
-     *
-     * @return string
-     */
-    public function getTree(string $separator = '/')
+    public function getTree(string $separator = '/'): string
     {
         $tree = '';
 
@@ -504,19 +414,17 @@ abstract class Page
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateSlug()
+    public function updateSlug(): void
     {
         if (!$this->slug) {
-            $this->slug = Transliterator::transliterate($this->title);
+            $this->slug = mb_strtolower((new AsciiSlugger())->slug($this->title)->toString());
         }
     }
 
     /**
      * @ORM\PreRemove()
-     *
-     * @param LifecycleEventArgs $event
      */
-    public function onRemove(LifecycleEventArgs $event)
+    public function onRemove(LifecycleEventArgs $event): void
     {
         $em = $event->getEntityManager();
         if (count($this->children)) {

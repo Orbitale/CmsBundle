@@ -12,7 +12,7 @@
 namespace Orbitale\Bundle\CmsBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -46,7 +46,7 @@ class LayoutsListener implements EventSubscriberInterface
         ];
     }
 
-    public function setRequestLayout(GetResponseEvent $event)
+    public function setRequestLayout(RequestEvent $event): void
     {
         $request = $event->getRequest();
 

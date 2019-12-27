@@ -12,7 +12,7 @@
 namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 
 use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
@@ -38,7 +38,7 @@ class CategoryTest extends AbstractTestCase
 
         $homepage->setCategory($category);
 
-        $kernel = static::getKernel();
+        $kernel = static::bootKernel();
 
         /** @var EntityManager $em */
         $em = $kernel->getContainer()->get('doctrine')->getManager();
@@ -81,7 +81,7 @@ class CategoryTest extends AbstractTestCase
         $category->addChild($child);
         $child->setParent($category);
 
-        $kernel = static::getKernel();
+        $kernel = static::bootKernel();
 
         /** @var EntityManager $em */
         $em = $kernel->getContainer()->get('doctrine')->getManager();
@@ -125,7 +125,7 @@ class CategoryTest extends AbstractTestCase
         ;
         $category->addChild($child);
 
-        $kernel = static::getKernel();
+        $kernel = static::bootKernel();
 
         /** @var EntityManager $em */
         $em = $kernel->getContainer()->get('doctrine')->getManager();

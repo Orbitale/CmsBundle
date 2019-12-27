@@ -11,11 +11,12 @@
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
-use Behat\Transliterator\Transliterator;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("slug")
@@ -31,25 +32,39 @@ abstract class Category
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", length=255)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="slug", type="string", length=255, unique=true)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank()
      */
     protected $slug;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=true)
+     *
+     * @Assert\Type("string")
      */
     protected $description;
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="enabled", type="boolean")
+     *
+     * @Assert\Type("bool")
      */
     protected $enabled = false;
 
@@ -57,11 +72,15 @@ abstract class Category
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
+     *
+     * @Assert\Type(\DateTime::class)
      */
     protected $createdAt;
 
     /**
      * @var Category
+     *
+     * @Assert\Type(Category::class)
      */
     protected $parent;
 
@@ -87,19 +106,11 @@ abstract class Category
         $this->pages     = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return Category
-     */
     public function setName(string $name): Category
     {
         $this->name = $name;
@@ -107,19 +118,11 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return Category
-     */
     public function setDescription(string $description = null): Category
     {
         $this->description = $description;
@@ -127,19 +130,11 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
-    /**
-     * @param string $slug
-     *
-     * @return Category
-     */
     public function setSlug(string $slug = null): Category
     {
         $this->slug = $slug;
@@ -147,39 +142,23 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return Category
-     */
-    public function setEnabled(bool $enabled = null): Category
+    public function setEnabled(bool $enabled = false): Category
     {
         $this->enabled = $enabled;
 
         return $this;
     }
 
-    /**
-     * @return Category
-     */
-    public function getParent()
+    public function getParent(): ?Category
     {
         return $this->parent;
     }
 
-    /**
-     * @param Category|null $parent
-     *
-     * @return Category
-     */
     public function setParent(Category $parent = null): Category
     {
         if ($parent === $this) {
@@ -199,19 +178,11 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return Category
-     */
     public function setCreatedAt(\DateTime $date): Category
     {
         $this->createdAt = $date;
@@ -227,11 +198,6 @@ abstract class Category
         return $this->children;
     }
 
-    /**
-     * @param Category $category
-     *
-     * @return Category
-     */
     public function addChild(Category $category): Category
     {
         $this->children->add($category);
@@ -243,11 +209,6 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @param Category $child
-     *
-     * @return Category
-     */
     public function removeChild(Category $child): Category
     {
         $this->children->removeElement($child);
@@ -263,11 +224,6 @@ abstract class Category
         return $this->pages;
     }
 
-    /**
-     * @param Page $page
-     *
-     * @return Category
-     */
     public function addPage(Page $page): Category
     {
         $this->children->add($page);
@@ -279,11 +235,6 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @param Page $page
-     *
-     * @return Category
-     */
     public function removePage(Page $page): Category
     {
         $this->children->removeElement($page);
@@ -293,11 +244,6 @@ abstract class Category
         return $this;
     }
 
-    /**
-     * @param string $separator
-     *
-     * @return string
-     */
     public function getTree(string $separator = '/'): string
     {
         $tree = '';
@@ -315,10 +261,10 @@ abstract class Category
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
      */
-    public function updateSlug()
+    public function updateSlug(): void
     {
         if (!$this->slug) {
-            $this->slug = Transliterator::transliterate($this->name);
+            $this->slug = mb_strtolower((new AsciiSlugger())->slug($this->name)->toString());
         }
     }
 
@@ -327,7 +273,7 @@ abstract class Category
      *
      * @param LifecycleEventArgs $event
      */
-    public function onRemove(LifecycleEventArgs $event)
+    public function onRemove(LifecycleEventArgs $event): void
     {
         $em = $event->getEntityManager();
         if (count($this->children)) {

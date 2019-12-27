@@ -26,7 +26,7 @@ class CmsExtension extends AbstractExtension implements GlobalsInterface
         $this->designConfig = $designConfig;
     }
 
-    public function getGlobals()
+    public function getGlobals(): array
     {
         return [
             'orbitale_cms_design' => $this->designConfig,

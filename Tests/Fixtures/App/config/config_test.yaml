@@ -1,17 +1,19 @@
 parameters:
-    database_path: '%kernel.root_dir%/../../../build/test.db'
+    database_path: '%kernel.project_dir%/../../../build/test.db'
 
 framework:
     test:       ~
     assets:     ~
     secret:     secret
     translator: { fallbacks:['fr'] }
-    router:     { resource: "%kernel.root_dir%/config/routing.yaml" }
+    router:     { resource: "%kernel.project_dir%/config/routing.yaml" }
     session:
         storage_id: session.storage.mock_file
 
 twig:
     strict_variables: false
+    paths:
+        - '%kernel.project_dir%/templates/'
 
 doctrine:
     dbal:
@@ -26,11 +28,11 @@ doctrine:
         mappings:
             TestBundle:
                 type: annotation
-                dir: '%kernel.root_dir%/../TestBundle/Entity'
+                dir: '%kernel.project_dir%/../TestBundle/Entity'
                 prefix: Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity
             OrbitaleCmsBundle:
                 type: annotation
-                dir: '%kernel.root_dir%/../../../Entity'
+                dir: '%kernel.project_dir%/../../../Entity'
                 prefix: Orbitale\Bundle\CmsBundle\Entity
 
 orbitale_cms:

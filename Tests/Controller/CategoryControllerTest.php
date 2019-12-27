@@ -11,8 +11,8 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
-use Doctrine\ORM\EntityManager;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\AbstractTestCase;
+use Doctrine\ORM\EntityManagerInterface;
+use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
@@ -37,8 +37,8 @@ class CategoryControllerTest extends AbstractTestCase
             ->setEnabled(true)
         ;
 
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 
@@ -50,15 +50,14 @@ class CategoryControllerTest extends AbstractTestCase
         $crawler = $client->followRedirect();
         static::assertEquals($category->getName(), trim($crawler->filter('title')->html()));
         static::assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($category->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertStringContainsString($category->getDescription(), trim($crawler->filter('article')->first()->html()));
     }
 
     public function testTree()
     {
         $client = static::createClient();
-
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Category();
@@ -97,7 +96,7 @@ class CategoryControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/category/'.$childOne->getTree());
         static::assertEquals($childOne->getName(), trim($crawler->filter('title')->html()));
         static::assertEquals($childOne->getName(), trim($crawler->filter('article > h1')->html()));
-        static::assertContains($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertStringContainsString($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/category/root/second-level');
@@ -115,9 +114,8 @@ class CategoryControllerTest extends AbstractTestCase
             ->setDescription('Hello world!')
             ->setEnabled(true)
         ;
-
-        /** @var EntityManager $em */
-        $em = $client->getKernel()->getContainer()->get('doctrine')->getManager();
+        /** @var EntityManagerInterface $em */
+        $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 
@@ -149,10 +147,10 @@ class CategoryControllerTest extends AbstractTestCase
 
         $section1 = $crawler->filter('section')->eq(0);
         static::assertEquals($page1->getTitle(), trim($section1->filter('article > h2 > a')->html()));
-        static::assertContains($page1->getContent(), trim($section1->filter('article')->html()));
+        static::assertStringContainsString($page1->getContent(), trim($section1->filter('article')->html()));
 
         $section2 = $crawler->filter('section')->eq(1);
         static::assertEquals($page2->getTitle(), trim($section2->filter('article > h2 > a')->html()));
-        static::assertContains($page2->getContent(), trim($section2->filter('article')->html()));
+        static::assertStringContainsString($page2->getContent(), trim($section2->filter('article')->html()));
     }
 }

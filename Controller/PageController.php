@@ -72,7 +72,7 @@ class PageController extends AbstractCmsController
      *
      * @return Page[]
      */
-    protected function getPages(array $slugsArray = []): array
+    public function getPages(array $slugsArray = []): array
     {
         /** @var Page[] $pages */
         $pages = $this->pageRepository
@@ -96,7 +96,7 @@ class PageController extends AbstractCmsController
      *
      * @return Page
      */
-    protected function getCurrentPage(array $pages, array $slugsArray): Page
+    public function getCurrentPage(array $pages, array $slugsArray): Page
     {
         if (count($pages) === count($slugsArray)) {
             $currentPage = $this->getFinalTreeElement($slugsArray, $pages);

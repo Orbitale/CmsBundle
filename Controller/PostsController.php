@@ -12,10 +12,8 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
-
 use Exception;
-use Orbitale\Bundle\CmsBundle\Entity\Page;
-use ReflectionException;
+use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -26,18 +24,38 @@ use Symfony\Component\HttpFoundation\Response;
 class PostsController extends AbstractCmsController
 {
     /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var PageRepository
+     */
+    private $pageRepository;
+
+    /**
+     * @var PageController
+     */
+    private $pageController;
+
+    public function __construct(PageRepository $pageRepository)
+    {
+        $this->pageRepository = $pageRepository;
+        $this->pageController = new PageController($pageRepository);
+    }
+
+    /**
      * @param Request $request
      * @param string $slugs
      * @param string $year
      * @param string $month
      * @param string $day
-     * @param string|null $_locale
      * @return Response
      * @throws Exception
      */
     public function indexAction(Request $request, string $slugs,
                                 string $year, string $month,
-                                string $day, string $_locale = null): Response
+                                string $day): Response
     {
         if (!preg_match('/([12][0-9]{3})/', $year)) {
             throw new Exception('Hups! Year is not the correct format!');
@@ -63,58 +81,14 @@ class PostsController extends AbstractCmsController
         }
 
         $this->request = $request;
-        $this->request->setLocale($_locale ?: $this->request->getLocale());
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
-
-        $pages = $this->getPages($slugsArray);
-
-        $currentPage = $this->getCurrentPage($pages, $slugsArray);
+        $pages = $this->pageController->getPages($slugsArray);
+        $currentPage = $this->pageController->getCurrentPage($pages, $slugsArray);
 
         return $this->render('@OrbitaleCms/Front/index.html.twig', [
             'pages' => $pages,
             'page' => $currentPage,
         ]);
-    }
-
-    /**
-     * Retrieves the page list based on slugs.
-     * Also checks the hierarchy of the different pages.
-     *
-     * @param array $slugsArray
-     * @return Page[]
-     */
-    protected function getPages(array $slugsArray = [])
-    {
-        /** @var Page[] $pages */
-        $pages = $this->get('orbitale_cms.page_repository')
-            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
-
-        if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
-            if (count($slugsArray)) {
-                throw $this->createNotFoundException('Page not found!');
-            }
-        }
-
-        return $pages;
-    }
-
-    /**
-     * Retrieves the current page based on page list and entered slugs.
-     *
-     * @param array $pages
-     * @param array $slugsArray
-     * @return Page
-     * @throws ReflectionException
-     */
-    protected function getCurrentPage(array $pages, array $slugsArray): Page
-    {
-        if (count($pages) === count($slugsArray)) {
-            $currentPage = $this->getFinalTreeElement($slugsArray, $pages);
-        } else {
-            $currentPage = current($pages);
-        }
-
-        return $currentPage;
     }
 }

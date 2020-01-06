@@ -58,7 +58,7 @@ class PostsController extends AbstractCmsController
                                 string $year, string $month,
                                 string $day): Response
     {
-        if ($this->validateDate("$year-$month-$day") != true) {
+        if (!$this->isValidDate("$year-$month-$day")) {
             throw $this->createNotFoundException();
         }
 

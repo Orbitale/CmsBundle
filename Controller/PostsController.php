@@ -12,6 +12,7 @@
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
+use DateTime;
 use Exception;
 use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,16 +58,8 @@ class PostsController extends AbstractCmsController
                                 string $year, string $month,
                                 string $day): Response
     {
-        if (!preg_match('/([12][0-9]{3})/', $year)) {
-            throw new Exception('Hups! Year is not the correct format!');
-        }
-
-        if (!preg_match('/(0[1-9]|1[012])/', $year)) {
-            throw new Exception('Hups! Year is not the correct format!');
-        }
-
-        if (!preg_match('/(0[1-9]|[12][0-9]|3[01])/', $day)) {
-            throw new Exception('Hups! Day is not the correct format!');
+        if ($this->validateDate("$year-$month-$day") != true) {
+            throw $this->createNotFoundException();
         }
 
         if (preg_match('#/$#', $slugs)) {
@@ -90,5 +83,11 @@ class PostsController extends AbstractCmsController
             'pages' => $pages,
             'page' => $currentPage,
         ]);
+    }
+
+    function validateDate($date, $format = 'Y-m-d')
+    {
+        $d = DateTime::createFromFormat($format, $date);
+        return $d && $d->format($format) == $date;
     }
 }

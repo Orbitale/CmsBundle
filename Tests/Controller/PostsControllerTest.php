@@ -7,24 +7,10 @@ use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 class PostsControllerTest extends AbstractTestCase
 {
 
-    public function testNoYearInURL(): void
+    public function testNoDatetimeInURL(): void
     {
-        $client  = static::createClient();
+        $client = static::createClient();
         $client->request('GET', '/posts/');
-        static::assertEquals(404, $client->getResponse()->getStatusCode());
-    }
-
-    public function testNoMonthInURL(): void
-    {
-        $client  = static::createClient();
-        $client->request('GET', '/posts/2019/');
-        static::assertEquals(404, $client->getResponse()->getStatusCode());
-    }
-
-    public function testNoDayInURL(): void
-    {
-        $client  = static::createClient();
-        $client->request('GET', '/posts/2019/12/');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 

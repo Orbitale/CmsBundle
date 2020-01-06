@@ -85,7 +85,7 @@ class PostsController extends AbstractCmsController
         ]);
     }
 
-    function validateDate($date, $format = 'Y-m-d')
+    function isValidDate($date, $format = 'Y-m-d'): bool
     {
         $d = DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;

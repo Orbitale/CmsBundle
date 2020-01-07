@@ -48,26 +48,20 @@ class PostsController extends AbstractCmsController
     /**
      * @param Request $request
      * @param string $slugs
-     * @param string $year
-     * @param string $month
-     * @param string $day
+     * @param string $date
      * @return Response
-     * @throws Exception
      */
     public function indexAction(Request $request, string $slugs,
-                                string $year, string $month,
-                                string $day): Response
+                                string $date, string $_date_format): Response
     {
-        if (!$this->isValidDate("$year-$month-$day")) {
+        if (!$this->isValidDate($date, $_date_format)) {
             throw $this->createNotFoundException();
         }
 
         if (preg_match('#/$#', $slugs)) {
             return $this->redirect($this->generateUrl('orbitale_cms_post',
                 [
-                    'year' => $year,
-                    'month' => $month,
-                    'day' => $day,
+                    'date' => $date,
                     'slugs' => rtrim($slugs, '/')
                 ]
             ));
@@ -85,7 +79,7 @@ class PostsController extends AbstractCmsController
         ]);
     }
 
-    function isValidDate($date, $format = 'Y-m-d'): bool
+    function isValidDate($date, $format = 'Y/m/d'): bool
     {
         $d = DateTime::createFromFormat($format, $date);
 

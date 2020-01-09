@@ -34,15 +34,9 @@ class PostsController extends AbstractCmsController
      */
     private $pageRepository;
 
-    /**
-     * @var PageController
-     */
-    private $pageController;
-
     public function __construct(PageRepository $pageRepository)
     {
         $this->pageRepository = $pageRepository;
-        $this->pageController = new PageController($pageRepository);
     }
 
     /**

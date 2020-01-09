@@ -1,3 +1,4 @@
+
 orbitale_cms_page:
     resource: "@OrbitaleCmsBundle/Resources/config/routing/pages.yaml"
     prefix:   /page/

@@ -1,7 +1,7 @@
-orbitale_cms_post:
+orbitale_cms_posts:
   path: /{date}/{slugs}
   requirements:
     slugs: "([a-zA-Z0-9_-]+\/?)*"
   defaults:
-    _controller: Orbitale\Bundle\CmsBundle\Controller\PostController::indexAction
-    _date_format: "Y/m/d"
+    _controller: Orbitale\Bundle\CmsBundle\Controller\PostsController::indexAction
+    _date_format: "Y-m-d"

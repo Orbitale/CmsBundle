@@ -72,12 +72,11 @@ class PageController extends AbstractCmsController
      *
      * @return Page[]
      */
-    public function getPages(array $slugsArray = []): array
+    protected function getPages(array $slugsArray = []): array
     {
         /** @var Page[] $pages */
         $pages = $this->pageRepository
-            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
-        ;
+            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
             throw $this->createNotFoundException(count($slugsArray)
@@ -96,7 +95,7 @@ class PageController extends AbstractCmsController
      *
      * @return Page
      */
-    public function getCurrentPage(array $pages, array $slugsArray): Page
+    protected function getCurrentPage(array $pages, array $slugsArray): Page
     {
         if (count($pages) === count($slugsArray)) {
             $currentPage = $this->getFinalTreeElement($slugsArray, $pages);

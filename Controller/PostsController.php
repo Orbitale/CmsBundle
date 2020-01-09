@@ -74,11 +74,7 @@ class PostsController extends AbstractCmsController
         $pages = $this->pageRepository
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
 
-        if (!$pages) {
-            throw $this->createNotFoundException("Not found");
-        }
-
-        if (count($pages) !== count($slugsArray)) {
+        if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
             throw $this->createNotFoundException("Not found");
         }
 

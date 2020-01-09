@@ -13,7 +13,7 @@
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
 use DateTime;
-use Exception;
+use Orbitale\Bundle\CmsBundle\Entity\Page;
 use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,11 +45,12 @@ class PostsController extends AbstractCmsController
      * @param string $date
      * @return Response
      */
-    public function indexAction(Request $request, string $slugs,
-                                string $date, string $_date_format): Response
+    public function indexAction(Request $request, string $slugs = '',
+                                string $date = '', string $_date_format = null,
+                                string $_locale = null): Response
     {
         if (!$this->isValidDate($date, $_date_format)) {
-            throw $this->createNotFoundException();
+            throw $this->createNotFoundException("Not found");
         }
 
         if (preg_match('#/$#', $slugs)) {
@@ -62,10 +63,26 @@ class PostsController extends AbstractCmsController
         }
 
         $this->request = $request;
+        $this->request->setLocale($_locale ?: $this->request->getLocale());
 
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
-        $pages = $this->pageController->getPages($slugsArray);
-        $currentPage = $this->pageController->getCurrentPage($pages, $slugsArray);
+
+        if (!$slugsArray) {
+            throw $this->createNotFoundException("Not found");
+        }
+
+        $pages = $this->pageRepository
+            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
+
+        if (!$pages) {
+            throw $this->createNotFoundException("Not found");
+        }
+
+        if (count($pages) !== count($slugsArray)) {
+            throw $this->createNotFoundException("Not found");
+        }
+
+        $currentPage = $this->getCurrentPage($pages, $slugsArray);
 
         return $this->render('@OrbitaleCms/Front/index.html.twig', [
             'pages' => $pages,
@@ -73,10 +90,31 @@ class PostsController extends AbstractCmsController
         ]);
     }
 
-    function isValidDate($date, $format = 'Y/m/d'): bool
+    /**
+     * @param $date
+     * @param $format
+     * @return bool
+     */
+    function isValidDate($date, $format): bool
     {
         $d = DateTime::createFromFormat($format, $date);
 
         return $d && $d->format($format) == $date;
+    }
+
+    /**
+     * @param array $pages
+     * @param array $slugsArray
+     * @return Page
+     */
+    public function getCurrentPage(array $pages, array $slugsArray): Page
+    {
+        if (count($pages) === count($slugsArray)) {
+            $currentPage = $this->getFinalTreeElement($slugsArray, $pages);
+        } else {
+            $currentPage = current($pages);
+        }
+
+        return $currentPage;
     }
 }

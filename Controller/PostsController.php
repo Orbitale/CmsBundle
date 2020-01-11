@@ -50,7 +50,7 @@ class PostsController extends AbstractCmsController
                                 string $_locale = null): Response
     {
         if (!$this->isValidDate($date, $_date_format)) {
-            throw $this->createNotFoundException("Not found");
+            throw $this->createNotFoundException("Invalid Date format provided");
         }
 
         if (preg_match('#/$#', $slugs)) {
@@ -68,14 +68,14 @@ class PostsController extends AbstractCmsController
         $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
 
         if (!$slugsArray) {
-            throw $this->createNotFoundException("Not found");
+            throw $this->createNotFoundException("Slug not found");
         }
 
         $pages = $this->pageRepository
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
-            throw $this->createNotFoundException("Not found");
+            throw $this->createNotFoundException("Post not found");
         }
 
         $currentPage = $this->getCurrentPage($pages, $slugsArray);

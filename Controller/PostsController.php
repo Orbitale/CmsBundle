@@ -53,7 +53,7 @@ class PostsController extends AbstractCmsController
             throw $this->createNotFoundException("Not found");
         }
 
-        if (preg_match('#/$#', $slugs)) {
+        if (!$slugs || '/' === $slugs) {
             return $this->redirect($this->generateUrl('orbitale_cms_post',
                 [
                     'date' => $date,

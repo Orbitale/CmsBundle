@@ -65,7 +65,7 @@ class PostsController extends AbstractCmsController
         $this->request = $request;
         $this->request->setLocale($_locale ?: $this->request->getLocale());
 
-        $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
+        $slugsArray = \preg_split('~/~', $slugs, -1, \PREG_SPLIT_NO_EMPTY);
 
         if (!$slugsArray) {
             throw $this->createNotFoundException("Slug not found");

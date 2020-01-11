@@ -18,10 +18,6 @@ use Orbitale\Bundle\CmsBundle\Repository\PageRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Class PostsController
- * @package Orbitale\Bundle\CmsBundle\Controller
- */
 class PostsController extends AbstractCmsController
 {
     /**
@@ -29,9 +25,6 @@ class PostsController extends AbstractCmsController
      */
     private $request;
 
-    /**
-     * @var PageRepository
-     */
     private $pageRepository;
 
     public function __construct(PageRepository $pageRepository)
@@ -39,12 +32,6 @@ class PostsController extends AbstractCmsController
         $this->pageRepository = $pageRepository;
     }
 
-    /**
-     * @param Request $request
-     * @param string $slugs
-     * @param string $date
-     * @return Response
-     */
     public function indexAction(Request $request, string $slugs = '', string $date = '', string $_date_format = null, string $_locale = null): Response
     {
         if (!$this->isValidDate($date, $_date_format)) {

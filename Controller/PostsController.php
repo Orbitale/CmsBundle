@@ -53,7 +53,7 @@ class PostsController extends AbstractCmsController
             throw $this->createNotFoundException("Invalid Date format provided");
         }
 
-        if (preg_match('#/$#', $slugs)) {
+        if (!$slugs || '/' === $slugs) {
             return $this->redirect($this->generateUrl('orbitale_cms_post',
                 [
                     'date' => $date,
@@ -72,7 +72,8 @@ class PostsController extends AbstractCmsController
         }
 
         $pages = $this->pageRepository
-            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
+            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
+        ;
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
             throw $this->createNotFoundException("Post not found");

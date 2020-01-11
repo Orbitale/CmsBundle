@@ -74,11 +74,6 @@ class PostsController extends AbstractCmsController
         ]);
     }
 
-    /**
-     * @param $date
-     * @param $format
-     * @return bool
-     */
     function isValidDate(string $date, string $format): bool
     {
         $d = DateTime::createFromFormat($format, $date);
@@ -86,11 +81,6 @@ class PostsController extends AbstractCmsController
         return $d && $d->format($format) == $date;
     }
 
-    /**
-     * @param array $pages
-     * @param array $slugsArray
-     * @return Page
-     */
     public function getCurrentPage(array $pages, array $slugsArray): Page
     {
         if (count($pages) === count($slugsArray)) {

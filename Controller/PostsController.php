@@ -106,7 +106,7 @@ class PostsController extends AbstractCmsController
     public function getCurrentPage(array $pages, array $slugsArray): Page
     {
         if (count($pages) === count($slugsArray)) {
-            $currentPage = $this->getFinalTreeElement($slugsArray, $pages);
+            return $this->getFinalTreeElement($slugsArray, $pages);
         } else {
             $currentPage = current($pages);
         }

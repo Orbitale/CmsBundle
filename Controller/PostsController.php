@@ -85,10 +85,8 @@ class PostsController extends AbstractCmsController
     {
         if (count($pages) === count($slugsArray)) {
             return $this->getFinalTreeElement($slugsArray, $pages);
-        } else {
-            $currentPage = current($pages);
         }
 
-        return $currentPage;
+        return \current($pages);
     }
 }

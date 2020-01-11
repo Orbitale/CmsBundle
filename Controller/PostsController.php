@@ -92,7 +92,7 @@ class PostsController extends AbstractCmsController
      * @param $format
      * @return bool
      */
-    function isValidDate($date, $format): bool
+    function isValidDate(string $date, string $format): bool
     {
         $d = DateTime::createFromFormat($format, $date);
 

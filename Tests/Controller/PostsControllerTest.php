@@ -14,11 +14,11 @@ class PostsControllerTest extends AbstractTestCase
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function testIncompleteDateTimeInURL(): void
+    public function testIncompleteURL(): void
     {
         $client = static::createClient();
-        $client->request('GET', '/posts/2020-01-19/');
-        static::assertEquals(404, $client->getResponse()->getStatusCode());
+        $client->request('GET', '/posts/2020-01-19');
+        static::assertEquals(301, $client->getResponse()->getStatusCode());
     }
 
     public function testNoPostWithSlug(): void

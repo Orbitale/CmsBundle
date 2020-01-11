@@ -45,9 +45,7 @@ class PostsController extends AbstractCmsController
      * @param string $date
      * @return Response
      */
-    public function indexAction(Request $request, string $slugs = '',
-                                string $date = '', string $_date_format = null,
-                                string $_locale = null): Response
+    public function indexAction(Request $request, string $slugs = '', string $date = '', string $_date_format = null, string $_locale = null): Response
     {
         if (!$this->isValidDate($date, $_date_format)) {
             throw $this->createNotFoundException("Invalid Date format provided");

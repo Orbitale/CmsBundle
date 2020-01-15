@@ -106,7 +106,7 @@ abstract class Category
         $this->pages     = new ArrayCollection();
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -130,7 +130,7 @@ abstract class Category
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }

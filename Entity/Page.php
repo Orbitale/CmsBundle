@@ -179,7 +179,7 @@ abstract class Page
         $this->children  = new ArrayCollection();
     }
 
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -191,7 +191,7 @@ abstract class Page
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): string
     {
         return $this->slug;
     }

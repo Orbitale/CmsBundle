@@ -101,11 +101,9 @@ abstract class Category
         return $this->name;
     }
 
-    public function setName(string $name): Category
+    public function setName(string $name): void
     {
         $this->name = $name;
-
-        return $this;
     }
 
     public function getDescription(): ?string
@@ -113,11 +111,9 @@ abstract class Category
         return $this->description;
     }
 
-    public function setDescription(string $description = null): Category
+    public function setDescription(string $description = null): void
     {
         $this->description = $description;
-
-        return $this;
     }
 
     public function getSlug(): string
@@ -125,11 +121,9 @@ abstract class Category
         return $this->slug;
     }
 
-    public function setSlug(string $slug = null): Category
+    public function setSlug(string $slug = null): void
     {
         $this->slug = $slug;
-
-        return $this;
     }
 
     public function isEnabled(): bool
@@ -137,11 +131,9 @@ abstract class Category
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled = false): Category
+    public function setEnabled(bool $enabled = false): void
     {
         $this->enabled = $enabled;
-
-        return $this;
     }
 
     public function getParent(): ?Category
@@ -149,13 +141,13 @@ abstract class Category
         return $this->parent;
     }
 
-    public function setParent(Category $parent = null): Category
+    public function setParent(Category $parent = null): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
             $this->parent = null;
 
-            return $this;
+            return;
         }
 
         $this->parent = $parent;
@@ -164,8 +156,6 @@ abstract class Category
         if ($parent && false === $parent->getChildren()->indexOf($this)) {
             $parent->addChild($this);
         }
-
-        return $this;
     }
 
     /**
@@ -176,22 +166,18 @@ abstract class Category
         return $this->children;
     }
 
-    public function addChild(Category $category): Category
+    public function addChild(Category $category): void
     {
         $this->children->add($category);
 
         if ($category->getParent() !== $this) {
             $category->setParent($this);
         }
-
-        return $this;
     }
 
-    public function removeChild(Category $child): Category
+    public function removeChild(Category $child): void
     {
         $this->children->removeElement($child);
-
-        return $this;
     }
 
     /**
@@ -202,24 +188,20 @@ abstract class Category
         return $this->pages;
     }
 
-    public function addPage(Page $page): Category
+    public function addPage(Page $page): void
     {
         $this->children->add($page);
 
         if ($page->getCategory() !== $this) {
             $page->setCategory($this);
         }
-
-        return $this;
     }
 
-    public function removePage(Page $page): Category
+    public function removePage(Page $page): void
     {
         $this->children->removeElement($page);
 
         $page->setCategory(null);
-
-        return $this;
     }
 
     public function getTree(string $separator = '/'): string

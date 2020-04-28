@@ -32,8 +32,15 @@ class AbstractTestCase extends WebTestCase
     {
         $page = new Page();
 
+        $set = \Closure::bind(function(string $property, $value) {
+            if (!property_exists(Page::class, $property)){
+                throw new \InvalidArgumentException(sprintf("Property %s does not exist in %s", $property, Page::class));
+            }
+            $this->{$property} = $value;
+        }, $page, Page::class);
+
         foreach ($values as $key => $value) {
-            $page->{'set'.ucfirst($key)}($value);
+            $set($key, $value);
         }
 
         return $page;

@@ -13,7 +13,7 @@ if (false === getenv('SYMFONY_PHPUNIT_REMOVE')) {
     putenv('SYMFONY_PHPUNIT_REMOVE=symfony/yaml');
 }
 if (false === getenv('SYMFONY_PHPUNIT_DIR')) {
-    putenv('SYMFONY_PHPUNIT_DIR='.__DIR__.'/.phpunit');
+    putenv('SYMFONY_PHPUNIT_DIR='.dirname(__DIR__).'/vendor/bin/.phpunit');
 }
 
 require dirname(__DIR__).'/vendor/symfony/phpunit-bridge/bin/simple-phpunit';

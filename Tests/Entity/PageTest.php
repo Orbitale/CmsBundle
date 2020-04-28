@@ -21,13 +21,11 @@ class PageTest extends AbstractTestCase
     {
         $page = new Page();
 
-        $page
-            ->setHomepage(true)
-            ->setSlug('home')
-            ->setTitle('My homepage')
-            ->setHost('localhost')
-            ->setContent('Hello world!')
-        ;
+        $page->setHomepage(true);
+        $page->setSlug('home');
+        $page->setTitle('My homepage');
+        $page->setHost('localhost');
+        $page->setContent('Hello world!');
 
         return $page;
     }
@@ -51,7 +49,7 @@ class PageTest extends AbstractTestCase
         static::assertFalse($homepage->isEnabled()); // Base value in entity
         static::assertTrue($homepage->isHomepage());
         static::assertEquals('localhost', $homepage->getHost());
-        static::assertInstanceOf('DateTime', $homepage->getCreatedAt());
+        static::assertInstanceOf(\DateTimeImmutable::class, $homepage->getCreatedAt());
 
         $homepage->setParent($homepage);
         static::assertNull($homepage->getParent());
@@ -61,7 +59,8 @@ class PageTest extends AbstractTestCase
     {
         $homepage = $this->getDummyPage();
 
-        $child = $this->getDummyPage()->setSlug('child');
+        $child = $this->getDummyPage();
+        $child->setSlug('child');
 
         $homepage->addChild($child);
         $child->setParent($homepage);
@@ -95,19 +94,16 @@ class PageTest extends AbstractTestCase
     public function testRemoval()
     {
         $page = new Page();
-        $page
-            ->setTitle('Default page')
-            ->setSlug('default')
-            ->setEnabled(true)
-        ;
+        $page->setTitle('Default page');
+        $page->setSlug('default');
+        $page->setEnabled(true);
 
         $child = new Page();
-        $child
-            ->setTitle('Child page')
-            ->setSlug('child')
-            ->setEnabled(true)
-            ->setParent($page)
-        ;
+        $child->setTitle('Child page');
+        $child->setSlug('child');
+        $child->setEnabled(true);
+        $child->setParent($page);
+
         $page->addChild($child);
 
         $kernel = static::bootKernel();

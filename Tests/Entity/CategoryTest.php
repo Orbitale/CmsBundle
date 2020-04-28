@@ -21,20 +21,16 @@ class CategoryTest extends AbstractTestCase
     public function testCategory()
     {
         $homepage = new Page();
-        $homepage
-            ->setHomepage(true)
-            ->setEnabled(false)
-            ->setSlug('home')
-            ->setTitle('My homepage')
-            ->setHost('localhost')
-            ->setContent('Hello world!')
-        ;
+        $homepage->setHomepage(true);
+        $homepage->setEnabled(false);
+        $homepage->setSlug('home');
+        $homepage->setTitle('My homepage');
+        $homepage->setHost('localhost');
+        $homepage->setContent('Hello world!');
 
         $category = new Category();
-        $category
-            ->setName('Default category')
-            ->setSlug('default')
-        ;
+        $category->setName('Default category');
+        $category->setSlug('default');
 
         $homepage->setCategory($category);
 
@@ -57,11 +53,9 @@ class CategoryTest extends AbstractTestCase
     public function testIdenticalParent()
     {
         $category = new Category();
-        $category
-            ->setName('Default category')
-            ->setSlug('default')
-            ->setEnabled(true)
-        ;
+        $category->setName('Default category');
+        $category->setSlug('default');
+        $category->setEnabled(true);
         $category->setParent($category);
         static::assertNull($category->getParent());
     }
@@ -69,11 +63,9 @@ class CategoryTest extends AbstractTestCase
     public function testLifecycleCallbacks()
     {
         $category = new Category();
-        $category
-            ->setName('Default category')
-            ->setSlug('default')
-            ->setEnabled(true)
-        ;
+        $category->setName('Default category');
+        $category->setSlug('default');
+        $category->setEnabled(true);
 
         $child = clone $category;
         $child->setSlug('child');
@@ -110,19 +102,18 @@ class CategoryTest extends AbstractTestCase
     public function testRemoval()
     {
         $category = new Category();
-        $category
-            ->setName('Default category')
-            ->setSlug('default')
-            ->setEnabled(true)
-        ;
+
+        $category->setName('Default category');
+        $category->setSlug('default');
+        $category->setEnabled(true);
 
         $child = new Category();
-        $child
-            ->setName('Child category')
-            ->setSlug('child')
-            ->setEnabled(true)
-            ->setParent($category)
-        ;
+
+        $child->setName('Child category');
+        $child->setSlug('child');
+        $child->setEnabled(true);
+        $child->setParent($category);
+
         $category->addChild($child);
 
         $kernel = static::bootKernel();

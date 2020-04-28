@@ -30,12 +30,10 @@ class CategoryControllerTest extends AbstractTestCase
         $client = static::createClient();
 
         $category = new Category();
-        $category
-            ->setSlug('default')
-            ->setName('Default Category')
-            ->setDescription('Hello world!')
-            ->setEnabled(true)
-        ;
+        $category->setSlug('default');
+        $category->setName('Default Category');
+        $category->setDescription('Hello world!');
+        $category->setEnabled(true);
 
         /** @var EntityManagerInterface $em */
         $em = static::$container->get(EntityManagerInterface::class);
@@ -61,34 +59,31 @@ class CategoryControllerTest extends AbstractTestCase
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Category();
-        $parent
-            ->setSlug('default')
-            ->setName('Default Category')
-            ->setDescription('Hello world!')
-            ->setEnabled(true)
-        ;
+        $parent->setSlug('default');
+        $parent->setName('Default Category');
+        $parent->setDescription('Hello world!');
+        $parent->setEnabled(true);
+
         $em->persist($parent);
         $em->flush();
 
         $childOne = new Category();
-        $childOne
-            ->setEnabled(true)
-            ->setSlug('first-level')
-            ->setName('First level')
-            ->setDescription('This level is the first one')
-            ->setParent($parent)
-        ;
+        $childOne->setEnabled(true);
+        $childOne->setSlug('first-level');
+        $childOne->setName('First level');
+        $childOne->setDescription('This level is the first one');
+        $childOne->setParent($parent);
+
         $em->persist($childOne);
         $em->flush();
 
         $childTwoDisabled = new Category();
-        $childTwoDisabled
-            ->setEnabled(false)
-            ->setSlug('second-level')
-            ->setName('Disabled category')
-            ->setDescription('This category should render a 404 error')
-            ->setParent($parent)
-        ;
+        $childTwoDisabled->setEnabled(false);
+        $childTwoDisabled->setSlug('second-level');
+        $childTwoDisabled->setName('Disabled category');
+        $childTwoDisabled->setDescription('This category should render a 404 error');
+        $childTwoDisabled->setParent($parent);
+
         $em->persist($childTwoDisabled);
         $em->flush();
 
@@ -108,36 +103,31 @@ class CategoryControllerTest extends AbstractTestCase
         $client = static::createClient();
 
         $category = new Category();
-        $category
-            ->setSlug('default')
-            ->setName('Default Category')
-            ->setDescription('Hello world!')
-            ->setEnabled(true)
-        ;
+        $category->setSlug('default');
+        $category->setName('Default Category');
+        $category->setDescription('Hello world!');
+        $category->setEnabled(true);
+
         /** @var EntityManagerInterface $em */
         $em = static::$container->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 
         $page1 = new Page();
-        $page1
-            ->setEnabled(true)
-            ->setSlug('home')
-            ->setTitle('My homepage')
-            ->setHost('localhost')
-            ->setContent('Hello world!')
-            ->setCategory($category)
-        ;
+        $page1->setEnabled(true);
+        $page1->setSlug('home');
+        $page1->setTitle('My homepage');
+        $page1->setHost('localhost');
+        $page1->setContent('Hello world!');
+        $page1->setCategory($category);
 
         $page2 = new Page();
-        $page2
-            ->setEnabled(true)
-            ->setSlug('about')
-            ->setTitle('About page')
-            ->setHost('localhost')
-            ->setContent('We.are.the.robots.')
-            ->setCategory($category)
-        ;
+        $page2->setEnabled(true);
+        $page2->setSlug('about');
+        $page2->setTitle('About page');
+        $page2->setHost('localhost');
+        $page2->setContent('We.are.the.robots.');
+        $page2->setCategory($category);
 
         $em->persist($page1);
         $em->persist($page2);

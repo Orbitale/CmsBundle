@@ -191,7 +191,7 @@ abstract class Page
 
     public function getSlug(): string
     {
-        return $this->slug;
+        return (string) $this->slug;
     }
 
     public function setSlug(?string $slug): void

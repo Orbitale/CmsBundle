@@ -10,3 +10,4 @@ orbitale_cms_category:
 orbitale_cms_post:
     resource: "@OrbitaleCmsBundle/Resources/config/routing/posts.yaml"
     prefix:   /posts/
+    trailing_slash_on_root: false

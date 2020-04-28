@@ -57,13 +57,12 @@ class LayoutsListenerTest extends AbstractTestCase
         $client = parent::createClient($options, $server);
 
         $homepage = new Page();
-        $homepage
-            ->setHomepage(true)
-            ->setEnabled(true)
-            ->setSlug('home')
-            ->setTitle('My homepage')
-            ->setContent('Hello world!')
-        ;
+
+        $homepage->setHomepage(true);
+        $homepage->setEnabled(true);
+        $homepage->setSlug('home');
+        $homepage->setTitle('My homepage');
+        $homepage->setContent('Hello world!');
 
         /** @var EntityManagerInterface $em */
         $em = static::$container->get(EntityManagerInterface::class);

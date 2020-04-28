@@ -35,26 +35,17 @@ class PostsController extends AbstractCmsController
     public function indexAction(Request $request, string $slugs = '', string $date = '', string $_date_format = null, string $_locale = null): Response
     {
         if (!$this->isValidDate($date, $_date_format)) {
-            throw $this->createNotFoundException("Invalid Date format provided");
+            throw $this->createNotFoundException("Invalid date format provided");
         }
 
         if (!$slugs || '/' === $slugs) {
-            return $this->redirect($this->generateUrl('orbitale_cms_post',
-                [
-                    'date' => $date,
-                    'slugs' => rtrim($slugs, '/')
-                ]
-            ));
+            throw $this->createNotFoundException("No page identifier provided");
         }
 
         $this->request = $request;
         $this->request->setLocale($_locale ?: $this->request->getLocale());
 
         $slugsArray = \preg_split('~/~', $slugs, -1, \PREG_SPLIT_NO_EMPTY);
-
-        if (!$slugsArray) {
-            throw $this->createNotFoundException("Slug not found");
-        }
 
         $pages = $this->pageRepository
             ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())

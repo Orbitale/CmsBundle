@@ -8,6 +8,15 @@ services:
             - controller.service_arguments
             - container.service_subscriber
 
+    Orbitale\Bundle\CmsBundle\Controller\PostsController:
+        public: true
+        autowire: true
+        arguments:
+            - '@Orbitale\Bundle\CmsBundle\Repository\PageRepository'
+        tags:
+            - controller.service_arguments
+            - container.service_subscriber
+
     Orbitale\Bundle\CmsBundle\Controller\CategoryController:
         public: true
         autowire: true

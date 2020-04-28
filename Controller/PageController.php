@@ -76,8 +76,7 @@ class PageController extends AbstractCmsController
     {
         /** @var Page[] $pages */
         $pages = $this->pageRepository
-            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
-        ;
+            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
 
         if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
             throw $this->createNotFoundException(count($slugsArray)

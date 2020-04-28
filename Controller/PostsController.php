@@ -68,6 +68,10 @@ class PostsController extends AbstractCmsController
 
         $currentPage = $this->getCurrentPage($pages, $slugsArray);
 
+        if ($currentPage->getCreatedAt()->format($_date_format) !== $date) {
+            throw $this->createNotFoundException('Date in URL does not match post\'s date.');
+        }
+
         return $this->render('@OrbitaleCms/Front/index.html.twig', [
             'pages' => $pages,
             'page' => $currentPage,

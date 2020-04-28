@@ -15,6 +15,12 @@ use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class CategoryTest extends AbstractTestCase
 {
@@ -160,5 +166,38 @@ class CategoryTest extends AbstractTestCase
         $category->updateSlug();
 
         static::assertEquals(null, $category->getSlug());
+    }
+
+    public function testSuccessfulFormSubmissionWithEmptyData()
+    {
+        static::bootKernel();
+
+        $category = new Category();
+
+        /** @var FormBuilderInterface $builder */
+        $builder = static::$container->get(FormFactoryInterface::class)->createBuilder(FormType::class, $category);
+        $builder
+            ->add('name')
+            ->add('slug')
+            ->add('description', TextareaType::class)
+            ->add('parent', EntityType::class, ['class' => Category::class])
+            ->add('enabled', CheckboxType::class)
+        ;
+
+        $form = $builder->getForm();
+
+        $form->submit([
+            'name' => null,
+            'slug' => null,
+            'description' => null,
+            'parent' => null,
+            'enabled' => null,
+        ]);
+
+        static::assertSame('', $category->getName());
+        static::assertSame('', $category->getSlug());
+        static::assertNull($category->getDescription());
+        static::assertNull($category->getParent());
+        static::assertFalse($category->isEnabled());
     }
 }

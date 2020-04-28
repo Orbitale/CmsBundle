@@ -98,10 +98,10 @@ abstract class Category
 
     public function getName(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
-    public function setName(string $name): void
+    public function setName(?string $name): void
     {
         $this->name = $name;
     }
@@ -111,19 +111,19 @@ abstract class Category
         return $this->description;
     }
 
-    public function setDescription(string $description = null): void
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
 
     public function getSlug(): string
     {
-        return $this->slug;
+        return (string) $this->slug;
     }
 
-    public function setSlug(string $slug = null): void
+    public function setSlug(?string $slug): void
     {
-        $this->slug = $slug;
+        $this->slug = (string) $slug;
     }
 
     public function isEnabled(): bool
@@ -131,9 +131,9 @@ abstract class Category
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled = false): void
+    public function setEnabled(?bool $enabled = false): void
     {
-        $this->enabled = $enabled;
+        $this->enabled = (bool) $enabled;
     }
 
     public function getParent(): ?Category
@@ -141,7 +141,7 @@ abstract class Category
         return $this->parent;
     }
 
-    public function setParent(Category $parent = null): void
+    public function setParent(?Category $parent): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.

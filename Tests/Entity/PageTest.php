@@ -14,6 +14,12 @@ namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class PageTest extends AbstractTestCase
 {
@@ -140,5 +146,61 @@ class PageTest extends AbstractTestCase
         $page->updateSlug();
 
         static::assertEquals('default-page', $page->getSlug());
+    }
+
+    public function testSuccessfulFormSubmissionWithEmptyData()
+    {
+        static::bootKernel();
+
+        $page = new Page();
+
+        /** @var FormBuilderInterface $builder */
+        $builder = static::$container->get(FormFactoryInterface::class)->createBuilder(FormType::class, $page);
+        $builder
+            ->add('title')
+            ->add('slug')
+            ->add('metaDescription')
+            ->add('metaTitle')
+            ->add('metaKeywords')
+            ->add('host')
+            ->add('content', TextareaType::class)
+            ->add('css', TextareaType::class)
+            ->add('js', TextareaType::class)
+            ->add('parent', EntityType::class, ['class' => Page::class])
+            ->add('homepage', CheckboxType::class)
+            ->add('enabled', CheckboxType::class)
+        ;
+
+        $form = $builder->getForm();
+
+        $form->submit([
+            'title' => null,
+            'slug' => null,
+            'metaDescription' => null,
+            'metaTitle' => null,
+            'metaKeywords' => null,
+            'host' => null,
+            'content' => null,
+            'css' => null,
+            'js' => null,
+            'category' => null,
+            'parent' => null,
+            'homepage' => null,
+            'enabled' => null,
+        ]);
+
+        static::assertSame('', $page->getTitle());
+        static::assertSame('', $page->getSlug());
+        static::assertNull($page->getMetaDescription());
+        static::assertNull($page->getMetaTitle());
+        static::assertNull($page->getMetaKeywords());
+        static::assertNull($page->getHost());
+        static::assertNull($page->getContent());
+        static::assertNull($page->getCss());
+        static::assertNull($page->getJs());
+        static::assertNull($page->getCategory());
+        static::assertNull($page->getParent());
+        static::assertFalse($page->isHomepage());
+        static::assertFalse($page->isEnabled());
     }
 }

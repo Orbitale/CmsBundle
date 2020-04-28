@@ -69,15 +69,6 @@ abstract class Category
     protected $enabled = false;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Assert\Type(\DateTime::class)
-     */
-    protected $createdAt;
-
-    /**
      * @var Category
      *
      * @Assert\Type(Category::class)
@@ -101,7 +92,6 @@ abstract class Category
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
         $this->children  = new ArrayCollection();
         $this->pages     = new ArrayCollection();
     }
@@ -174,18 +164,6 @@ abstract class Category
         if ($parent && false === $parent->getChildren()->indexOf($this)) {
             $parent->addChild($this);
         }
-
-        return $this;
-    }
-
-    public function getCreatedAt(): \DateTime
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTime $date): Category
-    {
-        $this->createdAt = $date;
 
         return $this;
     }

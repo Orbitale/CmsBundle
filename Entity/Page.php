@@ -112,11 +112,11 @@ abstract class Page
     protected $js;
 
     /**
-     * @var \DateTime
+     * @var \DateTimeImmutable
      *
-     * @ORM\Column(name="created_at", type="datetime")
+     * @ORM\Column(name="created_at", type="datetime_immutable")
      *
-     * @Assert\Type(\DateTime::class)
+     * @Assert\Type(\DateTimeImmutable::class)
      */
     protected $createdAt;
 
@@ -175,20 +175,18 @@ abstract class Page
 
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
         $this->children  = new ArrayCollection();
     }
 
     public function getTitle(): string
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
-    public function setTitle(string $title): Page
+    public function setTitle(?string $title): void
     {
-        $this->title = $title;
-
-        return $this;
+        $this->title = (string) $title;
     }
 
     public function getSlug(): string
@@ -196,11 +194,9 @@ abstract class Page
         return $this->slug;
     }
 
-    public function setSlug(?string $slug): Page
+    public function setSlug(?string $slug): void
     {
         $this->slug = (string) $slug;
-
-        return $this;
     }
 
     public function getContent(): ?string
@@ -208,11 +204,9 @@ abstract class Page
         return $this->content;
     }
 
-    public function setContent(string $content = null): Page
+    public function setContent(?string $content): void
     {
         $this->content = $content;
-
-        return $this;
     }
 
     public function getMetaDescription(): ?string
@@ -220,11 +214,9 @@ abstract class Page
         return $this->metaDescription;
     }
 
-    public function setMetaDescription(string $metaDescription = null): Page
+    public function setMetaDescription(?string $metaDescription): void
     {
         $this->metaDescription = $metaDescription;
-
-        return $this;
     }
 
     public function getMetaTitle(): ?string
@@ -232,11 +224,9 @@ abstract class Page
         return $this->metaTitle;
     }
 
-    public function setMetaTitle(string $metaTitle = null): Page
+    public function setMetaTitle(?string $metaTitle): void
     {
         $this->metaTitle = $metaTitle;
-
-        return $this;
     }
 
     public function getMetaKeywords(): ?string
@@ -244,11 +234,9 @@ abstract class Page
         return $this->metaKeywords;
     }
 
-    public function setMetaKeywords(string $metaKeywords = null): Page
+    public function setMetaKeywords(?string $metaKeywords): void
     {
         $this->metaKeywords = $metaKeywords;
-
-        return $this;
     }
 
     public function getCategory(): ?Category
@@ -256,11 +244,9 @@ abstract class Page
         return $this->category;
     }
 
-    public function setCategory(Category $category = null): Page
+    public function setCategory(?Category $category): void
     {
         $this->category = $category;
-
-        return $this;
     }
 
     public function getCss(): ?string
@@ -268,11 +254,9 @@ abstract class Page
         return $this->css;
     }
 
-    public function setCss(string $css = null): Page
+    public function setCss(?string $css): void
     {
         $this->css = $css;
-
-        return $this;
     }
 
     public function getJs(): ?string
@@ -280,23 +264,23 @@ abstract class Page
         return $this->js;
     }
 
-    public function setJs(string $js = null): Page
+    public function setJs(?string $js): void
     {
         $this->js = $js;
-
-        return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $date): Page
+    public function setCreatedAt(\DateTimeInterface $date): void
     {
-        $this->createdAt = $date;
+        if ($date instanceof \DateTime) {
+            $date = \DateTimeImmutable::createFromMutable($date);
+        }
 
-        return $this;
+        $this->createdAt = $date;
     }
 
     public function isEnabled(): bool
@@ -304,11 +288,9 @@ abstract class Page
         return $this->enabled;
     }
 
-    public function setEnabled(bool $enabled = false): Page
+    public function setEnabled(?bool $enabled = false): void
     {
-        $this->enabled = $enabled;
-
-        return $this;
+        $this->enabled = (bool) $enabled;
     }
 
     public function getParent(): ?Page
@@ -316,13 +298,13 @@ abstract class Page
         return $this->parent;
     }
 
-    public function setParent(Page $parent = null): Page
+    public function setParent(?Page $parent): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
             $this->parent = null;
 
-            return $this;
+            return;
         }
 
         $this->parent = $parent;
@@ -331,8 +313,6 @@ abstract class Page
         if ($parent && false === $parent->getChildren()->indexOf($this)) {
             $parent->addChild($this);
         }
-
-        return $this;
     }
 
     /**
@@ -343,22 +323,18 @@ abstract class Page
         return $this->children;
     }
 
-    public function addChild(Page $page): Page
+    public function addChild(Page $page): void
     {
         $this->children->add($page);
 
         if ($page->getParent() !== $this) {
             $page->setParent($this);
         }
-
-        return $this;
     }
 
-    public function removeChild(Page $page): Page
+    public function removeChild(Page $page): void
     {
         $this->children->removeElement($page);
-
-        return $this;
     }
 
     public function isHomepage(): bool
@@ -366,11 +342,9 @@ abstract class Page
         return $this->homepage;
     }
 
-    public function setHomepage(bool $homepage): Page
+    public function setHomepage(bool $homepage): void
     {
         $this->homepage = $homepage;
-
-        return $this;
     }
 
     public function getHost(): ?string
@@ -378,11 +352,9 @@ abstract class Page
         return $this->host;
     }
 
-    public function setHost(string $host = null): Page
+    public function setHost(?string $host): void
     {
         $this->host = $host;
-
-        return $this;
     }
 
     public function getLocale(): ?string
@@ -390,11 +362,9 @@ abstract class Page
         return $this->locale;
     }
 
-    public function setLocale(string $locale = null): Page
+    public function setLocale(?string $locale): void
     {
         $this->locale = $locale;
-
-        return $this;
     }
 
     public function getTree(string $separator = '/'): string

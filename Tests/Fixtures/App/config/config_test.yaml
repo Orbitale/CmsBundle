@@ -6,8 +6,6 @@ framework:
     assets:     ~
     secret:     secret
     translator: { fallbacks:['fr'] }
-    form:
-        enabled: true
     router:
         resource: "%kernel.project_dir%/config/routing.yaml"
         utf8: true

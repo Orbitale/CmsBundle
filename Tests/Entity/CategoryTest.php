@@ -15,12 +15,7 @@ use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CategoryTest extends AbstractTestCase
 {
@@ -168,31 +163,40 @@ class CategoryTest extends AbstractTestCase
         static::assertEquals(null, $category->getSlug());
     }
 
-    public function testSuccessfulFormSubmissionWithEmptyData()
+    public function testSuccessfulValidation()
     {
-        static::bootKernel();
+        self::bootKernel();
+        $validator = self::getContainer()->get(ValidatorInterface::class);
+
+        $category = new Category();
+        $category->setName('Name');
+        $category->setSlug('name');
+
+        $errors = $validator->validate($category);
+
+        self::assertCount(0, $errors);
+
+        static::assertSame('Name', $category->getName());
+        static::assertSame('name', $category->getSlug());
+        static::assertNull($category->getDescription());
+        static::assertNull($category->getParent());
+        static::assertFalse($category->isEnabled());
+    }
+
+    public function testFailingValidationWithEmptyData()
+    {
+        self::bootKernel();
+        $validator = self::getContainer()->get(ValidatorInterface::class);
 
         $category = new Category();
 
-        /** @var FormBuilderInterface $builder */
-        $builder = static::$container->get(FormFactoryInterface::class)->createBuilder(FormType::class, $category);
-        $builder
-            ->add('name')
-            ->add('slug')
-            ->add('description', TextareaType::class)
-            ->add('parent', EntityType::class, ['class' => Category::class])
-            ->add('enabled', CheckboxType::class)
-        ;
+        $errors = $validator->validate($category);
 
-        $form = $builder->getForm();
+        self::assertCount(2, $errors);
 
-        $form->submit([
-            'name' => null,
-            'slug' => null,
-            'description' => null,
-            'parent' => null,
-            'enabled' => null,
-        ]);
+        self::assertSame('name', $errors[0]->getPropertyPath());
+        self::assertSame('slug', $errors[1]->getPropertyPath());
+
 
         static::assertSame('', $category->getName());
         static::assertSame('', $category->getSlug());

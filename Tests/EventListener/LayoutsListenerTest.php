@@ -30,7 +30,7 @@ class LayoutsListenerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/page/');
 
         static::assertEquals(1, $crawler->filter('#test_layout_wrapper')->count());
-        static::assertRegExp('~^One change of the layout is this special hardcoded title\. ~', $crawler->filter('title')->html());
+        static::assertMatchesRegularExpression('~^One change of the layout is this special hardcoded title\. ~', $crawler->filter('title')->html());
     }
 
     public function testHostLayout(): void
@@ -39,7 +39,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
         $crawler = $client->request('GET', '/page/');
 
-        static::assertRegExp('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
+        static::assertMatchesRegularExpression('~^This layout is only for local\.host\. ~', $crawler->filter('title')->html());
     }
 
     public function testLayoutWrong(): void

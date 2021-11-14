@@ -6,9 +6,11 @@ framework:
     assets:     ~
     secret:     secret
     translator: { fallbacks:['fr'] }
-    router:     { resource: "%kernel.project_dir%/config/routing.yaml" }
+    router:
+        resource: "%kernel.project_dir%/config/routing.yaml"
+        utf8: true
     session:
-        storage_id: session.storage.mock_file
+        storage_factory_id: session.storage.factory.mock_file
 
 twig:
     strict_variables: false

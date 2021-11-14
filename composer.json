@@ -6,7 +6,7 @@
     "homepage": "https://github.com/Orbitale/CmsBundle",
     "license": "MIT",
     "require": {
-        "php": "^7.3",
+        "php": ">=7.3",
         "doctrine/annotations": "^1.8",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.5.1",
@@ -26,7 +26,6 @@
         "symfony/browser-kit": "^5.0",
         "symfony/css-selector": "^5.0",
         "symfony/dom-crawler": "^5.0",
-        "symfony/form": "^5.0",
         "symfony/phpunit-bridge": "^5.0",
         "symfony/yaml": "^5.0"
     },
@@ -53,12 +52,6 @@
     "extra": {
         "branch-alias": {
             "dev-master": "4.x-dev"
-        }
-    },
-    "repositories": {
-        "phpunit-bridge": {
-            "type": "path",
-            "url": "E:\\dev\\www\\CmsBundle\\vendor\\symfony\\phpunit-bridge"
         }
     }
 }

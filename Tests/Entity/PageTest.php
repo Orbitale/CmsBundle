@@ -14,12 +14,9 @@ namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 use Doctrine\ORM\EntityManager;
 use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Validator\ConstraintViolationInterface;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PageTest extends AbstractTestCase
 {
@@ -148,46 +145,48 @@ class PageTest extends AbstractTestCase
         static::assertEquals('default-page', $page->getSlug());
     }
 
-    public function testSuccessfulFormSubmissionWithEmptyData()
+    public function testSuccessfulValidation()
     {
-        static::bootKernel();
+        self::bootKernel();
+        $validator = self::getContainer()->get(ValidatorInterface::class);
+
+        $page = new Page();
+        $page->setTitle('Title');
+        $page->setSlug('title');
+
+        $errors = $validator->validate($page);
+
+        self::assertCount(0, $errors);
+
+        static::assertSame('Title', $page->getTitle());
+        static::assertSame('title', $page->getSlug());
+        static::assertNull($page->getMetaDescription());
+        static::assertNull($page->getMetaTitle());
+        static::assertNull($page->getMetaKeywords());
+        static::assertNull($page->getHost());
+        static::assertNull($page->getContent());
+        static::assertNull($page->getCss());
+        static::assertNull($page->getJs());
+        static::assertNull($page->getCategory());
+        static::assertNull($page->getParent());
+        static::assertFalse($page->isHomepage());
+        static::assertFalse($page->isEnabled());
+    }
+
+    public function testFailingfulValidationWithEmptyData()
+    {
+        self::bootKernel();
+        $validator = self::getContainer()->get(ValidatorInterface::class);
 
         $page = new Page();
 
-        /** @var FormBuilderInterface $builder */
-        $builder = static::$container->get(FormFactoryInterface::class)->createBuilder(FormType::class, $page);
-        $builder
-            ->add('title')
-            ->add('slug')
-            ->add('metaDescription')
-            ->add('metaTitle')
-            ->add('metaKeywords')
-            ->add('host')
-            ->add('content', TextareaType::class)
-            ->add('css', TextareaType::class)
-            ->add('js', TextareaType::class)
-            ->add('parent', EntityType::class, ['class' => Page::class])
-            ->add('homepage', CheckboxType::class)
-            ->add('enabled', CheckboxType::class)
-        ;
+        /** @var ConstraintViolationInterface[]&ConstraintViolationListInterface $errors */
+        $errors = $validator->validate($page);
 
-        $form = $builder->getForm();
+        self::assertCount(2, $errors);
 
-        $form->submit([
-            'title' => null,
-            'slug' => null,
-            'metaDescription' => null,
-            'metaTitle' => null,
-            'metaKeywords' => null,
-            'host' => null,
-            'content' => null,
-            'css' => null,
-            'js' => null,
-            'category' => null,
-            'parent' => null,
-            'homepage' => null,
-            'enabled' => null,
-        ]);
+        self::assertSame('title', $errors[0]->getPropertyPath());
+        self::assertSame('slug', $errors[1]->getPropertyPath());
 
         static::assertSame('', $page->getTitle());
         static::assertSame('', $page->getSlug());

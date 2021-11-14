@@ -33,7 +33,7 @@ class CategoryController extends AbstractCmsController
      *
      * @return Response
      */
-    public function indexAction(string $slugs = '', Request $request): Response
+    public function indexAction(Request $request, string $slugs = ''): Response
     {
         if (preg_match('#/$#', $slugs)) {
             return $this->redirect($this->generateUrl('orbitale_cms_category', ['slugs' => rtrim($slugs, '/')]));

@@ -1,0 +1,37 @@
+name: PHP CI
+
+on: [push]
+
+jobs:
+    build-test:
+        runs-on: ${{ matrix.operating-system }}
+
+        strategy:
+            matrix:
+                operating-system: [ ubuntu-latest, windows-latest, macos-latest ]
+                php-version:
+                    - '7.3'
+                    - '7.4'
+                    - '8.0'
+        name: PHP ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+        steps:
+            - uses: actions/checkout@v2
+
+            - uses: shivammathur/setup-php@v2
+              with:
+                  php-version: "${{ matrix.php-version }}"
+
+            - run: composer validate
+
+            - id: composer-cache
+              run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+            - uses: actions/cache@v1
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: ${{ runner.os }}-composer-
+
+            - run: composer install
+
+            - run: vendor/bin/phpunit

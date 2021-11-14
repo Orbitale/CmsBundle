@@ -1,3 +1,8 @@
+# v4.0.1
+
+* Make the project compatible with Symfony 5.4
+* Make the project compatible with PHP up to 8.1
+
 # v4.0.0
 
 ### Breaking changes

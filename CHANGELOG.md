@@ -1,3 +1,9 @@
+#v4.1.0
+
+* Make the project compatible with Symfony 6.0
+* Test multiple versions of PHP and Symfony in CI
+* **Potential BC break**: change minimum required Symfony versions to 5.3 instead of 5.0 (please upgrade 😉).
+
 # v4.0.1
 
 * Make the project compatible with Symfony 5.4

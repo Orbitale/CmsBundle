@@ -14,6 +14,7 @@ namespace Orbitale\Bundle\CmsBundle\Tests\EventListener;
 use Doctrine\ORM\EntityManagerInterface;
 use Orbitale\Bundle\CmsBundle\Tests\AbstractTestCase;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 
@@ -21,10 +22,10 @@ class LayoutsListenerTest extends AbstractTestCase
 {
     public function testDifferentLayout(): void
     {
-        $client = static::createClient(['environment' => 'layout']);
+        $client = self::createClient(['environment' => 'layout']);
 
         /** @var Environment $twig */
-        $twig = static::$container->get(Environment::class);
+        $twig = self::getContainer()->get(Environment::class);
         $twig->resolveTemplate('test_layout.html.twig');
 
         $crawler = $client->request('GET', '/page/');
@@ -35,7 +36,7 @@ class LayoutsListenerTest extends AbstractTestCase
 
     public function testHostLayout(): void
     {
-        $client = static::createClient(['environment' => 'layout'], ['HTTP_HOST' => 'local.host']);
+        $client = self::createClient(['environment' => 'layout'], ['HTTP_HOST' => 'local.host']);
 
         $crawler = $client->request('GET', '/page/');
 
@@ -46,13 +47,13 @@ class LayoutsListenerTest extends AbstractTestCase
     {
         $this->expectException(LoaderError::class);
         $this->expectExceptionMessage('Unable to find template this_layout_does_not_exist.html.twig for layout front. The "layout" parameter must be a valid twig view to be used as a layout in "this_layout_does_not_exist.html.twig".');
-        static::createClient(['environment' => 'layout_wrong'])->request('GET', '/page/');
+        self::createClient(['environment' => 'layout_wrong'])->request('GET', '/page/');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected static function createClient(array $options = [], array $server = [])
+    protected static function createClient(array $options = [], array $server = []): KernelBrowser
     {
         $client = parent::createClient($options, $server);
 
@@ -65,7 +66,7 @@ class LayoutsListenerTest extends AbstractTestCase
         $homepage->setContent('Hello world!');
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($homepage);
         $em->flush();
 

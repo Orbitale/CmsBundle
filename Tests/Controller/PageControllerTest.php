@@ -20,7 +20,7 @@ class PageControllerTest extends AbstractTestCase
     public function testNoHomepage(): void
     {
         $error   = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
-        $client  = static::createClient();
+        $client  = self::createClient();
         $crawler = $client->request('GET', '/page/');
         static::assertEquals($error, trim($crawler->filter('title')->html()));
         static::assertEquals(404, $client->getResponse()->getStatusCode());
@@ -28,14 +28,14 @@ class PageControllerTest extends AbstractTestCase
 
     public function testNoPageWithSlug(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->request('GET', '/page/inexistent-slug');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
     public function testOneHomepage(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $homepage = $this->createPage([
             'homepage' => true,
@@ -47,7 +47,7 @@ class PageControllerTest extends AbstractTestCase
         ]);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($homepage);
         $em->flush();
 
@@ -74,7 +74,7 @@ class PageControllerTest extends AbstractTestCase
 
     public function testOneHomepageWithLocale(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $homepage = $this->createPage([
             'homepage' => true,
@@ -87,7 +87,7 @@ class PageControllerTest extends AbstractTestCase
         ]);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($homepage);
         $em->flush();
 
@@ -114,10 +114,10 @@ class PageControllerTest extends AbstractTestCase
 
     public function testTree(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $root = $this->createPage([
@@ -163,10 +163,10 @@ class PageControllerTest extends AbstractTestCase
 
     public function testMetas(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
 
         $page = $this->createPage([
             'homepage'        => true,
@@ -198,9 +198,9 @@ class PageControllerTest extends AbstractTestCase
 
     public function testParentAndChildrenDontReverse(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
 
         $parent = $this->createPage([
             'enabled'  => true,
@@ -236,10 +236,10 @@ class PageControllerTest extends AbstractTestCase
      */
     public function testAllTypesOfPagesForHomepage(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
 
         // First, create the pages
         /** @var Page[] $pages */
@@ -290,10 +290,10 @@ class PageControllerTest extends AbstractTestCase
 
     public function testBreadcrumbsDesign(): void
     {
-        $client = static::createClient(['environment' => 'design_breadcrumbs']);
+        $client = self::createClient(['environment' => 'design_breadcrumbs']);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
 
         $page = $this->createPage(['enabled' => true, 'slug' => 'parent', 'title' => 'Parent page']);
         $em->persist($page);

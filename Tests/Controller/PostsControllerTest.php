@@ -9,7 +9,7 @@ class PostsControllerTest extends AbstractTestCase
 {
     public function testNoSlug(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->request('GET', '/posts/2020-01-19/');
         static::assertResponseStatusCodeSame(404);
         static::assertPageTitleContains('No page identifier provided');
@@ -17,7 +17,7 @@ class PostsControllerTest extends AbstractTestCase
 
     public function testNoPostWithSlug(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->request('GET', '/posts/2019-12-19/inexistent-slug');
         static::assertResponseStatusCodeSame(404);
         static::assertPageTitleContains('Post not found');
@@ -25,7 +25,7 @@ class PostsControllerTest extends AbstractTestCase
 
     public function testInvalidDateFormat(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->request('GET', '/posts/0-0-0/inexistent-slug');
         static::assertResponseStatusCodeSame(404);
         static::assertPageTitleContains('Invalid date format provided');
@@ -33,7 +33,7 @@ class PostsControllerTest extends AbstractTestCase
 
     public function testDateUrlDoesNotMatchPageDate(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $page = $this->createPage([
             'createdAt' => new \DateTimeImmutable(),
@@ -43,7 +43,7 @@ class PostsControllerTest extends AbstractTestCase
         ]);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($page);
         $em->flush();
 
@@ -54,7 +54,7 @@ class PostsControllerTest extends AbstractTestCase
 
     public function testSuccessfulPost(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $page = $this->createPage([
             'createdAt' => $now = new \DateTimeImmutable(),
@@ -64,7 +64,7 @@ class PostsControllerTest extends AbstractTestCase
         ]);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($page);
         $em->flush();
 

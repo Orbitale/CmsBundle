@@ -22,7 +22,7 @@ class AbstractTestCase extends WebTestCase
         static::bootKernel();
 
         /** @var Connection $c */
-        $c = static::$container->get(Connection::class);
+        $c = self::getContainer()->get(Connection::class);
         $c->query('delete from orbitale_cms_pages where 1');
         $c->query('delete from orbitale_cms_categories where 1');
         static::ensureKernelShutdown();

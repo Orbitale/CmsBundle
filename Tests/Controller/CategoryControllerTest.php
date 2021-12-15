@@ -20,14 +20,14 @@ class CategoryControllerTest extends AbstractTestCase
 {
     public function testNoCategoryWithSlug()
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->request('GET', '/category/inexistent-slug');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
     public function testSingleCategory()
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $category = new Category();
         $category->setSlug('default');
@@ -36,7 +36,7 @@ class CategoryControllerTest extends AbstractTestCase
         $category->setEnabled(true);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 
@@ -53,9 +53,9 @@ class CategoryControllerTest extends AbstractTestCase
 
     public function testTree()
     {
-        $client = static::createClient();
+        $client = self::createClient();
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
 
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $parent = new Category();
@@ -100,7 +100,7 @@ class CategoryControllerTest extends AbstractTestCase
 
     public function testWithPages()
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $category = new Category();
         $category->setSlug('default');
@@ -109,7 +109,7 @@ class CategoryControllerTest extends AbstractTestCase
         $category->setEnabled(true);
 
         /** @var EntityManagerInterface $em */
-        $em = static::$container->get(EntityManagerInterface::class);
+        $em = self::getContainer()->get(EntityManagerInterface::class);
         $em->persist($category);
         $em->flush();
 

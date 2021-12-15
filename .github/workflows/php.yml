@@ -14,7 +14,18 @@ jobs:
                     - '8.0'
                     - '8.1'
 
-        name: PHP ${{ matrix.php-version }} on ${{ matrix.operating-system }}
+                symfony-version:
+                    - '5.3'
+                    - '5.4'
+                    - '6.0'
+
+                exclude:
+                    - php-version: 7.3
+                      symfony-version: 6.0
+                    - php-version: 7.4
+                      symfony-version: 6.0
+
+        name: PHP ${{ matrix.php-version }} and Symfony ${{ matrix.symfony-version }}
         steps:
             - uses: actions/checkout@v2
 
@@ -34,6 +45,12 @@ jobs:
                   key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                   restore-keys: ${{ runner.os }}-composer-
 
+            - name: Update Symfony version
+              run: |
+                  sed -i composer.json -e 's/\^5\.0\(.[0-9]\+\)\?[|]\^6\.0/${{ matrix.symfony-version }}.*/g'
+
             - run: composer install
+
+            - run: vendor/bin/simple-phpunit --version
 
             - run: vendor/bin/simple-phpunit

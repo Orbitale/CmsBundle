@@ -14,6 +14,7 @@ use Doctrine\Bundle\DoctrineBundle\Command\Proxy\CreateSchemaDoctrineCommand;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -28,17 +29,22 @@ require_once __DIR__.'/Fixtures/App/AppKernel.php';
 (static function(){
     $fs = new Filesystem();
 
+    putenv('DATABASE_MAPPING_TYPE=attribute');
+    $_SERVER['DATABASE_MAPPING_TYPE'] = 'attribute';
+    $_ENV['DATABASE_MAPPING_TYPE'] = 'attribute';
+
+    $kernel = new AppKernel('test', true);
+
     // Remove build dir files
-    if (is_dir(__DIR__.'/../build')) {
+    if (is_dir($kernel->getBuildDir())) {
         echo "Removing files in the build directory.\n".__DIR__."\n";
         try {
-            $fs->remove(__DIR__.'/../build');
+            $fs->remove($kernel->getBuildDir());
         } catch (Exception $e) {
             fwrite(STDERR, $e->getMessage());
         }
     }
 
-    $kernel = new AppKernel('test', true);
     $kernel->boot();
 
     $databaseFile = $kernel->getContainer()->getParameter('database_path');
@@ -49,8 +55,9 @@ require_once __DIR__.'/Fixtures/App/AppKernel.php';
 
     $application = new Application($kernel);
     $application->setAutoExit(false);
-    $application->run(new ArrayInput(['command' => 'doctrine:database:create']));
-    $application->run(new ArrayInput(['command' => 'doctrine:schema:create']));
+    $out = new ConsoleOutput();
+    $application->run(new ArrayInput(['command' => 'doctrine:database:create']), $out);
+    $application->run(new ArrayInput(['command' => 'doctrine:schema:update', '--dump-sql' => true, '--force' => true, '--complete' => true]), $out);
 
     $kernel->shutdown();
 })();

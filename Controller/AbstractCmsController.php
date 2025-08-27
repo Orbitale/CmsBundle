@@ -52,7 +52,7 @@ abstract class AbstractCmsController extends AbstractController
             if ($element) {
                 // Only for the first iteration
                 $match = $previousElement
-                    ? $element->getParent() && $previousElement->getSlug() === $element->getParent()->getSlug()
+                    ? ($element->getParent() && $previousElement->getSlug() === $element->getParent()->getSlug())
                     : true;
 
                 $previousElement = $element;

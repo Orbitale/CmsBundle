@@ -38,7 +38,7 @@ class DoctrineMappingListener implements EventSubscriber
         $this->categoryClass = $categoryClass;
     }
 
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [Events::loadClassMetadata];
     }

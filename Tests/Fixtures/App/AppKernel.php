@@ -30,6 +30,11 @@ class AppKernel extends Kernel
         ];
     }
 
+    protected function prepareContainer(ContainerBuilder $container): void
+    {
+        parent::prepareContainer($container);
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yaml');
@@ -41,16 +46,21 @@ class AppKernel extends Kernel
 
     public function getProjectDir(): string
     {
-        return __DIR__;
+        return \dirname(__DIR__);
     }
 
     public function getCacheDir(): string
     {
-        return __DIR__.'/../../../build/cache/'.$this->getEnvironment();
+        return $this->getBuildDir().'/cache/';
     }
 
     public function getLogDir(): string
     {
-        return __DIR__.'/../../../build/kernel_logs/'.$this->getEnvironment();
+        return $this->getBuildDir().'/kernel_logs/';
+    }
+
+    public function getBuildDir(): string
+    {
+        return \dirname(__DIR__, 3).'/build/'.$this->getEnvironment();
     }
 }

@@ -30,7 +30,7 @@ class PageController extends AbstractCmsController
         $this->pageRepository = $pageRepository;
     }
 
-    public function indexAction(Request $request, string $slugs = '', string $_locale = null): Response
+    public function indexAction(Request $request, string $slugs = '', ?string $_locale = null): Response
     {
         if (preg_match('~/$~', $slugs)) {
             return $this->redirect($this->generateUrl('orbitale_cms_page', ['slugs' => rtrim($slugs, '/')]));

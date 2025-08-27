@@ -12,17 +12,15 @@
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @UniqueEntity("slug")
- * @ORM\HasLifecycleCallbacks()
- * @ORM\MappedSuperclass(repositoryClass="Orbitale\Bundle\CmsBundle\Repository\PageRepository")
  */
+#[UniqueEntity("slug")]
 abstract class Page
 {
     /**
@@ -33,57 +31,53 @@ abstract class Page
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=255)
-     *
      * @Assert\Type("string")
      * @Assert\NotBlank()
      */
+    #[Assert\Type("string")]
+    #[Assert\NotBlank]
     protected $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="slug", type="string", length=255, unique=true)
-     *
      * @Assert\Type("string")
      * @Assert\NotBlank()
      */
+    #[Assert\Type("string")]
+    #[Assert\NotBlank]
     protected $slug;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="page_content", type="text", nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $content;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="meta_description", type="string", length=255, nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $metaDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $metaTitle;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $metaKeywords;
 
     /**
@@ -91,69 +85,63 @@ abstract class Page
      *
      * @Assert\Type(Category::class)
      */
+    #[Assert\Type(Category::class)]
     protected $category;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="css", type="text", nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $css;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="js", type="text", nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $js;
 
     /**
      * @var \DateTimeImmutable
      *
-     * @ORM\Column(name="created_at", type="datetime_immutable")
-     *
      * @Assert\Type(\DateTimeImmutable::class)
      */
+    #[Assert\Type(\DateTimeImmutable::class)]
     protected $createdAt;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="enabled", type="boolean")
-     *
      * @Assert\Type("bool")
      */
+    #[Assert\Type("bool")]
     protected $enabled = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="homepage", type="boolean")
-     *
      * @Assert\Type("bool")
      */
+    #[Assert\Type("bool")]
     protected $homepage = false;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="host", type="string", length=255, nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $host;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="locale", type="string", length=6, nullable=true)
-     *
      * @Assert\Type("string")
      */
+    #[Assert\Type("string")]
     protected $locale;
 
     /**
@@ -161,6 +149,7 @@ abstract class Page
      *
      * @Assert\Type(Page::class)
      */
+    #[Assert\Type(Page::class)]
     protected $parent;
 
     /**
@@ -380,10 +369,6 @@ abstract class Page
         return trim($tree, $separator);
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
     public function updateSlug(): void
     {
         if (!$this->slug) {
@@ -391,12 +376,9 @@ abstract class Page
         }
     }
 
-    /**
-     * @ORM\PreRemove()
-     */
-    public function onRemove(LifecycleEventArgs $event): void
+    public function onRemove(PreRemoveEventArgs $event): void
     {
-        $em = $event->getEntityManager();
+        $em = $event->getObjectManager();
         if (count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);

@@ -19,7 +19,7 @@
         </lifecycle-callbacks>
         <field name="title" type="string" length="255" nullable="false" />
         <field name="slug" type="string" length="255" unique="true" nullable="false" />
-        <field name="content" type="text" nullable="true" />
+        <field name="content" column="page_content" type="text" nullable="true" />
         <field name="metaDescription" column="meta_description" type="string" length="255" nullable="true" />
         <field name="metaTitle" column="meta_title" type="string" length="255" nullable="true" />
         <field name="metaKeywords" column="meta_keywords" type="string" length="255" nullable="true" />

@@ -1,3 +1,7 @@
+# v5.0.1
+
+* Fix accidentally removed column name for `Page::$content`.
+
 # v5.0.0
 
 * Add support for Symfony 7.

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 
@@ -19,7 +21,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CategoryTest extends AbstractTestCase
 {
-    public function testCategory()
+    public function testCategory(): void
     {
         $homepage = new Page();
         $homepage->setHomepage(true);
@@ -44,14 +46,14 @@ class CategoryTest extends AbstractTestCase
         $em->flush();
 
         /** @var Page $homepage */
-        $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
+        $homepage = $em->getRepository($homepage::class)->find($homepage->getId());
 
         static::assertEquals($homepage->getCategory(), $category);
         static::assertEquals($category->getName(), (string) $category);
         static::assertFalse($category->isEnabled()); // Base value
     }
 
-    public function testIdenticalParent()
+    public function testIdenticalParent(): void
     {
         $category = new Category();
         $category->setName('Default category');
@@ -61,7 +63,7 @@ class CategoryTest extends AbstractTestCase
         static::assertNull($category->getParent());
     }
 
-    public function testLifecycleCallbacks()
+    public function testLifecycleCallbacks(): void
     {
         $category = new Category();
         $category->setName('Default category');
@@ -85,7 +87,7 @@ class CategoryTest extends AbstractTestCase
         static::assertEquals([$child], $category->getChildren()->toArray());
 
         /** @var Category $category */
-        $category = $em->getRepository(get_class($category))->findOneBy(['id' => $category->getId()]);
+        $category = $em->getRepository($category::class)->findOneBy(['id' => $category->getId()]);
 
         static::assertNotNull($category);
 
@@ -94,13 +96,13 @@ class CategoryTest extends AbstractTestCase
             $em->flush();
         }
 
-        $category = $em->getRepository(get_class($category))->findOneBy(['id' => $category->getId()]);
+        $category = $em->getRepository($category::class)->findOneBy(['id' => $category->getId()]);
 
         static::assertNull($category);
         static::assertNull($child->getParent());
     }
 
-    public function testRemoval()
+    public function testRemoval(): void
     {
         $category = new Category();
 
@@ -126,10 +128,10 @@ class CategoryTest extends AbstractTestCase
         $em->flush();
 
         /** @var Category $category */
-        $category = $em->getRepository(get_class($category))->find($category->getId());
+        $category = $em->getRepository($category::class)->find($category->getId());
 
         $children = $category->getChildren();
-        $first    = $children[0];
+        $first = $children[0];
         static::assertEquals($child->getId(), $first->getId());
 
         $category->removeChild($child);
@@ -138,12 +140,12 @@ class CategoryTest extends AbstractTestCase
         $em->remove($category);
         $em->flush();
 
-        $child = $em->getRepository(get_class($child))->find($child->getId());
+        $child = $em->getRepository($child::class)->find($child->getId());
 
         static::assertNull($child->getParent());
     }
 
-    public function testCategorySlugIsTransliterated()
+    public function testCategorySlugIsTransliterated(): void
     {
         $category = new Category();
         $category->setName('Default category');
@@ -153,17 +155,17 @@ class CategoryTest extends AbstractTestCase
         static::assertEquals('default-category', $category->getSlug());
     }
 
-    public function testCategorySlugIsNotTransliteratedIfEmpty()
+    public function testCategorySlugIsNotTransliteratedIfEmpty(): void
     {
         $category = new Category();
         $category->setName('');
 
         $category->updateSlug();
 
-        static::assertEquals(null, $category->getSlug());
+        static::assertNull($category->getSlug());
     }
 
-    public function testSuccessfulValidation()
+    public function testSuccessfulValidation(): void
     {
         self::bootKernel();
         $validator = self::getContainer()->get(ValidatorInterface::class);
@@ -174,7 +176,7 @@ class CategoryTest extends AbstractTestCase
 
         $errors = $validator->validate($category);
 
-        self::assertCount(0, $errors);
+        static::assertCount(0, $errors);
 
         static::assertSame('Name', $category->getName());
         static::assertSame('name', $category->getSlug());
@@ -183,7 +185,7 @@ class CategoryTest extends AbstractTestCase
         static::assertFalse($category->isEnabled());
     }
 
-    public function testFailingValidationWithEmptyData()
+    public function testFailingValidationWithEmptyData(): void
     {
         self::bootKernel();
         $validator = self::getContainer()->get(ValidatorInterface::class);
@@ -192,11 +194,10 @@ class CategoryTest extends AbstractTestCase
 
         $errors = $validator->validate($category);
 
-        self::assertCount(2, $errors);
+        static::assertCount(2, $errors);
 
-        self::assertSame('name', $errors[0]->getPropertyPath());
-        self::assertSame('slug', $errors[1]->getPropertyPath());
-
+        static::assertSame('name', $errors[0]->getPropertyPath());
+        static::assertSame('slug', $errors[1]->getPropertyPath());
 
         static::assertSame('', $category->getName());
         static::assertSame('', $category->getSlug());

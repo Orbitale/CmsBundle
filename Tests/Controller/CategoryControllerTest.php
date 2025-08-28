@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
@@ -18,14 +20,14 @@ use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class CategoryControllerTest extends AbstractTestCase
 {
-    public function testNoCategoryWithSlug()
+    public function testNoCategoryWithSlug(): void
     {
         $client = self::createClient();
         $client->request('GET', '/category/inexistent-slug');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function testSingleCategory()
+    public function testSingleCategory(): void
     {
         $client = self::createClient();
 
@@ -46,14 +48,15 @@ class CategoryControllerTest extends AbstractTestCase
         static::assertTrue($client->getResponse()->isRedirect('/category/default'));
 
         $crawler = $client->followRedirect();
-        static::assertEquals($category->getName(), trim($crawler->filter('title')->html()));
-        static::assertEquals($category->getName(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($category->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertEquals($category->getName(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($category->getName(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($category->getDescription(), \trim($crawler->filter('article')->first()->html()));
     }
 
-    public function testTree()
+    public function testTree(): void
     {
         $client = self::createClient();
+
         /** @var EntityManagerInterface $em */
         $em = self::getContainer()->get(EntityManagerInterface::class);
 
@@ -89,16 +92,16 @@ class CategoryControllerTest extends AbstractTestCase
 
         // Repeat with the homepage directly in the url
         $crawler = $client->request('GET', '/category/'.$childOne->getTree());
-        static::assertEquals($childOne->getName(), trim($crawler->filter('title')->html()));
-        static::assertEquals($childOne->getName(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($childOne->getDescription(), trim($crawler->filter('article')->first()->html()));
+        static::assertEquals($childOne->getName(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($childOne->getName(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($childOne->getDescription(), \trim($crawler->filter('article')->first()->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/category/root/second-level');
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
-    public function testWithPages()
+    public function testWithPages(): void
     {
         $client = self::createClient();
 
@@ -136,11 +139,11 @@ class CategoryControllerTest extends AbstractTestCase
         $crawler = $client->request('GET', '/category/'.$category->getTree());
 
         $section1 = $crawler->filter('section')->eq(0);
-        static::assertEquals($page1->getTitle(), trim($section1->filter('article > h2 > a')->html()));
-        static::assertStringContainsString($page1->getContent(), trim($section1->filter('article')->html()));
+        static::assertEquals($page1->getTitle(), \trim($section1->filter('article > h2 > a')->html()));
+        static::assertStringContainsString($page1->getContent(), \trim($section1->filter('article')->html()));
 
         $section2 = $crawler->filter('section')->eq(1);
-        static::assertEquals($page2->getTitle(), trim($section2->filter('article > h2 > a')->html()));
-        static::assertStringContainsString($page2->getContent(), trim($section2->filter('article')->html()));
+        static::assertEquals($page2->getTitle(), \trim($section2->filter('article > h2 > a')->html()));
+        static::assertStringContainsString($page2->getContent(), \trim($section2->filter('article')->html()));
     }
 }

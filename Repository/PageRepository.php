@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Repository;
 
@@ -18,13 +20,10 @@ use Orbitale\Bundle\CmsBundle\Entity\Page;
 class PageRepository extends AbstractCmsRepository
 {
     /**
-     * @param Category $category
-     * @param string   $order
-     * @param string   $orderBy
-     * @param int      $page
-     * @param int      $limit
-     *
-     * @return Paginator
+     * @param string $order
+     * @param string $orderBy
+     * @param int    $page
+     * @param int    $limit
      */
     public function findByCategory(Category $category, $order, $orderBy, $page, $limit): Paginator
     {
@@ -33,7 +32,7 @@ class PageRepository extends AbstractCmsRepository
             ->andWhere('page.enabled = :enabled')
             ->orderBy('page.'.$orderBy, $order)
             ->setMaxResults($limit)
-            ->setFirstResult($limit * ($page-1))
+            ->setFirstResult($limit * ($page - 1))
             ->setParameter('category', $category)
             ->setParameter('enabled', true)
         ;
@@ -46,9 +45,8 @@ class PageRepository extends AbstractCmsRepository
      * If slugs are defined, there's no problem in looking for nulled host or locale,
      * because slugs are unique, so it does not.
      *
-     * @param array       $slugs
-     * @param string|null $host
-     * @param string|null $locale
+     * @param null|string $host
+     * @param null|string $locale
      *
      * @return Page[]
      */
@@ -62,7 +60,7 @@ class PageRepository extends AbstractCmsRepository
         ;
 
         // Will search differently if we're looking for homepage.
-        $searchForHomepage = 0 === count($slugs);
+        $searchForHomepage = 0 === \count($slugs);
 
         if (true === $searchForHomepage) {
             // If we are looking for homepage, let's get only the first one.
@@ -71,10 +69,10 @@ class PageRepository extends AbstractCmsRepository
                 ->setParameter('homepage', true)
                 ->setMaxResults(1)
             ;
-        } elseif (1 === count($slugs)) {
+        } elseif (1 === \count($slugs)) {
             $qb
                 ->andWhere('page.slug = :slug')
-                ->setParameter('slug', reset($slugs))
+                ->setParameter('slug', \reset($slugs))
                 ->setMaxResults(1)
             ;
         } else {
@@ -112,13 +110,13 @@ class PageRepository extends AbstractCmsRepository
             ->getResult()
         ;
 
-        if (0 === count($results)) {
+        if (0 === \count($results)) {
             return $results;
         }
 
         // If we're looking for a homepage, only get the first result (matching more properties).
-        if (true === $searchForHomepage && count($results) > 0) {
-            reset($results);
+        if (true === $searchForHomepage && \count($results) > 0) {
+            \reset($results);
             $results = [$results[0]];
         }
 
@@ -129,10 +127,10 @@ class PageRepository extends AbstractCmsRepository
 
         $pages = $resultsSortedBySlug;
 
-        if (count($slugs) > 0) {
+        if (\count($slugs) > 0) {
             $pages = [];
             foreach ($slugs as $value) {
-                if (!array_key_exists($value, $resultsSortedBySlug)) {
+                if (!\array_key_exists($value, $resultsSortedBySlug)) {
                     // Means at least one page in the tree is not enabled
                     return [];
                 }

@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\EventListener;
 
@@ -33,7 +35,7 @@ class LayoutsListener implements EventSubscriberInterface
     public function __construct(array $layouts, Environment $twig)
     {
         $this->layouts = $layouts;
-        $this->twig    = $twig;
+        $this->twig = $twig;
     }
 
     /**
@@ -67,12 +69,13 @@ class LayoutsListener implements EventSubscriberInterface
             }
 
             // Check pattern
-            if ($layoutConfig['pattern'] && preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
+            if ($layoutConfig['pattern'] && \preg_match('~'.$layoutConfig['pattern'].'~', $path)) {
                 $match = true;
             }
 
             if ($match) {
                 $finalLayout = $layoutConfig;
+
                 break;
             }
         }
@@ -81,19 +84,20 @@ class LayoutsListener implements EventSubscriberInterface
         if (null === $finalLayout) {
             $layouts = $this->layouts;
             do {
-                $finalLayout = array_shift($layouts);
+                $finalLayout = \array_shift($layouts);
                 if ($finalLayout['host'] || $finalLayout['pattern']) {
                     $finalLayout = null;
                 }
-            } while (null === $finalLayout && count($layouts));
+            } while (null === $finalLayout && \count($layouts));
         }
 
         if (null === $finalLayout || !$this->twig->getLoader()->exists($finalLayout['resource'])) {
             $source = new Source('', $finalLayout['resource']);
 
-            throw new LoaderError(sprintf(
+            throw new LoaderError(\sprintf(
                 'Unable to find template %s for layout %s. The "layout" parameter must be a valid twig view to be used as a layout.',
-                $finalLayout['resource'], $finalLayout['name']
+                $finalLayout['resource'],
+                $finalLayout['name']
             ), 0, $source);
         }
 

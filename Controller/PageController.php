@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
@@ -32,14 +34,14 @@ class PageController extends AbstractCmsController
 
     public function indexAction(Request $request, string $slugs = '', ?string $_locale = null): Response
     {
-        if (preg_match('~/$~', $slugs)) {
-            return $this->redirect($this->generateUrl('orbitale_cms_page', ['slugs' => rtrim($slugs, '/')]));
+        if (\preg_match('~/$~', $slugs)) {
+            return $this->redirect($this->generateUrl('orbitale_cms_page', ['slugs' => \rtrim($slugs, '/')]));
         }
 
         $this->request = $request;
         $this->request->setLocale($_locale ?: $this->request->getLocale());
 
-        $slugsArray = preg_split('~/~', $slugs, -1, PREG_SPLIT_NO_EMPTY);
+        $slugsArray = \preg_split('~/~', $slugs, -1, \PREG_SPLIT_NO_EMPTY);
 
         $pages = $this->getPages($slugsArray);
 
@@ -60,7 +62,7 @@ class PageController extends AbstractCmsController
 
         return $this->render('@OrbitaleCms/Front/index.html.twig', [
             'pages' => $pages,
-            'page'  => $currentPage,
+            'page' => $currentPage,
         ]);
     }
 
@@ -76,10 +78,11 @@ class PageController extends AbstractCmsController
     {
         /** @var Page[] $pages */
         $pages = $this->pageRepository
-            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale());
+            ->findFrontPages($slugsArray, $this->request->getHost(), $this->request->getLocale())
+        ;
 
-        if (!count($pages) || (count($slugsArray) && count($pages) !== count($slugsArray))) {
-            throw $this->createNotFoundException(count($slugsArray)
+        if (!\count($pages) || (\count($slugsArray) && \count($pages) !== \count($slugsArray))) {
+            throw $this->createNotFoundException(\count($slugsArray)
                 ? 'Page not found'
                 : 'No homepage has been configured. Please check your existing pages or create a homepage in your application.');
         }
@@ -90,17 +93,15 @@ class PageController extends AbstractCmsController
     /**
      * Retrieves the current page based on page list and entered slugs.
      *
-     * @param Page[] $pages
-     * @param string[]  $slugsArray
-     *
-     * @return Page
+     * @param Page[]   $pages
+     * @param string[] $slugsArray
      */
     protected function getCurrentPage(array $pages, array $slugsArray): Page
     {
-        if (count($pages) === count($slugsArray)) {
+        if (\count($pages) === \count($slugsArray)) {
             $currentPage = $this->getFinalTreeElement($slugsArray, $pages);
         } else {
-            $currentPage = current($pages);
+            $currentPage = \current($pages);
         }
 
         return $currentPage;

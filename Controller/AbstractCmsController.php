@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Controller;
 
@@ -24,31 +26,31 @@ abstract class AbstractCmsController extends AbstractController
      * This also prevents things like /children/parent to work,
      * as it should be /parent/children.
      *
-     * @param array             $slugs
-     * @param Page[]|Category[] $elements
+     * @param Category[]|Page[] $elements
      *
      * @return Category|Page
      */
     protected function getFinalTreeElement(array $slugs, array $elements)
     {
         // Will check that slugs and elements match
-        $slugsElements = array_keys($elements);
-        $sortedSlugs   = $slugs;
-        sort($sortedSlugs);
-        sort($slugsElements);
+        $slugsElements = \array_keys($elements);
+        $sortedSlugs = $slugs;
+        \sort($sortedSlugs);
+        \sort($slugsElements);
 
-        if ($sortedSlugs !== $slugsElements || !count($slugs) || count($slugs) !== count($elements)) {
+        if ($sortedSlugs !== $slugsElements || !\count($slugs) || \count($slugs) !== \count($elements)) {
             throw $this->createNotFoundException();
         }
 
-        /** @var Page|Category $element */
+        /** @var Category|Page $element */
         $element = null;
-        /** @var Page|Category $previousElement */
+
+        /** @var Category|Page $previousElement */
         $previousElement = null;
 
         foreach ($slugs as $slug) {
             $element = $elements[$slug] ?? null;
-            $match   = false;
+            $match = false;
             if ($element) {
                 // Only for the first iteration
                 $match = $previousElement

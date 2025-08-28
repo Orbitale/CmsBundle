@@ -1,27 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Tests\DependencyInjection;
 
 use Orbitale\Bundle\CmsBundle\DependencyInjection\OrbitaleCmsExtension;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
+use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Yaml;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Category;
-use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 
 class OrbitaleCmsExtensionTest extends TestCase
 {
-    public function testInexistentPageClass()
+    public function testInexistentPageClass(): void
     {
         $builder = new ContainerBuilder();
 
@@ -30,13 +32,13 @@ class OrbitaleCmsExtensionTest extends TestCase
 
         (new OrbitaleCmsExtension())->load([
             'orbitale_cms' => [
-                'page_class'     => 'inexistent_page_class',
+                'page_class' => 'inexistent_page_class',
                 'category_class' => Category::class,
             ],
         ], $builder);
     }
 
-    public function testInexistentCategoryClass()
+    public function testInexistentCategoryClass(): void
     {
         $builder = new ContainerBuilder();
 
@@ -45,7 +47,7 @@ class OrbitaleCmsExtensionTest extends TestCase
 
         (new OrbitaleCmsExtension())->load([
             'orbitale_cms' => [
-                'page_class'     => Page::class,
+                'page_class' => Page::class,
                 'category_class' => 'inexistent_category_class',
             ],
         ], $builder);
@@ -53,11 +55,8 @@ class OrbitaleCmsExtensionTest extends TestCase
 
     /**
      * @dataProvider provideYamlConfiguration
-     *
-     * @param $config
-     * @param $expected
      */
-    public function testYamlConfiguration($config, $expected)
+    public function testYamlConfiguration($config, $expected): void
     {
         $builder = new ContainerBuilder();
 
@@ -76,18 +75,18 @@ class OrbitaleCmsExtensionTest extends TestCase
     {
         $dir = __DIR__.'/../Fixtures/App/extension_test/';
 
-        $configFiles = glob($dir.'config_*.yaml', GLOB_NOSORT);
-        $resultFiles = glob($dir.'result_*.yaml', GLOB_NOSORT);
+        $configFiles = \glob($dir.'config_*.yaml', \GLOB_NOSORT);
+        $resultFiles = \glob($dir.'result_*.yaml', \GLOB_NOSORT);
 
-        sort($configFiles);
-        sort($resultFiles);
+        \sort($configFiles);
+        \sort($resultFiles);
 
         $tests = [];
 
         foreach ($configFiles as $k => $file) {
             $tests[] = [
-                Yaml::parse(file_get_contents($file)),
-                Yaml::parse(file_get_contents($resultFiles[$k])),
+                Yaml::parse(\file_get_contents($file)),
+                Yaml::parse(\file_get_contents($resultFiles[$k])),
             ];
         }
 

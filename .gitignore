@@ -5,4 +5,3 @@ vendor/
 build/
 .phpunit
 phpunit.xml
-

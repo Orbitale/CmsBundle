@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
@@ -19,10 +21,10 @@ class PageControllerTest extends AbstractTestCase
 {
     public function testNoHomepage(): void
     {
-        $error   = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
-        $client  = self::createClient();
+        $error = 'No homepage has been configured. Please check your existing pages or create a homepage in your application. (404 Not Found)';
+        $client = self::createClient();
         $crawler = $client->request('GET', '/page/');
-        static::assertEquals($error, trim($crawler->filter('title')->html()));
+        static::assertEquals($error, \trim($crawler->filter('title')->html()));
         static::assertEquals(404, $client->getResponse()->getStatusCode());
     }
 
@@ -39,11 +41,11 @@ class PageControllerTest extends AbstractTestCase
 
         $homepage = $this->createPage([
             'homepage' => true,
-            'enabled'  => true,
-            'slug'     => 'home',
-            'title'    => 'My homepage',
-            'host'     => 'localhost',
-            'content'  => 'Hello world!',
+            'enabled' => true,
+            'slug' => 'home',
+            'title' => 'My homepage',
+            'host' => 'localhost',
+            'content' => 'Hello world!',
         ]);
 
         /** @var EntityManagerInterface $em */
@@ -52,9 +54,9 @@ class PageControllerTest extends AbstractTestCase
         $em->flush();
 
         $crawler = $client->request('GET', '/page/');
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($homepage->getContent(), \trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
 
@@ -67,9 +69,9 @@ class PageControllerTest extends AbstractTestCase
         static::assertTrue($client->getResponse()->isRedirect('/page'));
         $crawler = $client->followRedirect();
 
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($homepage->getContent(), \trim($crawler->filter('article')->html()));
     }
 
     public function testOneHomepageWithLocale(): void
@@ -78,12 +80,12 @@ class PageControllerTest extends AbstractTestCase
 
         $homepage = $this->createPage([
             'homepage' => true,
-            'enabled'  => true,
-            'locale'   => 'en',
-            'slug'     => 'home',
-            'title'    => 'My homepage',
-            'host'     => 'localhost',
-            'content'  => 'Hello world!',
+            'enabled' => true,
+            'locale' => 'en',
+            'slug' => 'home',
+            'title' => 'My homepage',
+            'host' => 'localhost',
+            'content' => 'Hello world!',
         ]);
 
         /** @var EntityManagerInterface $em */
@@ -92,9 +94,9 @@ class PageControllerTest extends AbstractTestCase
         $em->flush();
 
         $crawler = $client->request('GET', '/page/');
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($homepage->getContent(), \trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
 
@@ -107,9 +109,9 @@ class PageControllerTest extends AbstractTestCase
         static::assertTrue($client->getResponse()->isRedirect('/page?_locale=en'));
         $crawler = $client->followRedirect();
 
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('title')->html()));
-        static::assertEquals($homepage->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($homepage->getContent(), trim($crawler->filter('article')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($homepage->getTitle(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($homepage->getContent(), \trim($crawler->filter('article')->html()));
     }
 
     public function testTree(): void
@@ -122,39 +124,39 @@ class PageControllerTest extends AbstractTestCase
         // Prepare 3 pages : the root, the first level, and the third one that's disabled
         $root = $this->createPage([
             'homepage' => true,
-            'enabled'  => true,
-            'slug'     => 'root',
-            'title'    => 'Root',
-            'content'  => 'The root page',
+            'enabled' => true,
+            'slug' => 'root',
+            'title' => 'Root',
+            'content' => 'The root page',
         ]);
         $em->persist($root);
         $em->flush();
 
         $childOne = $this->createPage([
             'enabled' => true,
-            'slug'    => 'first-level',
-            'title'   => 'First level',
+            'slug' => 'first-level',
+            'title' => 'First level',
             'content' => 'This page is only available in the first level',
-            'parent'  => $root,
+            'parent' => $root,
         ]);
         $em->persist($childOne);
         $em->flush();
 
         $childTwoDisabled = $this->createPage([
             'enabled' => false,
-            'slug'    => 'second-level',
-            'title'   => 'Disabled Page',
+            'slug' => 'second-level',
+            'title' => 'Disabled Page',
             'content' => 'This page should render a 404 error',
-            'parent'  => $root,
+            'parent' => $root,
         ]);
         $em->persist($childTwoDisabled);
         $em->flush();
 
         // Repeat with the homepage directly in the url
         $crawler = $client->request('GET', '/page/root/first-level');
-        static::assertEquals($childOne->getTitle(), trim($crawler->filter('title')->html()));
-        static::assertEquals($childOne->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($childOne->getContent(), trim($crawler->filter('article')->html()));
+        static::assertEquals($childOne->getTitle(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($childOne->getTitle(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($childOne->getContent(), \trim($crawler->filter('article')->html()));
 
         // Repeat with the homepage directly in the url
         $client->request('GET', '/page/root/second-level');
@@ -169,55 +171,56 @@ class PageControllerTest extends AbstractTestCase
         $em = self::getContainer()->get(EntityManagerInterface::class);
 
         $page = $this->createPage([
-            'homepage'        => true,
-            'enabled'         => true,
-            'title'           => 'Root',
-            'content'         => 'The root page',
-            'css'             => '#home{color:red;}',
-            'js'              => 'alert("ok");',
+            'homepage' => true,
+            'enabled' => true,
+            'title' => 'Root',
+            'content' => 'The root page',
+            'css' => '#home{color:red;}',
+            'js' => 'alert("ok");',
             'metaDescription' => 'meta description',
-            'metaKeywords'    => 'this is a meta keyword list',
-            'metaTitle'       => 'this title is only in the metas',
+            'metaKeywords' => 'this is a meta keyword list',
+            'metaTitle' => 'this title is only in the metas',
         ]);
         $em->persist($page);
         $em->flush();
 
         $crawler = $client->request('GET', '/page');
-        static::assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
-        static::assertEquals($page->getTitle(), trim($crawler->filter('article > h1')->html()));
-        static::assertStringContainsString($page->getContent(), trim($crawler->filter('article')->html()));
+        static::assertEquals($page->getTitle(), \trim($crawler->filter('title')->html()));
+        static::assertEquals($page->getTitle(), \trim($crawler->filter('article > h1')->html()));
+        static::assertStringContainsString($page->getContent(), \trim($crawler->filter('article')->html()));
 
-        static::assertEquals($page->getCss(), trim($crawler->filter('#orbitale_cms_css')->html()));
-        static::assertEquals($page->getJs(), trim($crawler->filter('#orbitale_cms_js')->html()));
-        static::assertEquals($page->getMetaDescription(), trim($crawler->filter('meta[name="description"]')
+        static::assertEquals($page->getCss(), \trim($crawler->filter('#orbitale_cms_css')->html()));
+        static::assertEquals($page->getJs(), \trim($crawler->filter('#orbitale_cms_js')->html()));
+        static::assertEquals($page->getMetaDescription(), \trim($crawler->filter('meta[name="description"]')
             ->attr('content')));
-        static::assertEquals($page->getMetaKeywords(), trim($crawler->filter('meta[name="keywords"]')
+        static::assertEquals($page->getMetaKeywords(), \trim($crawler->filter('meta[name="keywords"]')
             ->attr('content')));
-        static::assertEquals($page->getMetaTitle(), trim($crawler->filter('meta[name="title"]')->attr('content')));
+        static::assertEquals($page->getMetaTitle(), \trim($crawler->filter('meta[name="title"]')->attr('content')));
     }
 
     public function testParentAndChildrenDontReverse(): void
     {
         $client = self::createClient();
+
         /** @var EntityManagerInterface $em */
         $em = self::getContainer()->get(EntityManagerInterface::class);
 
         $parent = $this->createPage([
-            'enabled'  => true,
+            'enabled' => true,
             'homepage' => true,
-            'title'    => 'Locale+host',
-            'host'     => 'localhost',
-            'locale'   => 'en',
+            'title' => 'Locale+host',
+            'host' => 'localhost',
+            'locale' => 'en',
         ]);
         $em->persist($parent);
         $em->flush();
 
         $child = $this->createPage([
-            'enabled'  => true,
+            'enabled' => true,
             'homepage' => true,
-            'title'    => 'Host only',
-            'host'     => 'localhost',
-            'parent'   => $parent,
+            'title' => 'Host only',
+            'host' => 'localhost',
+            'parent' => $parent,
         ]);
         $em->persist($child);
         $em->flush();
@@ -244,29 +247,29 @@ class PageControllerTest extends AbstractTestCase
         // First, create the pages
         /** @var Page[] $pages */
         $pages = [
-            'both'   => $this->createPage([
-                'enabled'  => true,
+            'both' => $this->createPage([
+                'enabled' => true,
                 'homepage' => true,
-                'title'    => 'Locale+host',
-                'host'     => 'localhost',
-                'locale'   => 'en',
+                'title' => 'Locale+host',
+                'host' => 'localhost',
+                'locale' => 'en',
             ]),
-            'host'   => $this->createPage([
-                'enabled'  => true,
+            'host' => $this->createPage([
+                'enabled' => true,
                 'homepage' => true,
-                'title'    => 'Host only',
-                'host'     => 'localhost',
+                'title' => 'Host only',
+                'host' => 'localhost',
             ]),
             'locale' => $this->createPage([
-                'enabled'  => true,
+                'enabled' => true,
                 'homepage' => true,
-                'title'    => 'Locale only',
-                'locale'   => 'en',
+                'title' => 'Locale only',
+                'locale' => 'en',
             ]),
-            'none'   => $this->createPage([
-                'enabled'  => true,
+            'none' => $this->createPage([
+                'enabled' => true,
                 'homepage' => true,
-                'title'    => 'No match',
+                'title' => 'No match',
             ]),
         ];
         foreach ($pages as $page) {
@@ -275,13 +278,13 @@ class PageControllerTest extends AbstractTestCase
         $em->flush();
 
         // First page considered as homepage is the last one inserted.
-        $pages = array_reverse($pages);
+        $pages = \array_reverse($pages);
 
         // Loop the pages because the "$pages" array respects precedence,
         // So disabling the pages on each loop should make all assertions work.
         foreach ($pages as $key => $page) {
             $crawler = $client->request('GET', '/page/');
-            static::assertEquals($page->getTitle(), trim($crawler->filter('title')->html()));
+            static::assertEquals($page->getTitle(), \trim($crawler->filter('title')->html()));
             $page = $em->find(Page::class, $page->getId());
             $page->setEnabled(false);
             $em->flush();
@@ -300,9 +303,9 @@ class PageControllerTest extends AbstractTestCase
         $em->flush();
         $pageChild = $this->createPage([
             'enabled' => true,
-            'slug'    => 'child',
-            'title'   => 'Child page',
-            'parent'  => $page,
+            'slug' => 'child',
+            'title' => 'Child page',
+            'parent' => $page,
         ]);
         $em->persist($pageChild);
         $em->flush();
@@ -336,7 +339,7 @@ class PageControllerTest extends AbstractTestCase
         $firstLinkNode = $nodesArray[2];
         static::assertEquals('a', $firstLinkNode->tagName);
         static::assertEquals('breadcrumb-link', $firstLinkNode->getAttribute('class'));
-        static::assertEquals($page->getTitle(), trim($firstLinkNode->textContent));
+        static::assertEquals($page->getTitle(), \trim($firstLinkNode->textContent));
 
         // We sort of skip node 3 because it should be a separator
         static::assertEquals('breadcrumb-overriden-separator-class', $nodesArray[3]->getAttribute('class'));
@@ -344,7 +347,7 @@ class PageControllerTest extends AbstractTestCase
         $currentLinkNode = $nodesArray[4];
         static::assertEquals('span', $currentLinkNode->tagName);
         static::assertEquals('breadcrumb-current', $currentLinkNode->getAttribute('class'));
-        static::assertEquals($pageChild->getTitle(), trim($currentLinkNode->textContent));
+        static::assertEquals($pageChild->getTitle(), \trim($currentLinkNode->textContent));
 
         $crawler->clear();
     }

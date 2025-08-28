@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Tests\Entity;
 
@@ -33,7 +35,7 @@ class PageTest extends AbstractTestCase
         return $page;
     }
 
-    public function testOneHomepage()
+    public function testOneHomepage(): void
     {
         $homepage = $this->getDummyPage();
 
@@ -45,7 +47,7 @@ class PageTest extends AbstractTestCase
         $em->flush();
 
         /** @var Page $homepage */
-        $homepage = $em->getRepository(get_class($homepage))->find($homepage->getId());
+        $homepage = $em->getRepository($homepage::class)->find($homepage->getId());
 
         static::assertEquals($homepage->getTitle(), (string) $homepage);
 
@@ -58,7 +60,7 @@ class PageTest extends AbstractTestCase
         static::assertNull($homepage->getParent());
     }
 
-    public function testLifecycleCallbacks()
+    public function testLifecycleCallbacks(): void
     {
         $homepage = $this->getDummyPage();
 
@@ -79,7 +81,7 @@ class PageTest extends AbstractTestCase
         static::assertEquals([$child], $homepage->getChildren()->toArray());
 
         /** @var Page $homepage */
-        $homepage = $em->getRepository(get_class($homepage))->findOneBy(['id' => $homepage->getId()]);
+        $homepage = $em->getRepository($homepage::class)->findOneBy(['id' => $homepage->getId()]);
 
         static::assertNotNull($homepage);
 
@@ -88,13 +90,13 @@ class PageTest extends AbstractTestCase
             $em->flush();
         }
 
-        $homepage = $em->getRepository(get_class($homepage))->findOneBy(['id' => $homepage->getId()]);
+        $homepage = $em->getRepository($homepage::class)->findOneBy(['id' => $homepage->getId()]);
 
         static::assertNull($homepage);
         static::assertNull($child->getParent());
     }
 
-    public function testRemoval()
+    public function testRemoval(): void
     {
         $page = new Page();
         $page->setTitle('Default page');
@@ -117,9 +119,10 @@ class PageTest extends AbstractTestCase
         $em->persist($child);
         $em->flush();
 
-        $page = $em->getRepository(get_class($page))->find($page->getId());
+        $page = $em->getRepository($page::class)->find($page->getId());
 
         $children = $page->getChildren();
+
         /** @var Page $first */
         $first = $children[0];
         static::assertEquals($child->getId(), $first->getId());
@@ -130,12 +133,12 @@ class PageTest extends AbstractTestCase
         $em->remove($page);
         $em->flush();
 
-        $child = $em->getRepository(get_class($child))->find($child->getId());
+        $child = $em->getRepository($child::class)->find($child->getId());
 
         static::assertNull($child->getParent());
     }
 
-    public function testPageSlugIsTransliterated()
+    public function testPageSlugIsTransliterated(): void
     {
         $page = new Page();
         $page->setTitle('Default page');
@@ -145,7 +148,7 @@ class PageTest extends AbstractTestCase
         static::assertEquals('default-page', $page->getSlug());
     }
 
-    public function testSuccessfulValidation()
+    public function testSuccessfulValidation(): void
     {
         self::bootKernel();
         $validator = self::getContainer()->get(ValidatorInterface::class);
@@ -156,7 +159,7 @@ class PageTest extends AbstractTestCase
 
         $errors = $validator->validate($page);
 
-        self::assertCount(0, $errors);
+        static::assertCount(0, $errors);
 
         static::assertSame('Title', $page->getTitle());
         static::assertSame('title', $page->getSlug());
@@ -173,7 +176,7 @@ class PageTest extends AbstractTestCase
         static::assertFalse($page->isEnabled());
     }
 
-    public function testFailingfulValidationWithEmptyData()
+    public function testFailingfulValidationWithEmptyData(): void
     {
         self::bootKernel();
         $validator = self::getContainer()->get(ValidatorInterface::class);
@@ -183,10 +186,10 @@ class PageTest extends AbstractTestCase
         /** @var ConstraintViolationInterface[]&ConstraintViolationListInterface $errors */
         $errors = $validator->validate($page);
 
-        self::assertCount(2, $errors);
+        static::assertCount(2, $errors);
 
-        self::assertSame('title', $errors[0]->getPropertyPath());
-        self::assertSame('slug', $errors[1]->getPropertyPath());
+        static::assertSame('title', $errors[0]->getPropertyPath());
+        static::assertSame('slug', $errors[1]->getPropertyPath());
 
         static::assertSame('', $page->getTitle());
         static::assertSame('', $page->getSlug());

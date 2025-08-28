@@ -8,4 +8,5 @@
             <generator strategy="AUTO" />
         </id>
     </entity>
+
 </doctrine-mapping>

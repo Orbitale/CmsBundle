@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
@@ -20,21 +22,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @UniqueEntity("slug")
  */
-#[UniqueEntity("slug")]
+#[UniqueEntity('slug')]
 abstract class Page
 {
-    /**
-     * @return int|string
-     */
-    abstract public function getId();
-
     /**
      * @var string
      *
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank()
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     protected $title;
 
@@ -42,9 +40,10 @@ abstract class Page
      * @var string
      *
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank()
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     protected $slug;
 
@@ -53,7 +52,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $content;
 
     /**
@@ -61,7 +60,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $metaDescription;
 
     /**
@@ -69,7 +68,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $metaTitle;
 
     /**
@@ -77,7 +76,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $metaKeywords;
 
     /**
@@ -93,7 +92,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $css;
 
     /**
@@ -101,7 +100,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $js;
 
     /**
@@ -117,7 +116,7 @@ abstract class Page
      *
      * @Assert\Type("bool")
      */
-    #[Assert\Type("bool")]
+    #[Assert\Type('bool')]
     protected $enabled = false;
 
     /**
@@ -125,7 +124,7 @@ abstract class Page
      *
      * @Assert\Type("bool")
      */
-    #[Assert\Type("bool")]
+    #[Assert\Type('bool')]
     protected $homepage = false;
 
     /**
@@ -133,7 +132,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $host;
 
     /**
@@ -141,7 +140,7 @@ abstract class Page
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $locale;
 
     /**
@@ -149,24 +148,29 @@ abstract class Page
      *
      * @Assert\Type(Page::class)
      */
-    #[Assert\Type(Page::class)]
+    #[Assert\Type(self::class)]
     protected $parent;
 
     /**
-     * @var Page[]|ArrayCollection
+     * @var ArrayCollection|Page[]
      */
     protected $children;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->children = new ArrayCollection();
+    }
 
     public function __toString()
     {
         return $this->title;
     }
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->children  = new ArrayCollection();
-    }
+    /**
+     * @return int|string
+     */
+    abstract public function getId();
 
     public function getTitle(): string
     {
@@ -282,12 +286,12 @@ abstract class Page
         $this->enabled = (bool) $enabled;
     }
 
-    public function getParent(): ?Page
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?Page $parent): void
+    public function setParent(?self $parent): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
@@ -305,14 +309,14 @@ abstract class Page
     }
 
     /**
-     * @return Page[]|ArrayCollection
+     * @return ArrayCollection|Page[]
      */
     public function getChildren()
     {
         return $this->children;
     }
 
-    public function addChild(Page $page): void
+    public function addChild(self $page): void
     {
         $this->children->add($page);
 
@@ -321,7 +325,7 @@ abstract class Page
         }
     }
 
-    public function removeChild(Page $page): void
+    public function removeChild(self $page): void
     {
         $this->children->removeElement($page);
     }
@@ -362,31 +366,31 @@ abstract class Page
 
         $current = $this;
         do {
-            $tree    = $current->getSlug().$separator.$tree;
+            $tree = $current->getSlug().$separator.$tree;
             $current = $current->getParent();
         } while ($current);
 
-        return trim($tree, $separator);
+        return \trim($tree, $separator);
     }
 
     public function updateSlug(): void
     {
         if (!$this->slug) {
-            $this->slug = mb_strtolower((new AsciiSlugger())->slug($this->title)->toString());
+            $this->slug = \mb_strtolower((new AsciiSlugger())->slug($this->title)->toString());
         }
     }
 
     public function onRemove(PreRemoveEventArgs $event): void
     {
         $em = $event->getObjectManager();
-        if (count($this->children)) {
+        if (\count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);
                 $em->persist($child);
             }
         }
         $this->enabled = false;
-        $this->parent  = null;
+        $this->parent = null;
         $this->title .= '-'.$this->getId().'-deleted';
         $this->slug .= '-'.$this->getId().'-deleted';
     }

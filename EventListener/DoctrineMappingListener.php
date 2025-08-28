@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\EventListener;
 
@@ -48,8 +50,8 @@ class DoctrineMappingListener implements EventSubscriber
         /** @var ClassMetadata $classMetadata */
         $classMetadata = $eventArgs->getClassMetadata();
 
-        $isPage     = is_a($classMetadata->getName(), $this->pageClass, true);
-        $isCategory = is_a($classMetadata->getName(), $this->categoryClass, true);
+        $isPage = \is_a($classMetadata->getName(), $this->pageClass, true);
+        $isCategory = \is_a($classMetadata->getName(), $this->categoryClass, true);
 
         if ($isPage) {
             $this->processPageMetadata($classMetadata);
@@ -84,7 +86,6 @@ class DoctrineMappingListener implements EventSubscriber
                 'mappedBy' => 'category',
             ]);
         }
-
     }
 
     /**
@@ -102,7 +103,7 @@ class DoctrineMappingListener implements EventSubscriber
     }
 
     /**
-     * Declare self-bidirectionnal mapping for children
+     * Declare self-bidirectionnal mapping for children.
      */
     private function processChildren(ClassMetadata $classMetadata, string $class): void
     {

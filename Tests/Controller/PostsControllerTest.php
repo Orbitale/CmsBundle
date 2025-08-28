@@ -1,5 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
+/*
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Orbitale\Bundle\CmsBundle\Tests\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,7 +58,7 @@ class PostsControllerTest extends AbstractTestCase
         $em->persist($page);
         $em->flush();
 
-        $client->request('GET', sprintf("/posts/%s/%s", '2020-01-01', $page->getSlug()));
+        $client->request('GET', \sprintf('/posts/%s/%s', '2020-01-01', $page->getSlug()));
         static::assertResponseStatusCodeSame(404);
         static::assertPageTitleContains('Date in URL does not match post\'s date.');
     }
@@ -68,7 +79,7 @@ class PostsControllerTest extends AbstractTestCase
         $em->persist($page);
         $em->flush();
 
-        $client->request('GET', sprintf("/posts/%s/%s", $now->format('Y-m-d'), $page->getSlug()));
+        $client->request('GET', \sprintf('/posts/%s/%s', $now->format('Y-m-d'), $page->getSlug()));
         static::assertResponseStatusCodeSame(200);
         static::assertPageTitleContains($page->getTitle());
     }

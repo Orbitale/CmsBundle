@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 /*
-* This file is part of the OrbitaleCmsBundle package.
-*
-* (c) Alexandre Rock Ancelet <alex@orbitale.io>
-*
-* For the full copyright and license information, please view the LICENSE
-* file that was distributed with this source code.
-*/
+ * This file is part of the OrbitaleCmsBundle package.
+ *
+ * (c) Alexandre Rock Ancelet <alex@orbitale.io>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
 namespace Orbitale\Bundle\CmsBundle\Entity;
 
@@ -20,21 +22,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @UniqueEntity("slug")
  */
-#[UniqueEntity("slug")]
+#[UniqueEntity('slug')]
 abstract class Category
 {
-    /**
-     * @return int|string
-     */
-    abstract public function getId();
-
     /**
      * @var string
      *
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank()
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     protected $name;
 
@@ -42,9 +40,10 @@ abstract class Category
      * @var string
      *
      * @Assert\Type("string")
+     *
      * @Assert\NotBlank()
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     #[Assert\NotBlank]
     protected $slug;
 
@@ -53,7 +52,7 @@ abstract class Category
      *
      * @Assert\Type("string")
      */
-    #[Assert\Type("string")]
+    #[Assert\Type('string')]
     protected $description;
 
     /**
@@ -61,36 +60,42 @@ abstract class Category
      *
      * @Assert\Type("bool")
      */
-    #[Assert\Type("bool")]
+    #[Assert\Type('bool')]
     protected $enabled = false;
 
     /**
      * @var Category
+     *
      * @Assert\Type(Category::class)
      */
-    #[Assert\Type(Category::class)]
+    #[Assert\Type(self::class)]
     protected $parent;
 
     /**
-     * @var Category[]|ArrayCollection
+     * @var ArrayCollection|Category[]
      */
     protected $children;
 
     /**
-     * @var Page[]|ArrayCollection
+     * @var ArrayCollection|Page[]
      */
     protected $pages;
+
+    public function __construct()
+    {
+        $this->children = new ArrayCollection();
+        $this->pages = new ArrayCollection();
+    }
 
     public function __toString()
     {
         return $this->name;
     }
 
-    public function __construct()
-    {
-        $this->children  = new ArrayCollection();
-        $this->pages     = new ArrayCollection();
-    }
+    /**
+     * @return int|string
+     */
+    abstract public function getId();
 
     public function getName(): string
     {
@@ -132,12 +137,12 @@ abstract class Category
         $this->enabled = (bool) $enabled;
     }
 
-    public function getParent(): ?Category
+    public function getParent(): ?self
     {
         return $this->parent;
     }
 
-    public function setParent(?Category $parent): void
+    public function setParent(?self $parent): void
     {
         if ($parent === $this) {
             // Refuse the category to have itself as parent.
@@ -155,14 +160,14 @@ abstract class Category
     }
 
     /**
-     * @return Category[]|ArrayCollection
+     * @return ArrayCollection|Category[]
      */
     public function getChildren()
     {
         return $this->children;
     }
 
-    public function addChild(Category $category): void
+    public function addChild(self $category): void
     {
         $this->children->add($category);
 
@@ -171,13 +176,13 @@ abstract class Category
         }
     }
 
-    public function removeChild(Category $child): void
+    public function removeChild(self $child): void
     {
         $this->children->removeElement($child);
     }
 
     /**
-     * @return Category[]|ArrayCollection
+     * @return ArrayCollection|Category[]
      */
     public function getPages()
     {
@@ -206,31 +211,31 @@ abstract class Category
 
         $current = $this;
         do {
-            $tree    = $current->getSlug().$separator.$tree;
+            $tree = $current->getSlug().$separator.$tree;
             $current = $current->getParent();
         } while ($current);
 
-        return trim($tree, $separator);
+        return \trim($tree, $separator);
     }
 
     public function updateSlug(): void
     {
         if (!$this->slug) {
-            $this->slug = mb_strtolower((new AsciiSlugger())->slug($this->name)->toString());
+            $this->slug = \mb_strtolower((new AsciiSlugger())->slug($this->name)->toString());
         }
     }
 
     public function onRemove(PreRemoveEventArgs $event): void
     {
         $em = $event->getObjectManager();
-        if (count($this->children)) {
+        if (\count($this->children)) {
             foreach ($this->children as $child) {
                 $child->setParent(null);
                 $em->persist($child);
             }
         }
         $this->enabled = false;
-        $this->parent  = null;
+        $this->parent = null;
         $this->name .= '-'.$this->getId().'-deleted';
         $this->slug .= '-'.$this->getId().'-deleted';
     }

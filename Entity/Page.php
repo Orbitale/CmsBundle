@@ -15,140 +15,83 @@ namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @UniqueEntity("slug")
- */
-#[UniqueEntity('slug')]
 abstract class Page
 {
     /**
      * @var string
-     *
-     * @Assert\Type("string")
-     *
-     * @Assert\NotBlank()
      */
-    #[Assert\Type('string')]
-    #[Assert\NotBlank]
     protected $title;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
-     *
-     * @Assert\NotBlank()
      */
-    #[Assert\Type('string')]
-    #[Assert\NotBlank]
     protected $slug;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $content;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $metaDescription;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $metaTitle;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $metaKeywords;
 
     /**
      * @var null|Category
-     *
-     * @Assert\Type(Category::class)
      */
-    #[Assert\Type(Category::class)]
     protected $category;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $css;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $js;
 
     /**
      * @var \DateTimeImmutable
-     *
-     * @Assert\Type(\DateTimeImmutable::class)
      */
-    #[Assert\Type(\DateTimeImmutable::class)]
     protected $createdAt;
 
     /**
      * @var bool
-     *
-     * @Assert\Type("bool")
      */
-    #[Assert\Type('bool')]
     protected $enabled = false;
 
     /**
      * @var bool
-     *
-     * @Assert\Type("bool")
      */
-    #[Assert\Type('bool')]
     protected $homepage = false;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $host;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $locale;
 
     /**
      * @var null|Page
-     *
-     * @Assert\Type(Page::class)
      */
-    #[Assert\Type(self::class)]
     protected $parent;
 
     /**

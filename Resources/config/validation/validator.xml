@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+    <class name="Orbitale\Bundle\CmsBundle\Entity\Category">
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
+            <option name="fields">slug</option>
+        </constraint>
+        <property name="name">
+            <constraint name="NotBlank"/>
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="slug">
+            <constraint name="NotBlank"/>
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="description">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="enabled">
+            <constraint name="Type"><option name="type">bool</option></constraint>
+        </property>
+        <property name="parent">
+            <constraint name="Type"><option name="type">Orbitale\Bundle\CmsBundle\Entity\Category</option></constraint>
+        </property>
+    </class>
+
+    <class name="Orbitale\Bundle\CmsBundle\Entity\Page">
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
+            <option name="fields">slug</option>
+        </constraint>
+        <property name="title">
+            <constraint name="NotBlank"/>
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="slug">
+            <constraint name="NotBlank"/>
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="content">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="metaDescription">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="metaTitle">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="metaKeywords">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="css">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="js">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="createdAt">
+            <constraint name="Type"><option name="type">DateTimeImmutable</option></constraint>
+        </property>
+        <property name="enabled">
+            <constraint name="Type"><option name="type">bool</option></constraint>
+        </property>
+        <property name="homepage">
+            <constraint name="Type"><option name="type">bool</option></constraint>
+        </property>
+        <property name="host">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="locale">
+            <constraint name="Type"><option name="type">string</option></constraint>
+        </property>
+        <property name="category">
+            <constraint name="Type"><option name="type">Orbitale\Bundle\CmsBundle\Entity\Category</option></constraint>
+        </property>
+        <property name="parent">
+            <constraint name="Type"><option name="type">Orbitale\Bundle\CmsBundle\Entity\Page</option></constraint>
+        </property>
+    </class>
+</constraint-mapping>

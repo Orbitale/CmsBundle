@@ -15,60 +15,33 @@ namespace Orbitale\Bundle\CmsBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Event\PreRemoveEventArgs;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\String\Slugger\AsciiSlugger;
-use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @UniqueEntity("slug")
- */
-#[UniqueEntity('slug')]
 abstract class Category
 {
     /**
      * @var string
-     *
-     * @Assert\Type("string")
-     *
-     * @Assert\NotBlank()
      */
-    #[Assert\Type('string')]
-    #[Assert\NotBlank]
     protected $name;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
-     *
-     * @Assert\NotBlank()
      */
-    #[Assert\Type('string')]
-    #[Assert\NotBlank]
     protected $slug;
 
     /**
      * @var string
-     *
-     * @Assert\Type("string")
      */
-    #[Assert\Type('string')]
     protected $description;
 
     /**
      * @var bool
-     *
-     * @Assert\Type("bool")
      */
-    #[Assert\Type('bool')]
     protected $enabled = false;
 
     /**
      * @var Category
-     *
-     * @Assert\Type(Category::class)
      */
-    #[Assert\Type(self::class)]
     protected $parent;
 
     /**

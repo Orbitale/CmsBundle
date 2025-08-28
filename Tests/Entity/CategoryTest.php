@@ -162,7 +162,7 @@ class CategoryTest extends AbstractTestCase
 
         $category->updateSlug();
 
-        static::assertNull($category->getSlug());
+        static::assertSame('', $category->getSlug());
     }
 
     public function testSuccessfulValidation(): void

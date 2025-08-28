@@ -3,8 +3,8 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page">
-        <id name="id" type="string" length="255">
+    <entity name="Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page" table="orbitale_cms_pages">
+        <id name="id" column="id" type="integer" length="255">
             <generator strategy="AUTO" />
         </id>
     </entity>

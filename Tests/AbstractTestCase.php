@@ -11,9 +11,14 @@
 
 namespace Orbitale\Bundle\CmsBundle\Tests;
 
-use Doctrine\DBAL\Connection;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
 
 class AbstractTestCase extends WebTestCase
 {
@@ -21,11 +26,26 @@ class AbstractTestCase extends WebTestCase
     {
         static::bootKernel();
 
-        /** @var Connection $c */
-        $c = self::getContainer()->get(Connection::class);
-        $method = method_exists($c, 'executeQuery') ? 'executeQuery' : 'query';
-        $c->$method('delete from orbitale_cms_pages where 1');
-        $c->$method('delete from orbitale_cms_categories where 1');
+        $databaseFile = self::$kernel->getContainer()->getParameter('database_path');
+
+        $fs = new Filesystem();
+
+        if ($fs->exists($databaseFile)) {
+            $fs->remove($databaseFile);
+        }
+
+        $application = new Application(self::$kernel);
+        $application->setAutoExit(false);
+        $out = new BufferedOutput();
+        $returns = [];
+        $returns[] = $application->run(new ArrayInput(['command' => 'doctrine:database:create']), $out);
+        $returns[] = $application->run(new ArrayInput(['command' => 'doctrine:schema:update', '--dump-sql' => true, '--complete' => true]), $out);
+        $returns[] = $application->run(new ArrayInput(['command' => 'doctrine:schema:create']), $out);
+
+        if (\in_array(1, $returns, true)) {
+            self::fail(\sprintf("A database setup command has failed:\n%s", $out->fetch()));
+        }
+
         static::ensureKernelShutdown();
     }
 

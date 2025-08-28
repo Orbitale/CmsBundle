@@ -6,7 +6,6 @@
     <mapped-superclass
         name="Orbitale\Bundle\CmsBundle\Entity\Page"
         repository-class="Orbitale\Bundle\CmsBundle\Repository\PageRepository"
-        table="orbitale_cms_pages"
     >
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="updateSlug" />
@@ -18,13 +17,15 @@
             <lifecycle-callback type="preUpdate" method="updateSlug" />
             <lifecycle-callback type="preRemove" method="onRemove" />
         </lifecycle-callbacks>
+        <field name="title" type="string" length="255" nullable="false" />
+        <field name="slug" type="string" length="255" unique="true" nullable="false" />
         <field name="content" type="text" nullable="true" />
-        <field name="metaDescription" column="meta_description" type="string" length="255" />
-        <field name="metaTitle" column="meta_title" type="string" length="255" />
-        <field name="metaKeywords" column="meta_keywords" type="string" length="255" />
+        <field name="metaDescription" column="meta_description" type="string" length="255" nullable="true" />
+        <field name="metaTitle" column="meta_title" type="string" length="255" nullable="true" />
+        <field name="metaKeywords" column="meta_keywords" type="string" length="255" nullable="true" />
         <field name="css" type="text" nullable="true" />
         <field name="js" type="text" nullable="true" />
-        <field name="createdAt" column="created_at" type="datetime_immutable" />
+        <field name="createdAt" column="created_at" type="datetime_immutable" nullable="false" />
         <field name="enabled" type="boolean">
             <options>
                 <option name="default">0</option>

@@ -6,7 +6,6 @@
     <mapped-superclass
         name="Orbitale\Bundle\CmsBundle\Entity\Category"
         repository-class="Orbitale\Bundle\CmsBundle\Repository\CategoryRepository"
-        table="orbitale_cms_categories"
     >
         <lifecycle-callbacks>
             <lifecycle-callback type="prePersist" method="updateSlug" />

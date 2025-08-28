@@ -61,6 +61,6 @@ class AppKernel extends Kernel
 
     public function getBuildDir(): string
     {
-        return \dirname(__DIR__, 3).'/build/'.$this->getEnvironment();
+        return \dirname(__DIR__, 3).'/build/';
     }
 }

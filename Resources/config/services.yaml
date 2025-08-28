@@ -45,7 +45,9 @@ services:
             - '%orbitale_cms.page_class%'
             - '%orbitale_cms.category_class%'
         tags:
-            - doctrine.event_subscriber
+            - name: doctrine.event_listener
+              event: loadClassMetadata
+              priority: 100
 
     Orbitale\Bundle\CmsBundle\Repository\PageRepository:
         factory: ['@doctrine.orm.entity_manager', 'getRepository']

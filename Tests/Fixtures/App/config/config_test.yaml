@@ -10,6 +10,7 @@ framework:
         resource: "%kernel.project_dir%/App/config/routing.yaml"
         utf8: true
     session:
+        handler_id: null
         storage_factory_id: session.storage.factory.mock_file
 
 twig:

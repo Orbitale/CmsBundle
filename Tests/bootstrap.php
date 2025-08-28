@@ -34,6 +34,5 @@ require_once __DIR__.'/Fixtures/App/AppKernel.php';
             fwrite(STDERR, $e->getMessage());
         }
     }
-    $kernel->shutdown();
     unset($kernel);
 })();

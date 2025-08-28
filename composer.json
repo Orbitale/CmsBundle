@@ -7,7 +7,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.3",
-        "doctrine/annotations": "^1.8",
+        "doctrine/annotations": "^1.8|^2.0",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.5.1",
         "symfony/asset": "^5.3|^6.0|^7.0",
@@ -51,7 +51,7 @@
     ],
     "extra": {
         "branch-alias": {
-            "dev-master": "4.x-dev"
+            "dev-master": "5.x-dev"
         }
     }
 }

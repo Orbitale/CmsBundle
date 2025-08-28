@@ -14,8 +14,6 @@ namespace Orbitale\Bundle\CmsBundle\Tests;
 use Orbitale\Bundle\CmsBundle\Tests\Fixtures\TestBundle\Entity\Page;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\ConsoleOutput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -23,6 +21,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 class AbstractTestCase extends WebTestCase
 {
     public function setUp(): void
+    {
+        self::installDatabase();
+    }
+
+    public static function installDatabase(): void
     {
         static::bootKernel();
 

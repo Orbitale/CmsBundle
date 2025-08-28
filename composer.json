@@ -6,10 +6,11 @@
     "homepage": "https://github.com/Orbitale/CmsBundle",
     "license": "MIT",
     "require": {
-        "php": ">=7.3",
+        "php": ">=8.1",
         "doctrine/annotations": "^1.8|^2.0",
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/orm": "^2.5.1",
+        "doctrine/dbal": "^3.0|^4.0",
         "symfony/asset": "^5.3|^6.0|^7.0",
         "symfony/config": "^5.3|^6.0|^7.0",
         "symfony/dependency-injection": "^5.3|^6.0|^7.0",

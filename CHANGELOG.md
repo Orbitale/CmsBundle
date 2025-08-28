@@ -1,4 +1,15 @@
-#v4.1.0
+# v5.0.0
+
+* Add support for Symfony 7.
+* Drop support for Symfony 5, support starts at Symfony 6.4 now.
+* Drop support for PHP 7 and 8.0, support starts at PHP 8.1 now.
+* Base entities mapping is now in XML instead of annotations/attributes.
+* Base entities validations rules are now in XML instead of annotations/attributes.
+* Fix some PHP deprecations in types.
+* Tests: revamp setup a bit, for modernisation.
+* Dev: add CS fix setup
+
+# v4.1.0
 
 * Make the project compatible with Symfony 6.0
 * Test multiple versions of PHP and Symfony in CI

@@ -51,7 +51,7 @@ jobs:
 
             - name: Update Symfony version
               run: |
-                  sed -i composer.json -e 's/\^5\.0\(.[0-9]\+\)\?[|]\^6\.0/${{ matrix.symfony-version }}.*/g'
+                  sed -i composer.json -e 's/\^5.3[|]\^6.0[|]\^7.0/${{ matrix.symfony-version }}.*/g'
 
             - run: composer install
 

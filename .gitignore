@@ -3,5 +3,6 @@ composer.phar
 composer.lock
 vendor/
 build/
+!build/.gitkeep
 .phpunit
 phpunit.xml

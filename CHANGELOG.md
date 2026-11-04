@@ -1,3 +1,7 @@
+# v5.0.2
+
+* Make project compatible with more versions of PHP and Symfony.
+
 # v5.0.1
 
 * Fix accidentally removed column name for `Page::$content`.

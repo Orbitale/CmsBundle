@@ -16,14 +16,22 @@ jobs:
                     - '8.5'
 
                 symfony-version:
-                    - '6.4'
-                    - '7.3'
-                    - '7.4'
-                    - '8.0'
-                    - '8.1'
+                    - '^6.4'
+                    - '^7.3'
+                    - '^7.4'
+                    - '^8.0.16'
+                    - '^8.1'
 
                 exclude:
-                    - { php-version: 8.1, symfony-version: 7.3 }
+                    - { php-version: 8.1, symfony-version: '^7.3' }
+                    - { php-version: 8.1, symfony-version: '^7.4' }
+
+                    - { php-version: 8.1, symfony-version: '^8.0.16' }
+                    - { php-version: 8.1, symfony-version: '^8.1' }
+                    - { php-version: 8.2, symfony-version: '^8.0.16' }
+                    - { php-version: 8.2, symfony-version: '^8.1' }
+                    - { php-version: 8.3, symfony-version: '^8.0.16' }
+                    - { php-version: 8.3, symfony-version: '^8.1' }
 
         name: PHP ${{ matrix.php-version }} and Symfony ${{ matrix.symfony-version }}
         steps:
@@ -47,7 +55,7 @@ jobs:
 
             - name: Update Symfony version
               run: |
-                  sed -i composer.json -e 's/\^5.3[|]\^6.0[|]\^7.0/${{ matrix.symfony-version }}.*/g'
+                  sed -i composer.json -e 's/\^6.4[|]\^7.0[|]\^8.0/${{ matrix.symfony-version }}/g'
 
             - run: composer install
 
